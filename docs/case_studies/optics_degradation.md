@@ -68,6 +68,8 @@ are confused with which.
 
 ![Confusion matrix](../images/optics_confusion_matrix.png)
 
+![Per-class metrics](../images/optics_per_class.png)
+
 Clean is the hardest class, as expected for subtle degradations at 32×32.
 Chromatic aberration, defocus, and sensor noise are classified reliably.
 

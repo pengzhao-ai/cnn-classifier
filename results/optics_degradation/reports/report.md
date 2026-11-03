@@ -1,6 +1,6 @@
 # Experiment report — optics_degradation_classifier
 
-- Run directory: `/Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123724Z_optics_degradation_classifier_06cb9622`
+- Run directory: `runs/20261103T123724Z_optics_degradation_classifier_06cb9622`
 - Status: completed
 - Config hash: 06cb9622a1012df5
 
@@ -35,8 +35,8 @@
 
 - `adapter`: manifest
 - `root`: —
-- `manifest`: /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/data/optics_degradation/manifest.csv
-- `image_root`: /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/data/optics_degradation
+- `manifest`: ./data/optics_degradation/manifest.csv
+- `image_root`: ./data/optics_degradation
 - `class_names`: ["clean", "defocus", "motion_blur", "chromatic_aberration", "vignetting", "sensor_noise", "jpeg"]
 - `num_classes`: 7
 - `channels`: rgb
@@ -269,8 +269,8 @@ Best validation accuracy: 0.824 (epoch 16)
 ## Reproduction
 
 ```bash
-cnncls train -c <config.yaml>  # produced 20261103T123724Z_optics_degradation_classifier_06cb9622
-cnncls evaluate --run /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123724Z_optics_degradation_classifier_06cb9622 --checkpoint /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123724Z_optics_degradation_classifier_06cb9622/checkpoints/best.pt
-cnncls report --run /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123724Z_optics_degradation_classifier_06cb9622 --format html
-cnncls compare /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123724Z_optics_degradation_classifier_06cb9622 <other-run>
+cnncls train -c <config.yaml> --runs-dir runs  # produced 20261103T123724Z_optics_degradation_classifier_06cb9622
+cnncls evaluate --run runs/20261103T123724Z_optics_degradation_classifier_06cb9622 --checkpoint runs/20261103T123724Z_optics_degradation_classifier_06cb9622/checkpoints/best.pt
+cnncls report --run runs/20261103T123724Z_optics_degradation_classifier_06cb9622
+cnncls compare runs/20261103T123724Z_optics_degradation_classifier_06cb9622 <other-run>
 ```

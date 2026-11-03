@@ -1,6 +1,6 @@
 # Experiment report — cifar10_resnet18_scratch
 
-- Run directory: `/Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T114457Z_cifar10_resnet18_scratch_3da6ebe9`
+- Run directory: `runs/20261103T114457Z_cifar10_resnet18_scratch_3da6ebe9`
 - Status: completed
 - Config hash: 3da6ebe93b4fc14f
 
@@ -34,7 +34,7 @@
 ### Data
 
 - `adapter`: torchvision
-- `root`: /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/data
+- `root`: ./data
 - `manifest`: —
 - `image_root`: —
 - `class_names`: auto
@@ -289,8 +289,8 @@ Best validation accuracy: 0.912 (epoch 26)
 ## Reproduction
 
 ```bash
-cnncls train -c <config.yaml>  # produced 20261103T114457Z_cifar10_resnet18_scratch_3da6ebe9
-cnncls evaluate --run /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T114457Z_cifar10_resnet18_scratch_3da6ebe9 --checkpoint /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T114457Z_cifar10_resnet18_scratch_3da6ebe9/checkpoints/best.pt
-cnncls report --run /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T114457Z_cifar10_resnet18_scratch_3da6ebe9 --format html
-cnncls compare /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T114457Z_cifar10_resnet18_scratch_3da6ebe9 <other-run>
+cnncls train -c <config.yaml> --runs-dir runs  # produced 20261103T114457Z_cifar10_resnet18_scratch_3da6ebe9
+cnncls evaluate --run runs/20261103T114457Z_cifar10_resnet18_scratch_3da6ebe9 --checkpoint runs/20261103T114457Z_cifar10_resnet18_scratch_3da6ebe9/checkpoints/best.pt
+cnncls report --run runs/20261103T114457Z_cifar10_resnet18_scratch_3da6ebe9
+cnncls compare runs/20261103T114457Z_cifar10_resnet18_scratch_3da6ebe9 <other-run>
 ```

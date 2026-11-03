@@ -1,0 +1,32 @@
+{
+  "rows": [
+    {
+      "ci_high": -0.0241975,
+      "ci_low": -0.03900249999999992,
+      "comparison": "augmentation (on - off)",
+      "confidence": 0.95,
+      "difference": -0.031399999999999983
+    },
+    {
+      "ci_high": 0.20420249999999998,
+      "ci_low": 0.183,
+      "comparison": "batchnorm (on - off)",
+      "confidence": 0.95,
+      "difference": 0.19370000000000004
+    },
+    {
+      "ci_high": 0.0003024999999999672,
+      "ci_low": -0.013599999999999949,
+      "comparison": "residual (on - off)",
+      "confidence": 0.95,
+      "difference": -0.006800000000000028
+    },
+    {
+      "ci_high": 0.09400249999999997,
+      "ci_low": 0.07599999999999996,
+      "comparison": "cosine vs constant (on - off)",
+      "confidence": 0.95,
+      "difference": 0.08479999999999999
+    }
+  ]
+}

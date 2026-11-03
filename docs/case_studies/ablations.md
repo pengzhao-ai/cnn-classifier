@@ -35,6 +35,15 @@ the shared baseline for each pair.
 
 ![Ablation comparison](../images/ablation_comparison.png)
 
+Paired bootstrap (on − off):
+
+| Pair | Difference | 95% CI |
+|---|---:|---|
+| Augmentation | −3.14 pp | −3.90 to −2.42 pp |
+| BatchNorm | +19.37 pp | +18.30 to +20.42 pp |
+| Residual | −0.68 pp | −1.36 to +0.03 pp |
+| Schedule | +8.48 pp | +7.60 to +9.40 pp |
+
 The comparison records per-run accuracy, macro F1, parameter count, training
 time, and latency, with the per-run bootstrap interval in each `summary.json`.
 The augmentation result (off better on this reduced budget) is measured, not a

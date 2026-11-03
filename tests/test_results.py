@@ -80,6 +80,19 @@ def test_ablation_results_are_committed():
         assert (RESULTS / "comparison" / f"ablation_comparison.{suffix}").is_file()
 
 
+def test_paired_bootstrap_comparisons_are_committed():
+    transfer = RESULTS / "comparison" / "transfer_paired.json"
+    ablation = RESULTS / "comparison" / "ablation_paired.json"
+    assert transfer.is_file()
+    assert ablation.is_file()
+    transfer_rows = json.loads(transfer.read_text(encoding="utf-8"))["rows"]
+    ablation_rows = json.loads(ablation.read_text(encoding="utf-8"))["rows"]
+    assert len(transfer_rows) == 3
+    assert len(ablation_rows) == 4
+    for row in [*transfer_rows, *ablation_rows]:
+        assert row["ci_low"] <= row["difference"] <= row["ci_high"]
+
+
 def test_optics_and_byo_results_are_committed():
     optics = _summary("optics_degradation")
     assert optics["test_accuracy"] is not None
@@ -97,8 +110,13 @@ def test_optics_and_byo_results_are_committed():
 
 
 def test_docs_images_are_byte_identical_to_results():
+    cifar = RESULTS / "cifar10" / "figures"
+    optics = RESULTS / "optics_degradation" / "figures"
     pairs = (
-        ("cifar10_training_history.png", RESULTS / "cifar10" / "figures" / "training_history.png"),
+        ("cifar10_training_history.png", cifar / "training_history.png"),
+        ("cifar10_confusion_matrix.png", cifar / "confusion_matrix.png"),
+        ("cifar10_errors.png", cifar / "errors.png"),
+        ("cifar10_model_card.png", cifar / "model_card.png"),
         (
             "transfer_comparison.png",
             RESULTS / "comparison" / "transfer_comparison.png",
@@ -108,9 +126,11 @@ def test_docs_images_are_byte_identical_to_results():
             RESULTS / "comparison" / "ablation_comparison.png",
         ),
         (
-            "optics_confusion_matrix.png",
-            RESULTS / "optics_degradation" / "figures" / "confusion_matrix.png",
+            "transfer_finetune_training_history.png",
+            RESULTS / "transfer" / "finetune" / "figures" / "training_history.png",
         ),
+        ("optics_confusion_matrix.png", optics / "confusion_matrix.png"),
+        ("optics_per_class.png", optics / "per_class.png"),
     )
     for docs_name, result_path in pairs:
         docs_path = DOCS_IMAGES / docs_name
@@ -122,3 +142,11 @@ def test_docs_images_are_byte_identical_to_results():
 def test_no_checkpoints_are_committed_under_results():
     assert not list(RESULTS.rglob("*.pt"))
     assert not list(RESULTS.rglob("*.pth"))
+
+
+def test_committed_reports_are_portable():
+    for name in ("report.md", "report.html"):
+        for path in RESULTS.rglob(name):
+            text = path.read_text(encoding="utf-8", errors="ignore")
+            assert "/Users/" not in text, path
+            assert "--format html" not in text, path

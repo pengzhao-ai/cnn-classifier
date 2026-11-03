@@ -38,12 +38,12 @@ Supported inputs through the same adapters:
 
 | Item | Options |
 |---|---|
-| Bit depth | 8-bit or 16-bit grayscale/RGB |
+| Bit depth | 8-bit RGB/grayscale; 16-bit grayscale PNG; 16-bit RGB/grayscale TIFF |
 | Labels | folder names or manifest `label` |
 | Split | folder names or manifest `split` |
 | Group | optional manifest `group` for leakage-safe splitting |
 | Class order | adapter order or explicit `data.class_names` |
-| Value range | automatic, fixed, or percentile |
+| Value range | automatic or fixed |
 
 ## What the model receives
 

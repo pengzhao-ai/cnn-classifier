@@ -1,6 +1,6 @@
 # Experiment report — bring_your_own_data_quickstart
 
-- Run directory: `/Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/byo_quickstart/20261103T123745Z_bring_your_own_data_quickstart_2a835edf`
+- Run directory: `runs/byo_quickstart/20261103T123745Z_bring_your_own_data_quickstart_2a835edf`
 - Status: completed
 - Config hash: 2a835edfac0ebd5c
 
@@ -34,8 +34,8 @@
 
 - `adapter`: manifest
 - `root`: —
-- `manifest`: /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/demos/bring_your_own_data/manifest.csv
-- `image_root`: /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/demos/bring_your_own_data/fixture
+- `manifest`: ./demos/bring_your_own_data/manifest.csv
+- `image_root`: ./demos/bring_your_own_data/fixture
 - `class_names`: ["circle", "square", "stripe"]
 - `num_classes`: 3
 - `channels`: gray
@@ -237,8 +237,8 @@ Best validation accuracy: 0.600 (epoch 1)
 ## Reproduction
 
 ```bash
-cnncls train -c <config.yaml>  # produced 20261103T123745Z_bring_your_own_data_quickstart_2a835edf
-cnncls evaluate --run /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/byo_quickstart/20261103T123745Z_bring_your_own_data_quickstart_2a835edf --checkpoint /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/byo_quickstart/20261103T123745Z_bring_your_own_data_quickstart_2a835edf/checkpoints/best.pt
-cnncls report --run /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/byo_quickstart/20261103T123745Z_bring_your_own_data_quickstart_2a835edf --format html
-cnncls compare /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/byo_quickstart/20261103T123745Z_bring_your_own_data_quickstart_2a835edf <other-run>
+cnncls train -c <config.yaml> --runs-dir runs  # produced 20261103T123745Z_bring_your_own_data_quickstart_2a835edf
+cnncls evaluate --run runs/byo_quickstart/20261103T123745Z_bring_your_own_data_quickstart_2a835edf --checkpoint runs/byo_quickstart/20261103T123745Z_bring_your_own_data_quickstart_2a835edf/checkpoints/best.pt
+cnncls report --run runs/byo_quickstart/20261103T123745Z_bring_your_own_data_quickstart_2a835edf
+cnncls compare runs/byo_quickstart/20261103T123745Z_bring_your_own_data_quickstart_2a835edf <other-run>
 ```

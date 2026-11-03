@@ -1,0 +1,25 @@
+{
+  "rows": [
+    {
+      "ci_high": -0.2720925,
+      "ci_low": -0.29190250000000006,
+      "comparison": "linear_probe vs scratch",
+      "confidence": 0.95,
+      "difference": -0.2822
+    },
+    {
+      "ci_high": 0.046902499999999944,
+      "ci_low": 0.034897499999999936,
+      "comparison": "finetune vs scratch",
+      "confidence": 0.95,
+      "difference": 0.040999999999999925
+    },
+    {
+      "ci_high": 0.33229999999999993,
+      "ci_low": 0.3134975,
+      "comparison": "finetune vs linear_probe",
+      "confidence": 0.95,
+      "difference": 0.32319999999999993
+    }
+  ]
+}

@@ -47,7 +47,8 @@ From an activated environment at the repository root:
 python demos/cifar10/scripts/run_scratch.py
 ```
 
-Quick smoke check (two epochs, bootstrap and latency measurement disabled):
+Quick smoke check (10,000/2,000 subset, two epochs, bootstrap and latency
+measurement disabled):
 
 ```bash
 python demos/cifar10/scripts/run_scratch.py --quick

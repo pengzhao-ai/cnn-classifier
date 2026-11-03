@@ -13,12 +13,12 @@ figures are in `results/ablations/`; the cross-pair comparison is in
 
 ## Pair results
 
-| Pair | On | Off | Difference | 95% CI overlap |
-|---|---|---|---|---|
-| Augmentation | 67.92% | **71.06%** | off +3.14 pp | none |
-| BatchNorm | **67.92%** | 48.55% | on +19.37 pp | none |
-| Residual | 67.92% | **68.60%** | off +0.68 pp | substantial |
-| Schedule | **67.92%** | 59.44% | cosine +8.48 pp | none |
+| Pair | On | Off | Difference | 95% CI overlap | Paired 95% CI |
+|---|---|---|---|---|---|
+| Augmentation | 67.92% | **71.06%** | off +3.14 pp | none | −3.90 to −2.42 pp |
+| BatchNorm | **67.92%** | 48.55% | on +19.37 pp | none | +18.30 to +20.42 pp |
+| Residual | 67.92% | **68.60%** | off +0.68 pp | substantial | −1.36 to +0.03 pp |
+| Schedule | **67.92%** | 59.44% | cosine +8.48 pp | none | +7.60 to +9.40 pp |
 
 The four “on” configs share the same base recipe, so their identical 67.92%
 result is the controlled baseline for each pair, not four independent

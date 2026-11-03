@@ -1,6 +1,6 @@
 # Experiment report — cifar10_scratch_baseline
 
-- Run directory: `/Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T055515Z_cifar10_scratch_baseline_0283f0f0`
+- Run directory: `runs/20261103T055515Z_cifar10_scratch_baseline_0283f0f0`
 - Status: completed
 - Config hash: 0283f0f08d57f258
 
@@ -34,7 +34,7 @@
 ### Data
 
 - `adapter`: torchvision
-- `root`: /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/data
+- `root`: ./data
 - `manifest`: —
 - `image_root`: —
 - `class_names`: auto
@@ -167,6 +167,7 @@
 
 | Split | Count | Fingerprint |
 | --- | --- | --- |
+| test | 10,000 | 7aac74439fdc9640 |
 | train | 45,000 | 7b1e5f5d9704b897 |
 | val | 5,000 | ce06d441c20dc849 |
 
@@ -305,16 +306,16 @@ Best validation accuracy: 0.928 (epoch 46)
 - Epochs run: 50
 - Git commit: d42b24e (dirty)
 - Git branch: main
-- Mean latency (ms): 2.106
-- p50 latency (ms): 2.008
-- p95 latency (ms): 2.518
-- Throughput (images/s): 474.741
+- Mean latency (ms): 2.081
+- p50 latency (ms): 1.987
+- p95 latency (ms): 2.519
+- Throughput (images/s): 480.565
 
 ## Reproduction
 
 ```bash
-cnncls train -c <config.yaml>  # produced 20261103T055515Z_cifar10_scratch_baseline_0283f0f0
-cnncls evaluate --run /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T055515Z_cifar10_scratch_baseline_0283f0f0 --checkpoint /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T055515Z_cifar10_scratch_baseline_0283f0f0/checkpoints/best.pt
-cnncls report --run /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T055515Z_cifar10_scratch_baseline_0283f0f0 --format html
-cnncls compare /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T055515Z_cifar10_scratch_baseline_0283f0f0 <other-run>
+cnncls train -c <config.yaml> --runs-dir runs  # produced 20261103T055515Z_cifar10_scratch_baseline_0283f0f0
+cnncls evaluate --run runs/20261103T055515Z_cifar10_scratch_baseline_0283f0f0 --checkpoint runs/20261103T055515Z_cifar10_scratch_baseline_0283f0f0/checkpoints/best.pt
+cnncls report --run runs/20261103T055515Z_cifar10_scratch_baseline_0283f0f0
+cnncls compare runs/20261103T055515Z_cifar10_scratch_baseline_0283f0f0 <other-run>
 ```

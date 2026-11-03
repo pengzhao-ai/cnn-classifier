@@ -35,7 +35,7 @@ config-driven training pipeline that reports its own behavior honestly.
 | Test accuracy 95% CI | 91.76–92.77% |
 | Test NLL | 0.2894 |
 | Calibration ECE | 0.0434 |
-| Latency | 2.16 ms/image on MPS |
+| Latency | 2.08 ms/image on MPS |
 | Training time | 1,338 s (22.3 min) |
 
 Reference: 92.42% validation / 92.61% test on MPS, seed 42. The test difference
@@ -47,6 +47,8 @@ met. No tuning was performed against the test split.
 ![Confusion matrix](../images/cifar10_confusion_matrix.png)
 
 ![Error gallery](../images/cifar10_errors.png)
+
+![Model card](../images/cifar10_model_card.png)
 
 ## Artifacts
 

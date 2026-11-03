@@ -43,7 +43,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           enable-cache: true
       - run: uv sync --all-extras --no-editable
-      - run: uv run --no-sync pytest
+      - run: uv run --no-sync pytest --cov=cnn_classifier --cov-fail-under=90
 
   smoke:
     name: Synthetic and bring-your-own-data smoke
@@ -85,6 +85,7 @@ jobs:
       - run: uvx twine check dist/*
       - run: uv pip install --reinstall --no-deps dist/*.whl
       - run: uv run --no-sync cnncls --version
+      - run: uv run --no-sync cnncls train -c configs/tests/synthetic.yaml --set training.epochs=1 --runs-dir /tmp/wheel-smoke
       - uses: actions/upload-artifact@v4
         with:
           name: dist

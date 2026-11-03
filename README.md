@@ -1,5 +1,9 @@
 # cnn-classifier
 
+[![Python 3.11–3.13](https://img.shields.io/badge/python-3.11--3.13-blue)](https://www.python.org/)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE)
+[![Docs](https://img.shields.io/badge/docs-pengzhao--ai.github.io%2Fcnn--classifier-indigo)](https://pengzhao-ai.github.io/cnn-classifier/)
+
 A config-driven, reproducible PyTorch toolkit for CNN image classification.
 
 `cnn-classifier` turns a new image/label dataset into a trained, evaluated, and
@@ -158,3 +162,7 @@ The approved design and implementation plan are in `docs/superpowers/`.
 ## License
 
 Apache-2.0. See [`LICENSE`](LICENSE).
+
+## Citation
+
+If you use this toolkit, cite it using [`CITATION.cff`](CITATION.cff).

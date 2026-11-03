@@ -1,6 +1,6 @@
 # Experiment report — ablation_cosine
 
-- Run directory: `/Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123549Z_ablation_cosine_123f8ffc`
+- Run directory: `runs/20261103T123549Z_ablation_cosine_123f8ffc`
 - Status: completed
 - Config hash: 123f8ffc26b6ee84
 
@@ -34,7 +34,7 @@
 ### Data
 
 - `adapter`: torchvision
-- `root`: /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/data
+- `root`: ./data
 - `manifest`: —
 - `image_root`: —
 - `class_names`: auto
@@ -270,8 +270,8 @@ Best validation accuracy: 0.674 (epoch 7)
 ## Reproduction
 
 ```bash
-cnncls train -c <config.yaml>  # produced 20261103T123549Z_ablation_cosine_123f8ffc
-cnncls evaluate --run /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123549Z_ablation_cosine_123f8ffc --checkpoint /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123549Z_ablation_cosine_123f8ffc/checkpoints/best.pt
-cnncls report --run /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123549Z_ablation_cosine_123f8ffc --format html
-cnncls compare /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123549Z_ablation_cosine_123f8ffc <other-run>
+cnncls train -c <config.yaml> --runs-dir runs  # produced 20261103T123549Z_ablation_cosine_123f8ffc
+cnncls evaluate --run runs/20261103T123549Z_ablation_cosine_123f8ffc --checkpoint runs/20261103T123549Z_ablation_cosine_123f8ffc/checkpoints/best.pt
+cnncls report --run runs/20261103T123549Z_ablation_cosine_123f8ffc
+cnncls compare runs/20261103T123549Z_ablation_cosine_123f8ffc <other-run>
 ```

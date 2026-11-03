@@ -40,8 +40,8 @@ machine, not guarantees.
 | Top-5 accuracy | 98.90% |
 | NLL | 0.2894 |
 | ECE | 0.0434 |
-| Latency | 2.16 ms/image |
-| Peak MPS memory | 181.5 MB |
+| Latency | 2.08 ms/image |
+| MPS memory (allocated) | 121.0 MB |
 
 Reference: 92.42% validation / 92.61% test. The reproduced test result is
 −0.36 percentage points from the reference and above the ≥90% gate. No test-set
@@ -57,6 +57,14 @@ All three runs share the CIFAR-10 test set and test fingerprint
 | Scratch | 90.88% | 90.33–91.43% | 90.90% | 11,181,642 |
 | Linear probe | 62.66% | 61.75–63.63% | 62.54% | 5,130 |
 | Fine-tune | **94.98%** | 94.57–95.41% | 94.97% | 11,181,642 |
+
+Paired bootstrap on the shared test predictions:
+
+| Comparison | Difference | 95% CI |
+|---|---:|---|
+| Fine-tune − scratch | +4.10 pp | +3.49 to +4.69 pp |
+| Fine-tune − linear probe | +32.32 pp | +31.35 to +33.23 pp |
+| Linear probe − scratch | −28.22 pp | −29.19 to −27.21 pp |
 
 ![Transfer comparison](images/transfer_comparison.png)
 
@@ -77,6 +85,15 @@ identical 67.92% result is the shared baseline for each pair.
 | BatchNorm | **67.92%** | 48.55% | on +19.37 pp | none |
 | Residual | 67.92% | **68.60%** | off +0.68 pp | substantial |
 | Schedule | **67.92%** | 59.44% | cosine +8.48 pp | none |
+
+Paired bootstrap (on − off):
+
+| Pair | Difference | 95% CI |
+|---|---:|---|
+| Augmentation | −3.14 pp | −3.90 to −2.42 pp |
+| BatchNorm | +19.37 pp | +18.30 to +20.42 pp |
+| Residual | −0.68 pp | −1.36 to +0.03 pp |
+| Schedule | +8.48 pp | +7.60 to +9.40 pp |
 
 ![Ablation comparison](images/ablation_comparison.png)
 
@@ -108,6 +125,10 @@ resolution, and defocus and sensor noise exceed 91% F1. See the
 - `results/comparison/` holds the cross-run transfer and ablation tables.
 - `docs/images/` mirrors selected figures; a test checks byte-identical copies.
 - Timings are measurements, not guarantees.
+
+The packaging is reproducible: after rerunning the demos, run
+`python scripts/package_results.py` and `python scripts/make_comparisons.py`.
+See `scripts/README.md` for details.
 
 ## Caveats
 

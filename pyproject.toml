@@ -108,7 +108,6 @@ include = [
     "/LICENSE",
     "/pyproject.toml",
     "/src",
-    "/tests",
 ]
 
 [tool.pytest.ini_options]

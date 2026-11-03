@@ -1,8 +1,9 @@
 """Run the CIFAR-10 scratch baseline demo.
 
 Full mode uses the reference configuration for 50 epochs. Quick mode keeps the
-same data and model but runs two epochs with bootstrap and latency measurement
-disabled, which is enough for a pipeline smoke check on a laptop.
+same data and model but uses a 10,000/2,000 subset for two epochs with bootstrap
+and latency measurement disabled, which is enough for a pipeline smoke check on
+a laptop.
 
 Usage:
     python demos/cifar10/scripts/run_scratch.py
@@ -22,6 +23,8 @@ DEFAULT_RUNS_DIR = REPO_ROOT / "runs"
 
 QUICK_OVERRIDES = [
     "training.epochs=2",
+    "data.adapter_params.max_train_samples=10000",
+    "data.adapter_params.max_val_samples=2000",
     "evaluation.bootstrap.enabled=false",
     "evaluation.latency.enabled=false",
 ]

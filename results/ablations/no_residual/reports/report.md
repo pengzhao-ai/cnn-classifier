@@ -1,6 +1,6 @@
 # Experiment report — ablation_no_residual
 
-- Run directory: `/Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123528Z_ablation_no_residual_011d4ad2`
+- Run directory: `runs/20261103T123528Z_ablation_no_residual_011d4ad2`
 - Status: completed
 - Config hash: 011d4ad272296b03
 
@@ -34,7 +34,7 @@
 ### Data
 
 - `adapter`: torchvision
-- `root`: /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/data
+- `root`: ./data
 - `manifest`: —
 - `image_root`: —
 - `class_names`: auto
@@ -270,8 +270,8 @@ Best validation accuracy: 0.682 (epoch 8)
 ## Reproduction
 
 ```bash
-cnncls train -c <config.yaml>  # produced 20261103T123528Z_ablation_no_residual_011d4ad2
-cnncls evaluate --run /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123528Z_ablation_no_residual_011d4ad2 --checkpoint /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123528Z_ablation_no_residual_011d4ad2/checkpoints/best.pt
-cnncls report --run /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123528Z_ablation_no_residual_011d4ad2 --format html
-cnncls compare /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123528Z_ablation_no_residual_011d4ad2 <other-run>
+cnncls train -c <config.yaml> --runs-dir runs  # produced 20261103T123528Z_ablation_no_residual_011d4ad2
+cnncls evaluate --run runs/20261103T123528Z_ablation_no_residual_011d4ad2 --checkpoint runs/20261103T123528Z_ablation_no_residual_011d4ad2/checkpoints/best.pt
+cnncls report --run runs/20261103T123528Z_ablation_no_residual_011d4ad2
+cnncls compare runs/20261103T123528Z_ablation_no_residual_011d4ad2 <other-run>
 ```

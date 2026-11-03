@@ -1,6 +1,6 @@
 # Experiment report — ablation_no_augmentation
 
-- Run directory: `/Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123408Z_ablation_no_augmentation_cf3b3f52`
+- Run directory: `runs/20261103T123408Z_ablation_no_augmentation_cf3b3f52`
 - Status: completed
 - Config hash: cf3b3f524a5a4e2c
 
@@ -34,7 +34,7 @@
 ### Data
 
 - `adapter`: torchvision
-- `root`: /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/data
+- `root`: ./data
 - `manifest`: —
 - `image_root`: —
 - `class_names`: auto
@@ -270,8 +270,8 @@ Best validation accuracy: 0.709 (epoch 8)
 ## Reproduction
 
 ```bash
-cnncls train -c <config.yaml>  # produced 20261103T123408Z_ablation_no_augmentation_cf3b3f52
-cnncls evaluate --run /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123408Z_ablation_no_augmentation_cf3b3f52 --checkpoint /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123408Z_ablation_no_augmentation_cf3b3f52/checkpoints/best.pt
-cnncls report --run /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123408Z_ablation_no_augmentation_cf3b3f52 --format html
-cnncls compare /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123408Z_ablation_no_augmentation_cf3b3f52 <other-run>
+cnncls train -c <config.yaml> --runs-dir runs  # produced 20261103T123408Z_ablation_no_augmentation_cf3b3f52
+cnncls evaluate --run runs/20261103T123408Z_ablation_no_augmentation_cf3b3f52 --checkpoint runs/20261103T123408Z_ablation_no_augmentation_cf3b3f52/checkpoints/best.pt
+cnncls report --run runs/20261103T123408Z_ablation_no_augmentation_cf3b3f52
+cnncls compare runs/20261103T123408Z_ablation_no_augmentation_cf3b3f52 <other-run>
 ```

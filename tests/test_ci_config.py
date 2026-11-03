@@ -30,6 +30,7 @@ def test_ci_uses_non_editable_install_and_no_full_training():
     text = (WORKFLOWS / "ci.yml").read_text(encoding="utf-8")
     assert "uv sync --all-extras --no-editable" in text
     assert "--no-sync" in text
+    assert "--cov-fail-under=90" in text
     for forbidden in (
         "run_scratch.py\n",
         "run_transfer.py",
@@ -65,6 +66,7 @@ def test_release_workflow_uses_tag_trigger_and_trusted_publishing():
         "environment: pypi",
         "pypa/gh-action-pypi-publish",
         "gh release create",
+        "GH_REPO: ${{ github.repository }}",
     ):
         assert phrase in text, phrase
     assert "password:" not in text.lower()

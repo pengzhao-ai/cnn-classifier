@@ -1,6 +1,6 @@
 # Experiment report — ablation_no_batchnorm
 
-- Run directory: `/Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123447Z_ablation_no_batchnorm_8a7bf7ab`
+- Run directory: `runs/20261103T123447Z_ablation_no_batchnorm_8a7bf7ab`
 - Status: completed
 - Config hash: 8a7bf7abe135c3f0
 
@@ -34,7 +34,7 @@
 ### Data
 
 - `adapter`: torchvision
-- `root`: /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/data
+- `root`: ./data
 - `manifest`: —
 - `image_root`: —
 - `class_names`: auto
@@ -270,8 +270,8 @@ Best validation accuracy: 0.467 (epoch 7)
 ## Reproduction
 
 ```bash
-cnncls train -c <config.yaml>  # produced 20261103T123447Z_ablation_no_batchnorm_8a7bf7ab
-cnncls evaluate --run /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123447Z_ablation_no_batchnorm_8a7bf7ab --checkpoint /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123447Z_ablation_no_batchnorm_8a7bf7ab/checkpoints/best.pt
-cnncls report --run /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123447Z_ablation_no_batchnorm_8a7bf7ab --format html
-cnncls compare /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/runs/20261103T123447Z_ablation_no_batchnorm_8a7bf7ab <other-run>
+cnncls train -c <config.yaml> --runs-dir runs  # produced 20261103T123447Z_ablation_no_batchnorm_8a7bf7ab
+cnncls evaluate --run runs/20261103T123447Z_ablation_no_batchnorm_8a7bf7ab --checkpoint runs/20261103T123447Z_ablation_no_batchnorm_8a7bf7ab/checkpoints/best.pt
+cnncls report --run runs/20261103T123447Z_ablation_no_batchnorm_8a7bf7ab
+cnncls compare runs/20261103T123447Z_ablation_no_batchnorm_8a7bf7ab <other-run>
 ```

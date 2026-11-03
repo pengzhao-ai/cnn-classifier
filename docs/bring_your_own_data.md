@@ -40,17 +40,18 @@ leakage across splits.
 
 | Item | Supported |
 |---|---|
-| Bit depth | 8-bit RGB/grayscale, 16-bit RGB/grayscale |
+| Bit depth | 8-bit RGB/grayscale; 16-bit grayscale PNG; 16-bit RGB/grayscale TIFF |
 | Formats | PNG, TIFF, JPEG, BMP, WebP through Pillow/tifffile |
 | Labels | folder names or manifest `label` |
 | Split | folder names or manifest `split`; random, stratified, group, explicit |
 | Class order | adapter order or `data.class_names` |
-| Value range | automatic, fixed, or percentile |
+| Value range | automatic or fixed |
 | Channels | `rgb`, `gray`, or `as_is` |
 
 A 16-bit image is scaled from its full stored range to `float32` in `[0, 1]`;
-it is not truncated to 8 bits. The selected policy is recorded in the model
-contract and the report.
+it is not truncated to 8 bits. A 16-bit RGB PNG is rejected with a clear error
+rather than silently downcast; use a 16-bit TIFF for multichannel 16-bit data.
+The selected policy is recorded in the model contract and the report.
 
 ## What the model receives
 
@@ -111,7 +112,7 @@ trainer, evaluator, and report path then work unchanged.
 - **Wrong class order.** `data.class_names` must match the adapter's index
   order; a mismatch fails loudly.
 - **Wrong value range.** If your files store 12-bit data left-aligned in
-  16 bits, use an explicit fixed or percentile range instead of `auto`.
+  16 bits, use an explicit fixed range instead of `auto`.
 - **Leakage across splits.** Put the source subject or scene in the `group`
   column and use the group split policy.
 - **Test-set use during training.** The trainer never iterates the test loader;

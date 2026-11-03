@@ -19,8 +19,8 @@ directory remains under `runs/` (gitignored).
 | Test accuracy 95% CI | 91.76% – 92.77% |
 | Test NLL | 0.2894 |
 | Calibration ECE | 0.0434 |
-| Latency (MPS, batch inference) | 2.16 ms / image (462.9 images/s) |
-| Peak MPS memory | 181.5 MB |
+| Latency (MPS, batch inference) | 2.08 ms / image (480.6 images/s) |
+| MPS memory (allocated) | 121.0 MB |
 | Training time | 1,338 s (22.3 min) |
 | Parameters | 7,827,786 (all trainable) |
 
@@ -47,6 +47,14 @@ The full comparison, Pareto chart, and caveats are in
 | Scratch | 90.88% | 90.33–91.43% | 90.90% | 11,181,642 | 19.6 min |
 | Linear probe | 62.66% | 61.75–63.63% | 62.54% | 5,130 | 8.4 min |
 | Fine-tune | **94.98%** | 94.57–95.41% | 94.97% | 11,181,642 | 19.5 min |
+
+Paired bootstrap on the shared test predictions:
+
+| Comparison | Difference | 95% CI |
+|---|---:|---|
+| Fine-tune − scratch | +4.10 pp | +3.49 to +4.69 pp |
+| Fine-tune − linear probe | +32.32 pp | +31.35 to +33.23 pp |
+| Linear probe − scratch | −28.22 pp | −29.19 to −27.21 pp |
 
 The scratch control uses ImageNet normalization to match the pretrained input
 contract. BatchNorm running statistics update even while the probe parameters

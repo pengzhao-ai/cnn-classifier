@@ -111,7 +111,7 @@ contract. The two are linked by:
 - `data.channels`: `rgb`, `gray`, or `as_is`;
 - `data.image_size`;
 - `data.normalization`: computed, supplied, or none;
-- `data.value_range`: automatic, fixed, or percentile for scientific images.
+- `data.value_range`: automatic or fixed for scientific images.
 
 `inspect-data` and `train --dry-run` print the resulting contract, and the run
 directory stores it in `data/model_contract.json`. See

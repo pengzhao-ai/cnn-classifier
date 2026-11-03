@@ -41,6 +41,16 @@ All three runs share the CIFAR-10 test set and test fingerprint.
 
 ![Transfer comparison](../images/transfer_comparison.png)
 
+![Fine-tune training history](../images/transfer_finetune_training_history.png)
+
+Paired bootstrap on the shared test predictions:
+
+| Comparison | Difference | 95% CI |
+|---|---:|---|
+| Fine-tune − scratch | +4.10 pp | +3.49 to +4.69 pp |
+| Fine-tune − linear probe | +32.32 pp | +31.35 to +33.23 pp |
+| Linear probe − scratch | −28.22 pp | −29.19 to −27.21 pp |
+
 The comparison records test fingerprints, per-run bootstrap intervals,
 parameter counts, training time, latency, and peak memory. BatchNorm running
 statistics update even while probe parameters are frozen, so the linear probe
