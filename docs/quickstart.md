@@ -2,19 +2,31 @@
 
 ## Install
 
+### From PyPI
+
+```bash
+pip install cnn-classifier-toolkit
+cnncls doctor
+```
+
+### From a checkout
+
+The commands below use the repository's configs and demos, so run them from a
+checkout. The package installs non-editable on purpose. On macOS, an editable
+`.pth` can be hidden after PyTorch loads; the non-editable install keeps the
+`cnncls` entry point reliable.
+
 ```bash
 make sync
 source .venv/bin/activate
 cnncls doctor
 ```
 
-The package installs non-editable on purpose. On macOS, an editable `.pth` can
-be hidden after PyTorch loads; the non-editable install keeps the `cnncls`
-entry point reliable. Run `make sync` after changing library code. If the
-installed copy still has old code, force it:
+Run `make sync` after changing library code. If the installed copy still has old
+code, force it:
 
 ```bash
-uv sync --all-extras --no-editable --reinstall-package cnn-classifier
+uv sync --all-extras --no-editable --reinstall-package cnn-classifier-toolkit
 ```
 
 Without activating the environment, use `uv run --no-sync ...` rather than

@@ -1,8 +1,12 @@
 # Changelog
 
-All notable changes to `cnn-classifier` are documented here.
+All notable changes to `cnn-classifier-toolkit` are documented here.
 
 ## [Unreleased]
+
+## [0.1.0] - 2026-11-03
+
+Initial public release.
 
 ### Added
 
@@ -26,7 +30,3 @@ All notable changes to `cnn-classifier` are documented here.
   Silicon MPS (reference 92.61%).
 - Full transfer, ablation, and optical results are committed under `results/`,
   with comparison tables and figures under `results/comparison/`.
-
-## [0.1.0]
-
-Initial public release.

@@ -12,7 +12,7 @@ The package is intentionally non-editable. Run `make sync` after changing
 library code; if the installed copy is stale, use:
 
 ```bash
-uv sync --all-extras --no-editable --reinstall-package cnn-classifier
+uv sync --all-extras --no-editable --reinstall-package cnn-classifier-toolkit
 ```
 
 ## Development workflow

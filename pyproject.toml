@@ -3,7 +3,7 @@ requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
 [project]
-name = "cnn-classifier"
+name = "cnn-classifier-toolkit"
 dynamic = ["version"]
 description = "A config-driven, reproducible PyTorch toolkit for CNN image classification."
 readme = "README.md"

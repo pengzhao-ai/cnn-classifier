@@ -1,8 +1,9 @@
 # Bring your own data
 
-`cnn-classifier` is designed so that a new image-classification dataset is a
-data adapter plus a YAML configuration, not a rewrite of the training loop. This
-page shows the contract with the committed quickstart fixture.
+The CNN Classifier Toolkit is designed so that a new image-classification
+dataset is a data adapter plus a YAML configuration, not a rewrite of the
+training loop. This page shows the contract with the committed quickstart
+fixture.
 
 ## What you provide
 

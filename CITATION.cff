@@ -1,8 +1,8 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata below."
-title: "cnn-classifier"
+title: "cnn-classifier-toolkit"
 abstract: "A config-driven, reproducible PyTorch toolkit for CNN image classification."
-version: "0.1.0.dev0"
+version: "0.1.0"
 date-released: "2026-11-03"
 type: software
 authors:

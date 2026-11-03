@@ -23,6 +23,7 @@ def _project() -> dict:
 
 def test_package_metadata_urls_and_entry_point():
     metadata = _project()
+    assert metadata["name"] == "cnn-classifier-toolkit"
     assert metadata["scripts"]["cnncls"] == "cnn_classifier.cli:main"
     assert metadata["urls"]["Repository"] == "https://github.com/pengzhao-ai/cnn-classifier"
     assert metadata["urls"]["Documentation"] == "https://pengzhao-ai.github.io/cnn-classifier/"

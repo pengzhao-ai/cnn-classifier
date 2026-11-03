@@ -217,7 +217,7 @@ wheels = [
 ]
 
 [[package]]
-name = "cnn-classifier"
+name = "cnn-classifier-toolkit"
 source = { editable = "." }
 dependencies = [
     { name = "jinja2" },

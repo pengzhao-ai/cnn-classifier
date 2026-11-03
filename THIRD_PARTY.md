@@ -1,8 +1,8 @@
 # Third-party software
 
-`cnn-classifier` depends on the following open-source projects. The license
-listed is the primary license of the upstream project; consult the installed
-package metadata for the authoritative text and any bundled notices.
+`cnn-classifier-toolkit` depends on the following open-source projects. The
+license listed is the primary license of the upstream project; consult the
+installed package metadata for the authoritative text and any bundled notices.
 
 | Package | Purpose | License |
 |---|---|---|

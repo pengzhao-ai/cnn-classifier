@@ -1,12 +1,15 @@
-# cnn-classifier
+# CNN Classifier Toolkit
 
 A config-driven, reproducible PyTorch toolkit for CNN image classification.
 
-`cnn-classifier` turns a new image/label dataset into a trained, evaluated, and
+The toolkit turns a new image/label dataset into a trained, evaluated, and
 reported classifier through a typed YAML configuration. The same library powers
 the command line, so a quick smoke test and a full experiment use one pipeline.
 It ships with a complete reference implementation, five demos, and committed
 results from a measured Apple Silicon MPS run.
+
+It is published on PyPI as `cnn-classifier-toolkit`; the import package remains
+`cnn_classifier` and the CLI remains `cnncls`.
 
 ## Results at a glance
 

@@ -1,4 +1,4 @@
-site_name: cnn-classifier
+site_name: CNN Classifier Toolkit
 site_description: A config-driven, reproducible PyTorch toolkit for CNN image classification.
 site_url: https://pengzhao-ai.github.io/cnn-classifier/
 repo_url: https://github.com/pengzhao-ai/cnn-classifier

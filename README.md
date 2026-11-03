@@ -1,4 +1,4 @@
-# cnn-classifier
+# CNN Classifier Toolkit
 
 [![Python 3.11–3.13](https://img.shields.io/badge/python-3.11--3.13-blue)](https://www.python.org/)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE)
@@ -6,9 +6,12 @@
 
 A config-driven, reproducible PyTorch toolkit for CNN image classification.
 
-`cnn-classifier` turns a new image/label dataset into a trained, evaluated, and
+The toolkit turns a new image/label dataset into a trained, evaluated, and
 reported classifier through a typed YAML configuration. The same library powers
 the command line, so a quick smoke test and a full experiment use one pipeline.
+
+It is published on PyPI as `cnn-classifier-toolkit`; the import package remains
+`cnn_classifier` and the CLI remains `cnncls`.
 
 ## Results at a glance
 
@@ -43,6 +46,15 @@ for the environment and caveats.
 | Devices | automatic CUDA, Apple MPS, or CPU selection |
 
 ## Install
+
+### From PyPI
+
+```bash
+pip install cnn-classifier-toolkit
+cnncls doctor
+```
+
+### From a checkout
 
 ```bash
 make sync
