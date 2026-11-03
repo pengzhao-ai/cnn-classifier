@@ -1,0 +1,39 @@
+site_name: cnn-classifier
+site_description: A config-driven, reproducible PyTorch toolkit for CNN image classification.
+site_url: https://pengzhao-ai.github.io/cnn-classifier/
+repo_url: https://github.com/pengzhao-ai/cnn-classifier
+repo_name: pengzhao-ai/cnn-classifier
+strict: true
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - content.code.copy
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: teal
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: teal
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+nav:
+  - Home: index.md
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - toc:
+      permalink: true
+  - pymdownx.highlight
+  - pymdownx.superfences

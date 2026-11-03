@@ -1,0 +1,145 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "cnn-classifier"
+dynamic = ["version"]
+description = "A config-driven, reproducible PyTorch toolkit for CNN image classification."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.11,<3.14"
+authors = [{ name = "Peng Zhao" }]
+keywords = [
+    "cnn",
+    "classification",
+    "deep-learning",
+    "image-classification",
+    "pytorch",
+    "toolkit",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Typing :: Typed",
+]
+dependencies = [
+    "torch>=2.15,<3",
+    "torchvision>=0.29,<1",
+    "pydantic>=2.6",
+    "pyyaml>=6.0",
+    "numpy>=2.0",
+    "pillow>=10.0",
+    "tifffile>=2024.1",
+    "matplotlib>=3.8",
+    "jinja2>=3.1",
+    "typer>=0.12",
+    "rich>=13.0",
+]
+
+[project.optional-dependencies]
+viz = [
+    "torchinfo>=1.8",
+    "scikit-learn>=1.4",
+]
+tracking = [
+    "tensorboard>=2.16",
+]
+docs = [
+    "mkdocs-material>=9.5",
+    "mkdocstrings[python]>=0.24",
+]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "hypothesis>=6.98",
+    "ruff>=0.6",
+    "mypy>=1.11",
+    "pre-commit>=3.7",
+    "pandas>=2.2",
+]
+all = [
+    "torchinfo>=1.8",
+    "scikit-learn>=1.4",
+    "tensorboard>=2.16",
+    "mkdocs-material>=9.5",
+    "mkdocstrings[python]>=0.24",
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "hypothesis>=6.98",
+    "ruff>=0.6",
+    "mypy>=1.11",
+    "pre-commit>=3.7",
+    "pandas>=2.2",
+]
+
+[project.scripts]
+cnncls = "cnn_classifier.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/pengzhao-ai/cnn-classifier"
+Documentation = "https://pengzhao-ai.github.io/cnn-classifier/"
+Repository = "https://github.com/pengzhao-ai/cnn-classifier"
+Changelog = "https://github.com/pengzhao-ai/cnn-classifier/blob/main/CHANGELOG.md"
+Issues = "https://github.com/pengzhao-ai/cnn-classifier/issues"
+
+[tool.hatch.version]
+path = "src/cnn_classifier/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cnn_classifier"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/README.md",
+    "/LICENSE",
+    "/pyproject.toml",
+    "/src",
+    "/tests",
+]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra --strict-markers --strict-config"
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.coverage.run]
+source = ["cnn_classifier"]
+branch = true
+omit = ["*/viz/*"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+extend-exclude = ["docs", "site", "dist", "build"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4", "SIM", "RUF"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["cnn_classifier"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unreachable = true
+show_error_codes = true
+files = ["src"]
