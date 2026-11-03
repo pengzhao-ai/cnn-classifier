@@ -14,7 +14,7 @@ the command line, so a quick smoke test and a full experiment use one pipeline.
 | ResNet-18 fine-tune, 32×32 | **94.98% test** | 30 epochs, 19.5 min MPS | measured |
 | ResNet-18 scratch, 32×32 | 90.88% test | 30 epochs, 19.6 min MPS | measured |
 | ResNet-18 linear probe | 62.66% test | 30 epochs, 8.4 min MPS | measured |
-| Four core ablations | BN +19.4 pp; cosine +8.5 pp; residual +0.7 pp; augmentation −3.1 pp | 8 epochs, 10k train subset | measured |
+| Four core ablations | BN on +19.4 pp; cosine +8.5 pp; residual off +0.7 pp; augmentation off +3.1 pp | 8 epochs, 10k train subset | measured |
 | Optical degradation classifier | 85.71% test | 20 epochs, 7.5 s MPS | measured |
 | Bring-your-own-data quickstart | contract verified | 2 epochs, under a minute | complete |
 
