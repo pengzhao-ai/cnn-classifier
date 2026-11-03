@@ -3,149 +3,101 @@
 A config-driven, reproducible PyTorch toolkit for CNN image classification.
 
 `cnn-classifier` turns a new image/label dataset into a trained, evaluated, and
-reported classifier through a typed YAML configuration. The reusable core covers
-data adapters, configurable CNN and torchvision models, training, evaluation,
-diagnostics, and artifact-driven reports.
+reported classifier through a typed YAML configuration. The same library powers
+the command line, so a quick smoke test and a full experiment use one pipeline.
 
-!!! note "Milestone A complete"
-    The core library, CLI, evaluation stack, diagnostics, visualization, and
-    report generator are implemented and tested. Dataset demos and the full
-    results site are the next milestone.
+!!! note "Sharp v1"
+    The core library, CLI, evaluation stack, diagnostics, report generator, and
+    the five demo suites are implemented. The CIFAR-10 scratch baseline has been
+    reproduced on Apple Silicon MPS; the transfer, ablation, and optical runs are
+    scheduled for the final benchmark stage.
 
-## Why this exists
+## Results at a glance
 
-Most CNN projects start as a notebook with a hard-coded dataset, model, and
-training loop. Reusing that work on the next image problem means rewriting the
-same plumbing. This project makes the plumbing explicit:
+| Experiment | Result | Budget | Status |
+|---|---:|---|---|
+| CIFAR-10 scratch baseline | **92.25% test**, 92.78% best validation | 50 epochs, 22.3 min MPS | reproduced |
+| Three 32×32 ResNet-18 transfer runs | pending | 30 epochs each | benchmark stage |
+| Four core ablations | pending | 8 epochs, 10k train subset | benchmark stage |
+| Optical degradation classifier | pending | 20 epochs | benchmark stage |
+| Bring-your-own-data quickstart | contract verified | 2 epochs, under a minute | complete |
+
+Reference for the scratch baseline: 92.42% validation / 92.61% test on MPS,
+seed 42. The reproduced test result is within 0.4 percentage points and clears
+the ≥90% acceptance gate. See [Results](results.md) for the environment and
+caveats.
+
+## What it is
 
 - **One configuration contract.** Every experiment is a validated YAML file.
-  Unknown keys fail; CLI overrides are checked against the same schema.
+  Unknown keys fail; CLI overrides use the same schema.
 - **One data contract.** Adapters produce `float32 [C, H, W]` samples, integer
-  labels, and a written model contract. Raw files, NumPy arrays, and torchvision
-  datasets all feed the same trainer.
-- **One artifact contract.** A run directory is self-describing: resolved config,
-  environment, git state, fingerprints, checkpoints, metrics, predictions,
-  figures, and a report.
-- **Test discipline.** The test split is isolated during training and available
-  only through an explicit evaluation step.
+  labels, and a written model contract.
+- **One artifact contract.** A run directory is self-describing: resolved
+  config, environment, git state, fingerprints, checkpoints, metrics,
+  predictions, figures, and a report.
+- **Test discipline.** Training never iterates the test loader; test is
+  available only through an explicit evaluation step.
 
-This is a modern, reproducible, well-diagnosed CNN toolkit. It is not a
-state-of-the-art benchmark submission, a model zoo, or a notebook collection.
+## Architecture
 
-## Install and verify
+```mermaid
+flowchart LR
+    YAML[Typed YAML config] --> Data[Dataset adapters]
+    Data --> Loader[Train / val / test loaders]
+    Loader --> Model[Model registry]
+    Model --> Trainer[Trainer + callbacks]
+    Trainer --> Eval[Evaluation + diagnostics]
+    Eval --> Report[Figures + HTML / Markdown report]
+    Trainer --> Run[Self-describing run directory]
+    Eval --> Run
+    Report --> Run
+```
+
+The dependency rule is one-way: configuration and data do not import the
+training loop; training does not import plotting. Reporting reads run artifacts.
+See [How it works](how_it_works.md) for the module boundaries.
+
+## Quickstart
 
 ```bash
 make sync
 source .venv/bin/activate
 cnncls doctor
-```
-
-The package is installed non-editable so the console entry point works reliably
-on macOS even after PyTorch loads. Run `make sync` after changing library code.
-
-## Quickstart
-
-The synthetic config exercises the entire pipeline without downloading data:
-
-```bash
 cnncls train -c configs/tests/synthetic.yaml --set training.epochs=1
 ```
 
-Inspect the raw-to-intake contract and debug before a longer run:
+The synthetic run needs no download. For the real-data path:
 
 ```bash
-cnncls inspect-data -c configs/tests/synthetic.yaml
-cnncls debug -c configs/tests/synthetic.yaml --overfit-batch --steps 20
-cnncls train -c configs/tests/synthetic.yaml --dry-run
+python demos/bring_your_own_data/scripts/run_quickstart.py
+python demos/cifar10/scripts/run_scratch.py --quick
 ```
 
-Evaluate and reuse artifacts:
+## Demos
 
-```bash
-cnncls evaluate --checkpoint runs/<run>/checkpoints/best.pt --split test
-cnncls predict --checkpoint runs/<run>/checkpoints/best.pt --input image.png
-cnncls report --run runs/<run>
-cnncls compare runs/<run-a> runs/<run-b> --out results/comparison
-```
+| Demo | What it shows | Entry point |
+|---|---|---|
+| [CIFAR-10 scratch](https://github.com/pengzhao-ai/cnn-classifier/tree/main/demos/cifar10) | reference residual CNN and full training path | `demos/cifar10/scripts/run_scratch.py` |
+| [Transfer benchmark](https://github.com/pengzhao-ai/cnn-classifier/tree/main/configs/cifar10) | scratch vs linear probe vs fine-tune at 32×32 | `demos/cifar10/scripts/run_transfer.py` |
+| [Ablations](https://github.com/pengzhao-ai/cnn-classifier/tree/main/demos/ablations) | four controlled pairs on a reduced CIFAR split | `demos/ablations/run_ablations.py` |
+| [Optical degradation](https://github.com/pengzhao-ai/cnn-classifier/tree/main/demos/optics_degradation) | manifest data, group-safe splits, confusion analysis | `demos/optics_degradation/scripts/run_optics.py` |
+| [Bring your own data](bring_your_own_data.md) | raw-to-intake contract and custom adapters | `demos/bring_your_own_data/scripts/run_quickstart.py` |
 
-## Command line
+## Documentation map
 
-| Command | Purpose |
-|---|---|
-| `cnncls init DIR` | Scaffold a config, README, and data layout |
-| `cnncls doctor` | Versions, device selection, optional dependencies |
-| `cnncls inspect-data -c CONFIG` | Class balance, duplicates, corruption, leakage, model contract |
-| `cnncls debug -c CONFIG` | One-batch overfit, shape trace, gradients, determinism |
-| `cnncls train -c CONFIG` | Train, evaluate, write figures and the report |
-| `cnncls evaluate --checkpoint PATH` | Evaluate on `test` or `val`, write predictions and metrics |
-| `cnncls predict --checkpoint PATH --input PATH` | Image, folder, or manifest inference |
-| `cnncls report --run DIR` | Rebuild HTML and Markdown from artifacts |
-| `cnncls compare RUN... --out DIR` | Fair comparison with test-fingerprint enforcement |
+- [Quickstart](quickstart.md) — install, verify, run the first experiments.
+- [How it works](how_it_works.md) — module boundaries and the run lifecycle.
+- [Models & architectures](models.md) — registry, CNN presets, torchvision transfer.
+- [Configuration](configuration.md) — schema, defaults, overrides, validation.
+- [Techniques](techniques/augmentation.md) — augmentation, optimization, transfer,
+  evaluation rigor, efficiency and diagnostics.
+- [Results](results.md) — measured numbers, environment, and caveats.
+- [Extending](extending.md) — custom adapters, models, transforms.
+- [CLI](cli.md) and [API](api.md) — command and library reference.
 
-`train --dry-run` builds the dataset and model, runs one forward/backward pass,
-prints the contract and parameter counts, and exits without writing a run.
+## Positioning
 
-## Bring your own data
-
-The `image_folder` adapter expects one directory per class:
-
-```text
-data/
-├── train/{class_a,class_b,...}/
-├── val/{class_a,class_b,...}/
-└── test/{class_a,class_b,...}/     # optional
-```
-
-`cnncls init my_project` writes a starter `config.yaml` for this layout. Other
-adapters cover CSV manifests, NumPy arrays, torchvision datasets, and synthetic
-fixtures.
-
-## What is covered
-
-- **Augmentation and regularization:** torchvision v2 transforms, MixUp, CutMix,
-  label smoothing, dropout, weight decay, early stopping.
-- **Normalization and BatchNorm:** computed or supplied statistics, explicit normalization transforms,
-  BatchNorm on/off in both CNN families.
-- **Learning-rate management:** warmup, cosine, step, plateau, batch-level
-  stepping, differential parameter groups.
-- **ResNet and transfer learning:** configurable residual stages, torchvision
-  backbones, 32x32 stem adaptation, freezing, BatchNorm policy, linear probes.
-- **Evaluation:** top-k, macro F1, per-class precision/recall/F1, confusion
-  matrices, NLL, ECE/MCE/Brier, bootstrap intervals, TTA, latency, error
-  galleries.
-- **Reproducibility:** seeded data splits, RNG state in checkpoints, deterministic
-  mode, environment and git capture, data fingerprints.
-
-## Project layout
-
-```text
-src/cnn_classifier/
-├── config/       typed YAML schema, defaults chain, CLI overrides
-├── core/         devices, seeding, hashing, shared contracts
-├── data/         adapters, image I/O, splits, transforms, inspection
-├── models/       CNN builders, torchvision wrapper, transfer utilities
-├── training/     trainer, callbacks, checkpoints, optimizer, schedules, AMP
-├── evaluation/   metrics, calibration, bootstrap, latency, comparison
-├── diagnostics/  overfit, tracing, gradients, determinism
-├── viz/          publication-style figures and HTML/Markdown reports
-├── runs/         run directories and artifact writers
-└── cli.py        `cnncls` command line
-```
-
-## Development
-
-```bash
-make test        # library tests
-make coverage    # core coverage gate
-make lint        # ruff
-make typecheck   # mypy
-make docs        # this site
-make build       # wheel and sdist
-make gate        # all of the above
-```
-
-The approved design and implementation plan are in `docs/superpowers/`.
-
-## License
-
-Apache-2.0. See `LICENSE`.
+This is a modern, reproducible, well-diagnosed CNN training toolkit. It is not a
+state-of-the-art benchmark submission, a model zoo, or a notebook collection.
+The demos are chosen to exercise the engineering, not to win a leaderboard.

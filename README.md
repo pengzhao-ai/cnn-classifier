@@ -5,14 +5,28 @@ A config-driven, reproducible PyTorch toolkit for CNN image classification.
 `cnn-classifier` turns a new image/label dataset into a trained, evaluated, and
 reported classifier through a typed YAML configuration. The same library powers
 the command line, so a quick smoke test and a full experiment use one pipeline.
-It is designed to be reused across problems, not tied to a single dataset.
+
+## Results at a glance
+
+| Experiment | Result | Budget | Status |
+|---|---:|---|---|
+| CIFAR-10 scratch baseline | **92.25% test**, 92.78% best validation | 50 epochs, 22.3 min MPS | reproduced |
+| Three 32×32 ResNet-18 transfer runs | pending | 30 epochs each | benchmark stage |
+| Four core ablations | pending | 8 epochs, 10k train subset | benchmark stage |
+| Optical degradation classifier | pending | 20 epochs | benchmark stage |
+| Bring-your-own-data quickstart | contract verified | 2 epochs, under a minute | complete |
+
+Reference: 92.42% validation / 92.61% test on MPS, seed 42. The reproduced test
+result is within 0.4 percentage points and clears the ≥90% gate. See the
+[results page](https://pengzhao-ai.github.io/cnn-classifier/results/) for the
+environment and caveats.
 
 ## What is in the core
 
 | Area | What you get |
 |---|---|
 | Data | torchvision, ImageFolder, CSV manifest, NumPy, and synthetic adapters; 8-bit and 16-bit image I/O; group-safe splits; leakage and duplicate inspection |
-| Models | configurable simple CNN, configurable residual CNN, torchvision backbone wrapper, 32x32 stem adaptation, freezing, differential parameter groups |
+| Models | configurable simple CNN, configurable residual CNN, torchvision backbone wrapper, 32×32 stem adaptation, freezing, differential parameter groups |
 | Training | callbacks, early stopping, checkpoint/resume, AMP, gradient clipping and accumulation, MixUp/CutMix, EMA, warmup/cosine/step/plateau schedules |
 | Evaluation | top-k, per-class metrics, confusion matrices, NLL, calibration (ECE/MCE/Brier), bootstrap intervals, TTA, latency, error analysis |
 | Diagnostics | one-batch overfit, shape tracing, gradient reports, determinism checks |
@@ -62,25 +76,50 @@ cnncls report --run runs/<run>
 cnncls compare runs/<run-a> runs/<run-b> --out results/comparison
 ```
 
-`evaluate` and `predict` use the run's resolved config by default; pass
-`-c/--config` to make an override explicit. `compare` refuses to compare runs
-whose test fingerprints differ.
+## Demos
 
-## Bring your own data
+| Demo | What it shows | Entry point |
+|---|---|---|
+| CIFAR-10 scratch | reference residual CNN and the full training path | `python demos/cifar10/scripts/run_scratch.py` |
+| Transfer benchmark | scratch vs linear probe vs fine-tune at 32×32 | `python demos/cifar10/scripts/run_transfer.py` |
+| Ablations | four controlled pairs on a reduced CIFAR split | `python demos/ablations/run_ablations.py` |
+| Optical degradation | manifest data, group-safe splits, confusion analysis | `python demos/optics_degradation/scripts/run_optics.py` |
+| Bring your own data | raw-to-intake contract and custom adapters | `python demos/bring_your_own_data/scripts/run_quickstart.py` |
 
-Use the `image_folder` adapter with one directory per class:
+The bring-your-own-data quickstart uses a committed 16-bit fixture and finishes
+in a few seconds.
 
-```text
-data/
-├── train/{class_a,class_b,...}/
-├── val/{class_a,class_b,...}/
-└── test/{class_a,class_b,...}/     # optional
-```
+## Command line
 
-`cnncls init my_project` writes a starter config and this layout. The adapter
-reports the raw-to-intake contract: images are decoded, converted to the
-configured channel policy, scaled to `[0, 1]`, optionally normalized, and
-batched as `float32 [B, C, H, W]` tensors.
+| Command | Purpose |
+|---|---|
+| `cnncls init DIR` | Scaffold a config, README, and data layout |
+| `cnncls doctor` | Versions, device selection, optional dependencies |
+| `cnncls inspect-data -c CONFIG` | Class balance, duplicates, corruption, leakage, model contract |
+| `cnncls debug -c CONFIG` | One-batch overfit, shape trace, gradients, determinism |
+| `cnncls train -c CONFIG` | Train, evaluate, write figures and the report |
+| `cnncls evaluate --checkpoint PATH` | Evaluate on `test` or `val`, write predictions and metrics |
+| `cnncls predict --checkpoint PATH --input PATH` | Image, folder, or manifest inference |
+| `cnncls report --run DIR` | Rebuild HTML and Markdown from artifacts |
+| `cnncls compare RUN... --out DIR` | Fair comparison with test-fingerprint enforcement |
+
+`train --dry-run` builds the dataset and model, runs one forward/backward pass,
+prints the contract and parameter counts, and exits without writing a run.
+
+## Documentation
+
+The full site is published at
+[https://pengzhao-ai.github.io/cnn-classifier/](https://pengzhao-ai.github.io/cnn-classifier/):
+
+- [Quickstart](https://pengzhao-ai.github.io/cnn-classifier/quickstart/)
+- [How it works](https://pengzhao-ai.github.io/cnn-classifier/how_it_works/)
+- [Models & architectures](https://pengzhao-ai.github.io/cnn-classifier/models/)
+- [Configuration](https://pengzhao-ai.github.io/cnn-classifier/configuration/)
+- [Techniques](https://pengzhao-ai.github.io/cnn-classifier/techniques/augmentation/)
+- [Results](https://pengzhao-ai.github.io/cnn-classifier/results/)
+- [Bring your own data](https://pengzhao-ai.github.io/cnn-classifier/bring_your_own_data/)
+- [CLI](https://pengzhao-ai.github.io/cnn-classifier/cli/)
+- [API](https://pengzhao-ai.github.io/cnn-classifier/api/)
 
 ## Project layout
 
@@ -105,17 +144,13 @@ make test        # library tests
 make coverage    # core coverage gate
 make lint        # ruff
 make typecheck   # mypy
-make docs        # MkDocs site
+make docs        # this site
 make build       # wheel and sdist
 make gate        # all of the above
 ```
 
-The approved sharp-v1 design and implementation plan live in
-`docs/superpowers/`. Milestone A, the reusable core library, is complete;
-dataset demos and the published results site follow in Milestone B.
-
-Documentation: <https://pengzhao-ai.github.io/cnn-classifier/>
+The approved design and implementation plan are in `docs/superpowers/`.
 
 ## License
 
-Apache-2.0. See `LICENSE`.
+Apache-2.0. See [`LICENSE`](LICENSE).

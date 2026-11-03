@@ -9,7 +9,11 @@ theme:
   name: material
   features:
     - navigation.sections
+    - navigation.tabs
+    - navigation.top
+    - search.suggest
     - content.code.copy
+    - content.code.annotate
   palette:
     - scheme: default
       primary: indigo
@@ -26,14 +30,54 @@ theme:
 
 nav:
   - Home: index.md
+  - Quickstart: quickstart.md
+  - How it works: how_it_works.md
+  - Models & architectures: models.md
+  - Configuration: configuration.md
+  - Techniques:
+      - Augmentation & regularization: techniques/augmentation.md
+      - Optimization & LR: techniques/optimization.md
+      - Transfer learning: techniques/transfer.md
+      - Evaluation rigor: techniques/evaluation.md
+      - Efficiency & diagnostics: techniques/diagnostics.md
+  - Case studies:
+      - CIFAR-10 scratch: case_studies/cifar10.md
+      - Transfer benchmark: case_studies/transfer.md
+      - Optical degradation: case_studies/optics_degradation.md
+      - Bring your own data: bring_your_own_data.md
+      - Ablations: case_studies/ablations.md
+  - Results: results.md
+  - Extending: extending.md
+  - CLI: cli.md
+  - API: api.md
+  - Project:
+      - Release: release.md
+      - Design: superpowers/specs/2026-11-02-cnn-classifier-design.md
+      - Implementation plan: superpowers/plans/2026-11-02-sharp-v1.md
 
 plugins:
   - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_source: false
+            show_root_heading: true
+            members_order: source
 
 markdown_extensions:
   - admonition
   - attr_list
+  - def_list
+  - footnotes
+  - tables
   - toc:
       permalink: true
   - pymdownx.highlight
-  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
