@@ -16,6 +16,14 @@ from cnn_classifier.models.residual_cnn import (
 )
 from cnn_classifier.models.simple_cnn import SimpleCNN, SimpleCNNBuilder, SimpleCNNParams
 from cnn_classifier.models.summary import model_summary
+from cnn_classifier.models.torchvision import TorchvisionBuilder, TorchvisionParams
+from cnn_classifier.models.transfer import (
+    apply_stem_adaptation,
+    apply_transfer,
+    build_param_groups,
+    replace_classifier,
+    unfreeze_modules,
+)
 
 __all__ = [
     "MODELS",
@@ -29,7 +37,14 @@ __all__ = [
     "SimpleCNNParams",
     "StageConfig",
     "StemConfig",
+    "TorchvisionBuilder",
+    "TorchvisionParams",
+    "apply_stem_adaptation",
+    "apply_transfer",
     "build_model",
+    "build_param_groups",
     "model_summary",
     "register_model",
+    "replace_classifier",
+    "unfreeze_modules",
 ]
