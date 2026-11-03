@@ -1,0 +1,7 @@
+defaults: [_base.yaml]
+
+experiment:
+  name: ablation_augmentation
+  seed: 42
+  tags: [ablation, augmentation]
+  notes: "Augmentation on: random crop and horizontal flip."

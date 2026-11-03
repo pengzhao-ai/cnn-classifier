@@ -1,0 +1,11 @@
+defaults: [_base.yaml]
+
+experiment:
+  name: ablation_no_residual
+  seed: 42
+  tags: [ablation, residual]
+  notes: "Residual connections off; each block is a plain two-convolution stack."
+
+model:
+  params:
+    residual: false

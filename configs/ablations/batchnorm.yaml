@@ -1,0 +1,7 @@
+defaults: [_base.yaml]
+
+experiment:
+  name: ablation_batchnorm
+  seed: 42
+  tags: [ablation, batchnorm]
+  notes: "BatchNorm on in the residual CNN."

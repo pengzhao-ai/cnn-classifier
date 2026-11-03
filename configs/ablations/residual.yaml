@@ -1,0 +1,7 @@
+defaults: [_base.yaml]
+
+experiment:
+  name: ablation_residual
+  seed: 42
+  tags: [ablation, residual]
+  notes: "Residual connections on."

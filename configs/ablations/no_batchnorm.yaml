@@ -1,0 +1,11 @@
+defaults: [_base.yaml]
+
+experiment:
+  name: ablation_no_batchnorm
+  seed: 42
+  tags: [ablation, batchnorm]
+  notes: "BatchNorm off; convolutions use bias instead."
+
+model:
+  params:
+    norm: none

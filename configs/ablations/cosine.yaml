@@ -1,0 +1,7 @@
+defaults: [_base.yaml]
+
+experiment:
+  name: ablation_cosine
+  seed: 42
+  tags: [ablation, schedule]
+  notes: "Cosine learning-rate schedule."

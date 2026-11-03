@@ -1,0 +1,13 @@
+defaults: [_base.yaml]
+
+experiment:
+  name: ablation_no_augmentation
+  seed: 42
+  tags: [ablation, augmentation]
+  notes: "Augmentation off: tensor conversion and normalization only."
+
+data:
+  transforms:
+    train:
+      - {name: ToTensor}
+      - {name: Normalize, mean: auto, std: auto}

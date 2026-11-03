@@ -1,0 +1,11 @@
+defaults: [_base.yaml]
+
+experiment:
+  name: ablation_constant
+  seed: 42
+  tags: [ablation, schedule]
+  notes: "Constant learning-rate schedule."
+
+training:
+  scheduler:
+    name: constant
