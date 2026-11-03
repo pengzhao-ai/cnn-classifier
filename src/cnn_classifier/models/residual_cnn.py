@@ -82,8 +82,10 @@ class ResidualCNN(nn.Module):
         layers.append(nn.ReLU(inplace=True))
         if stem.pool:
             layers.append(nn.MaxPool2d(2))
+        stage_spans: list[tuple[str, int, int, bool]] = [("stem", 0, len(layers), False)]
         current = stem.channels
-        for stage in params.stages:
+        for stage_index, stage in enumerate(params.stages, start=1):
+            start = len(layers)
             if stage.conv:
                 layers.append(
                     nn.Conv2d(current, stage.channels, 3, 1, 1, bias=params.norm == "none")
@@ -105,6 +107,15 @@ class ResidualCNN(nn.Module):
                         nn.ReLU(inplace=True),
                     )
                 )
+            stage_spans.append(
+                (
+                    f"stage {stage_index}",
+                    start,
+                    len(layers),
+                    params.residual and stage.blocks > 0,
+                )
+            )
+        self.stage_spans = tuple(stage_spans)
         self.features = nn.Sequential(*layers)
         self.head = nn.Sequential(
             nn.AdaptiveAvgPool2d(1),

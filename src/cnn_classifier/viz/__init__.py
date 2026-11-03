@@ -1,6 +1,6 @@
 """Visualization and reporting helpers."""
 
-from cnn_classifier.viz.architecture import plot_model_card
+from cnn_classifier.viz.architecture import plot_cnn_pipeline, plot_model_card
 from cnn_classifier.viz.compare import plot_model_comparison
 from cnn_classifier.viz.data import plot_augmentation_gallery, plot_dataset_overview
 from cnn_classifier.viz.evaluation import (
@@ -26,6 +26,7 @@ __all__ = [
     "compute_gradcam",
     "plot_augmentation_gallery",
     "plot_calibration",
+    "plot_cnn_pipeline",
     "plot_confusion_matrix",
     "plot_dataset_overview",
     "plot_error_gallery",
