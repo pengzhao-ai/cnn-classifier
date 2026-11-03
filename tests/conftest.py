@@ -78,3 +78,8 @@ def tiny_batch():
     import torch
 
     return torch.zeros(2, 3, 8, 8), torch.tensor([0, 1])
+
+
+@pytest.fixture
+def byo_config_path() -> Path:
+    return Path(__file__).resolve().parents[1] / "demos" / "bring_your_own_data" / "config.yaml"

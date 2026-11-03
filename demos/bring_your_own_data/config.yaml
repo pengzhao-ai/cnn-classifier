@@ -1,0 +1,108 @@
+schema_version: "1.0"
+
+experiment:
+  name: bring_your_own_data_quickstart
+  seed: 7
+  tags: [byo, manifest, 16-bit, quickstart]
+  notes: "Tiny committed 16-bit grayscale fixture; runs end to end in under a minute."
+
+data:
+  adapter: manifest
+  manifest: manifest.csv
+  image_root: fixture
+  class_names: [circle, square, stripe]
+  num_classes: 3
+  channels: gray
+  image_size: [16, 16]
+  split:
+    mode: explicit
+    seed: 7
+  normalization:
+    mode: compute
+    cache: true
+  transforms:
+    train:
+      - {name: Resize, size: [16, 16]}
+      - {name: ToTensor}
+      - {name: Normalize, mean: auto, std: auto}
+    eval:
+      - {name: Resize, size: [16, 16]}
+      - {name: ToTensor}
+      - {name: Normalize, mean: auto, std: auto}
+
+model:
+  name: simple_cnn
+  params:
+    channels: [8, 16]
+    dropout: 0.0
+    norm: batch
+
+training:
+  epochs: 2
+  batch_size: 8
+  grad_accum_steps: 1
+  selection_metric: val_accuracy
+  optimizer:
+    name: adamw
+    lr: 1.0e-3
+    weight_decay: 1.0e-4
+  scheduler:
+    name: cosine
+    warmup_epochs: 0
+    min_lr_ratio: 0.0
+    step_unit: epoch
+  loss:
+    name: cross_entropy
+    label_smoothing: 0.0
+  grad_clip_norm: null
+  amp: auto
+  early_stopping:
+    enabled: false
+    monitor: val_accuracy
+    mode: max
+    patience: 5
+    min_delta: 0.0
+  checkpoint:
+    monitor: val_accuracy
+    mode: max
+    save_last: true
+
+evaluation:
+  metrics: [accuracy, macro_f1, per_class, confusion_matrix, nll]
+  top_k: 3
+  bootstrap:
+    enabled: false
+    n_resamples: 200
+    confidence: 0.95
+    stratify: true
+  calibration:
+    bins: 10
+  latency:
+    enabled: false
+    warmup: 5
+    iterations: 20
+  error_analysis:
+    max_examples: 8
+  tta:
+    enabled: false
+    transforms: [identity, hflip]
+    reduction: mean_probabilities
+
+tracking:
+  console: true
+  csv: true
+  tensorboard: false
+
+report:
+  enabled: true
+  formats: [html, markdown]
+  figures: [training_history, confusion_matrix, per_class, model_summary]
+
+runtime:
+  device: auto
+  deterministic: true
+  num_workers: 0
+  persistent_workers: false
+  pin_memory: false
+  channels_last: false
+  compile: false
