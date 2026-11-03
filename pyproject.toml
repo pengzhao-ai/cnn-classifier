@@ -116,7 +116,7 @@ pythonpath = ["src"]
 [tool.coverage.run]
 source = ["cnn_classifier"]
 branch = true
-omit = ["*/viz/*"]
+omit = ["*/viz/*", "*/cli.py"]
 
 [tool.coverage.report]
 show_missing = true

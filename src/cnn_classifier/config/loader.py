@@ -87,7 +87,12 @@ def load_config(path: str | Path, overrides: Sequence[str] = ()) -> RunConfig:
         raise ConfigError(f"config file does not exist: {config_path}")
     packaged = _load_yaml(_DEFAULT_CONFIG)
     merged = deep_merge(packaged, _load_chain(config_path, seen=set()))
-    merged = apply_overrides(merged, overrides)
+    if overrides:
+        try:
+            resolved_defaults = RunConfig.model_validate(merged)
+        except Exception as exc:
+            raise ConfigError(f"invalid configuration {config_path}: {exc}") from exc
+        merged = apply_overrides(resolved_defaults.model_dump(mode="json"), overrides)
     try:
         config = RunConfig.model_validate(merged)
     except Exception as exc:
