@@ -99,6 +99,29 @@ def test_torchvision_adapter_records_test_fingerprint(tmp_path, monkeypatch):
     assert first.test_fingerprint == second.test_fingerprint
 
 
+def test_torchvision_adapter_honors_sample_limits(tmp_path, monkeypatch):
+    monkeypatch.setattr(torchvision.datasets, "FakeVisionDataset", FakeVisionDataset, raising=False)
+    config = _torchvision_config(
+        tmp_path,
+        split={"mode": "random", "val_fraction": 0.4},
+        adapter_params={
+            "dataset": "FakeVisionDataset",
+            "download": False,
+            "max_train_samples": 4,
+            "max_val_samples": 2,
+        },
+    )
+
+    first = build_dataset(config)
+    second = build_dataset(config)
+
+    assert len(first.train) == 4
+    assert len(first.val) == 2
+    assert len(first.test) == 3
+    assert first.split_info.train_indices == second.split_info.train_indices
+    assert first.split_info.val_indices == second.split_info.val_indices
+
+
 def test_torchvision_adapter_random_and_labels_fallback(tmp_path, monkeypatch):
     monkeypatch.setattr(torchvision.datasets, "FakeLabelsDataset", FakeLabelsDataset, raising=False)
     config = _torchvision_config(

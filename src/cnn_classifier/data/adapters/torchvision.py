@@ -20,7 +20,11 @@ from cnn_classifier.core.types import (
 )
 from cnn_classifier.data.adapters._common import resolve_normalization
 from cnn_classifier.data.adapters.registry import register_dataset
-from cnn_classifier.data.splits import random_split_indices, stratified_split_indices
+from cnn_classifier.data.splits import (
+    SplitIndices,
+    random_split_indices,
+    stratified_split_indices,
+)
 from cnn_classifier.data.transforms import EnsureTensor, build_transforms
 
 
@@ -70,6 +74,15 @@ def _dataset_targets(dataset: Dataset[Any]) -> list[int]:
     return [int(value) for value in targets]
 
 
+def _sample_limit(config: DataConfig, key: str) -> int | None:
+    value = config.adapter_params.get(key)
+    if value is None:
+        return None
+    if not isinstance(value, int) or isinstance(value, bool) or value <= 0:
+        raise ConfigError(f"adapter_params.{key} must be a positive integer")
+    return value
+
+
 @register_dataset("torchvision")
 class TorchvisionAdapter:
     """Wrap a torchvision classification dataset with the package contracts."""
@@ -111,6 +124,13 @@ class TorchvisionAdapter:
             mode = "random_stratified"
         else:
             raise ConfigError("torchvision adapter supports random or random_stratified splits")
+        max_train = _sample_limit(config, "max_train_samples")
+        max_val = _sample_limit(config, "max_val_samples")
+        if max_train is not None or max_val is not None:
+            split = SplitIndices(
+                split.train_indices[:max_train] if max_train is not None else split.train_indices,
+                split.val_indices[:max_val] if max_val is not None else split.val_indices,
+            )
         train_triple = _TripleDataset(train_base)
         stats_source = _TensorTripleDataset(train_triple)
         normalization = resolve_normalization(config, stats_source, split.train_indices)
@@ -127,6 +147,8 @@ class TorchvisionAdapter:
                 "dataset": dataset_name,
                 "train_size": len(train_base),
                 "test_size": len(test_base),
+                "train_samples": len(split.train_indices),
+                "val_samples": len(split.val_indices),
                 "seed": config.split.seed,
             }
         )
