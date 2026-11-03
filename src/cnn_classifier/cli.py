@@ -139,6 +139,11 @@ def _fingerprint_payload(bundle: DatasetBundle) -> dict[str, Any]:
         name: {"count": len(indices), "fingerprint": _split_digest(bundle, indices)}
         for name, indices in split_indices.items()
     }
+    if "test" not in split_rows and bundle.test_fingerprint:
+        split_rows["test"] = {
+            "count": len(bundle.test) if bundle.test is not None else 0,  # type: ignore[arg-type]
+            "fingerprint": bundle.test_fingerprint,
+        }
     primary = split_rows.get("test", split_rows["val"])["fingerprint"]
     train_groups = _split_groups(bundle, split_info.train_indices)
     val_groups = _split_groups(bundle, split_info.val_indices)
@@ -209,7 +214,11 @@ def _echo_summary(summary: dict[str, Any]) -> None:
 def _spinner(config: RunConfig, bundle: DatasetBundle) -> None:
     typer.echo(f"Device: {resolve_device(config.runtime.device)}")
     typer.echo(f"Planned epochs: {config.training.epochs}")
-    test_count = len(bundle.split_info.test_indices or ())
+    test_count = (
+        len(bundle.test)  # type: ignore[arg-type]
+        if bundle.test is not None
+        else len(bundle.split_info.test_indices or ())
+    )
     typer.echo(
         f"Samples: train={len(bundle.split_info.train_indices)}, "
         f"val={len(bundle.split_info.val_indices)}, test={test_count}"
@@ -531,7 +540,7 @@ def _update_summary(
             "trainable_params": trainable,
             "latency_ms": result.latency.mean_ms if result.latency is not None else None,
             "peak_memory_mb": _peak_memory_mb(device),
-            "dataset_fingerprint": fingerprint.get("fingerprint"),
+            "dataset_fingerprint": fingerprint.get("dataset_fingerprint"),
         }
     )
     if split == "test":

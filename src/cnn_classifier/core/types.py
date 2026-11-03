@@ -84,6 +84,7 @@ class DatasetBundle:
     fingerprint: str
     sample_metadata: SampleMetadata
     model_contract: ModelInputContract
+    test_fingerprint: str | None = None
 
     def __post_init__(self) -> None:
         if not self.class_names:

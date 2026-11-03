@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import shutil
+from dataclasses import replace
 from pathlib import Path
 
 import numpy as np
@@ -10,8 +11,9 @@ import torch
 from PIL import Image
 from typer.testing import CliRunner
 
-from cnn_classifier.cli import _prepare, app
+from cnn_classifier.cli import _fingerprint_payload, _prepare, app
 from cnn_classifier.config import load_config
+from cnn_classifier.data.adapters import build_dataset
 
 runner = CliRunner()
 CONFIG = Path(__file__).resolve().parents[1] / "configs" / "tests" / "synthetic.yaml"
@@ -72,6 +74,21 @@ def test_prepare_places_model_on_resolved_device(monkeypatch):
 
     assert resolved == device
     assert next(model.parameters()).device.type == "meta"
+
+
+def test_fingerprint_payload_includes_separate_test_fingerprint():
+    config = load_config(CONFIG)
+    bundle = build_dataset(config.data)
+    bundle = replace(
+        bundle,
+        split_info=replace(bundle.split_info, test_indices=None),
+        test_fingerprint="test-hash",
+    )
+
+    payload = _fingerprint_payload(bundle)
+
+    assert payload["test_fingerprint"] == "test-hash"
+    assert payload["splits"]["test"] == {"count": len(bundle.test), "fingerprint": "test-hash"}
 
 
 def test_inspect_data_reports_contract():

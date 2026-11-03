@@ -89,6 +89,16 @@ def test_torchvision_adapter_wraps_dataset_and_splits(tmp_path, monkeypatch):
     assert bundle.model_contract.input_shape == (3, 8, 8)
 
 
+def test_torchvision_adapter_records_test_fingerprint(tmp_path, monkeypatch):
+    monkeypatch.setattr(torchvision.datasets, "FakeVisionDataset", FakeVisionDataset, raising=False)
+
+    first = build_dataset(_torchvision_config(tmp_path))
+    second = build_dataset(_torchvision_config(tmp_path))
+
+    assert first.test_fingerprint
+    assert first.test_fingerprint == second.test_fingerprint
+
+
 def test_torchvision_adapter_random_and_labels_fallback(tmp_path, monkeypatch):
     monkeypatch.setattr(torchvision.datasets, "FakeLabelsDataset", FakeLabelsDataset, raising=False)
     config = _torchvision_config(

@@ -93,6 +93,16 @@ class TorchvisionAdapter:
             raise ConfigError("data.class_names must match the torchvision class order")
         label_map = {name: index for index, name in enumerate(class_names)}
         targets = _dataset_targets(train_base)
+        test_targets = _dataset_targets(test_base)[: len(test_base)]
+        test_fingerprint = stable_hash(
+            {
+                "adapter": "torchvision",
+                "dataset": dataset_name,
+                "test_size": len(test_targets),
+                "test_targets": test_targets,
+                "class_names": class_names,
+            }
+        )
         if config.split.mode == "random":
             split = random_split_indices(targets, config.split.val_fraction, config.split.seed)
             mode = "random"
@@ -156,4 +166,5 @@ class TorchvisionAdapter:
             fingerprint=fingerprint,
             sample_metadata=metadata,
             model_contract=contract,
+            test_fingerprint=test_fingerprint,
         )
