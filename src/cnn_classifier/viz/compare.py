@@ -14,8 +14,8 @@ from cnn_classifier.viz.style import PALETTE, save_figure
 def plot_model_comparison(rows: Sequence[dict[str, Any]], path: Path) -> Path:
     valid = [row for row in rows if row.get("accuracy") is not None]
     fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
-    for row in valid:
-        color = PALETTE[hash(row.get("run", "")) % len(PALETTE)]
+    for index, row in enumerate(valid):
+        color = PALETTE[index % len(PALETTE)]
         params = row.get("params")
         latency = row.get("latency_ms")
         if params is not None:

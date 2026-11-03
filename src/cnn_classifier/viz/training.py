@@ -20,23 +20,49 @@ def plot_training_history(
     fig, axes = plt.subplots(2, 2, figsize=(12, 7))
     loss_ax, accuracy_ax, lr_ax, grad_ax = axes.flat
 
-    loss_ax.plot(epochs, [row.get("train_loss", float("nan")) for row in history], label="Train")
-    loss_ax.plot(epochs, [row.get("val_loss", float("nan")) for row in history], label="Val")
+    loss_ax.plot(
+        epochs,
+        [row.get("train_loss", float("nan")) for row in history],
+        label="Train",
+        marker="o",
+        markersize=3,
+    )
+    loss_ax.plot(
+        epochs,
+        [row.get("val_loss", float("nan")) for row in history],
+        label="Val",
+        marker="o",
+        markersize=3,
+    )
     loss_ax.set_title("Loss")
     loss_ax.set_xlabel("Epoch")
     loss_ax.legend()
 
     accuracy_ax.plot(
-        epochs, [row.get("train_accuracy", float("nan")) for row in history], label="Train"
+        epochs,
+        [row.get("train_accuracy", float("nan")) for row in history],
+        label="Train",
+        marker="o",
+        markersize=3,
     )
     accuracy_ax.plot(
-        epochs, [row.get("val_accuracy", float("nan")) for row in history], label="Val"
+        epochs,
+        [row.get("val_accuracy", float("nan")) for row in history],
+        label="Val",
+        marker="o",
+        markersize=3,
     )
     accuracy_ax.set_title("Accuracy")
     accuracy_ax.set_xlabel("Epoch")
     accuracy_ax.legend()
 
-    lr_ax.plot(epochs, [row.get("lr", float("nan")) for row in history], color=PALETTE[2])
+    lr_ax.plot(
+        epochs,
+        [row.get("lr", float("nan")) for row in history],
+        color=PALETTE[2],
+        marker="o",
+        markersize=3,
+    )
     lr_ax.set_title("Learning rate")
     lr_ax.set_xlabel("Epoch")
 

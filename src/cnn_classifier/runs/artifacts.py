@@ -27,10 +27,24 @@ class MetricsWriter:
         with self._metrics_path().open("a", encoding="utf-8") as handle:
             handle.write(json.dumps(payload, sort_keys=True) + "\n")
         if self._header is None:
-            self._header = ["step", *sorted(metrics)]
-            with self._history_path().open("w", encoding="utf-8", newline="") as handle:
-                writer = csv.DictWriter(handle, fieldnames=self._header)
-                writer.writeheader()
+            self._header = self._existing_header()
+            if self._header is None:
+                self._header = ["step", *sorted(metrics)]
+                with self._history_path().open("w", encoding="utf-8", newline="") as handle:
+                    writer = csv.DictWriter(handle, fieldnames=self._header)
+                    writer.writeheader()
         with self._history_path().open("a", encoding="utf-8", newline="") as handle:
             writer = csv.DictWriter(handle, fieldnames=self._header, extrasaction="ignore")
             writer.writerow(payload)
+
+    def _existing_header(self) -> list[str] | None:
+        path = self._history_path()
+        if not path.is_file() or path.stat().st_size == 0:
+            return None
+        with path.open(encoding="utf-8", newline="") as handle:
+            reader = csv.reader(handle)
+            try:
+                header = next(reader)
+            except StopIteration:
+                return None
+        return header or None

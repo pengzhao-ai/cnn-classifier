@@ -1,0 +1,85 @@
+schema_version: "1.0"
+
+experiment:
+  name: synthetic-smoke
+  seed: 7
+  tags: [smoke, cpu]
+  notes: "Tiny deterministic dataset for CLI and report checks."
+
+data:
+  adapter: synthetic
+  class_names: [circle, square, triangle]
+  num_classes: 3
+  channels: gray
+  image_size: [16, 16]
+  split:
+    mode: random_stratified
+    val_fraction: 0.2
+    seed: 7
+  normalization:
+    mode: compute
+  adapter_params:
+    num_samples: 30
+    num_classes: 3
+    image_size: [16, 16]
+    test_fraction: 0.2
+  transforms:
+    train:
+      - name: RandomHorizontalFlip
+        p: 0.5
+      - name: ToTensor
+      - name: Normalize
+        mean: auto
+        std: auto
+    eval:
+      - name: ToTensor
+      - name: Normalize
+        mean: auto
+        std: auto
+
+model:
+  name: simple_cnn
+  params:
+    channels: [8, 16]
+    dropout: 0.0
+    norm: batch
+
+training:
+  epochs: 2
+  batch_size: 8
+  optimizer:
+    name: adamw
+    lr: 0.001
+    weight_decay: 0.0001
+  scheduler:
+    name: cosine
+    warmup_epochs: 0
+  loss:
+    name: cross_entropy
+  early_stopping:
+    enabled: false
+  checkpoint:
+    monitor: val_accuracy
+    mode: max
+
+evaluation:
+  metrics: [accuracy, top_k, macro_f1, per_class, confusion_matrix, ece, nll]
+  top_k: 3
+  bootstrap:
+    enabled: false
+  latency:
+    enabled: false
+  tta:
+    enabled: false
+
+report:
+  enabled: true
+  formats: [html, markdown]
+
+runtime:
+  device: cpu
+  deterministic: true
+  num_workers: 0
+  persistent_workers: false
+  pin_memory: false
+  compile: false

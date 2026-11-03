@@ -243,12 +243,19 @@ class Trainer:
         """Evaluate on the validation split without touching test."""
         return self._validate()
 
-    def resume(self, checkpoint_path: Path) -> None:
+    def resume(
+        self,
+        checkpoint_path: Path,
+        *,
+        allow_config_change: bool = False,
+        history: Sequence[dict[str, float]] | None = None,
+    ) -> None:
         """Restore model, optimizer, scheduler, AMP, and RNG state."""
         payload = load_checkpoint(
             checkpoint_path,
             map_location=self.device,
             expected_config_hash=self.run.config_hash,
+            allow_config_change=allow_config_change,
         )
         self.model.load_state_dict(payload["model"])
         if payload.get("optimizer") is not None:
@@ -262,7 +269,7 @@ class Trainer:
         self.state.global_step = int(payload["global_step"])
         self.state.best_metric = float(payload["best_metric"])
         self.state.best_epoch = int(payload["best_epoch"])
-        self.state.history = []
+        self.state.history = [dict(row) for row in (history or [])]
         self.state.stop_requested = False
         if self._callbacks_are_default:
             self.callbacks = self._default_callbacks()
