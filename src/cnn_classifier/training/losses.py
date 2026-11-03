@@ -39,7 +39,7 @@ def mixup_cutmix_batch(
     if mixup_alpha <= 0 and cutmix_alpha <= 0:
         return MixedBatch(images, labels, labels, 1.0)
     batch_size = images.shape[0]
-    permutation = torch.randperm(batch_size, generator=generator, device=images.device)
+    permutation = torch.randperm(batch_size, generator=generator).to(images.device)
     use_cutmix = cutmix_alpha > 0 and (
         mixup_alpha <= 0 or float(torch.rand(1, generator=generator).item()) < 0.5
     )
