@@ -4,16 +4,21 @@ import json
 import shutil
 from dataclasses import replace
 from pathlib import Path
+from types import SimpleNamespace
 
 import numpy as np
 import pytest
 import torch
 from PIL import Image
+from torch.utils.data import DataLoader, Dataset
 from typer.testing import CliRunner
 
-from cnn_classifier.cli import _fingerprint_payload, _prepare, app
+from cnn_classifier.cli import _fingerprint_payload, _prepare, _write_figures, app
 from cnn_classifier.config import load_config
+from cnn_classifier.config.schema import DataConfig, ModelConfig
 from cnn_classifier.data.adapters import build_dataset
+from cnn_classifier.evaluation.evaluator import evaluate_model
+from cnn_classifier.models import build_model
 
 runner = CliRunner()
 CONFIG = Path(__file__).resolve().parents[1] / "configs" / "tests" / "synthetic.yaml"
@@ -89,6 +94,66 @@ def test_fingerprint_payload_includes_separate_test_fingerprint():
 
     assert payload["test_fingerprint"] == "test-hash"
     assert payload["splits"]["test"] == {"count": len(bundle.test), "fingerprint": "test-hash"}
+
+
+class _TripleDataset(Dataset):
+    def __init__(self, images: torch.Tensor, labels: torch.Tensor) -> None:
+        self.images = images
+        self.labels = labels
+
+    def __len__(self) -> int:
+        return len(self.labels)
+
+    def __getitem__(self, index: int):
+        return self.images[index], int(self.labels[index]), index
+
+
+def test_write_figures_builds_error_gallery_without_dataset_indices(tmp_path):
+    generator = torch.Generator().manual_seed(0)
+    images = torch.rand(6, 3, 8, 8, generator=generator)
+    labels = torch.tensor([0, 1, 2, 0, 1, 2])
+    dataset = _TripleDataset(images, labels)
+    loader = DataLoader(dataset, batch_size=3, shuffle=False)
+    config = load_config(CONFIG)
+
+    model = build_model(
+        ModelConfig(name="simple_cnn", params={"channels": [4], "dropout": 0.0}),
+        num_classes=3,
+        in_channels=3,
+        image_size=(8, 8),
+    )
+    with torch.no_grad():
+        for parameter in model.parameters():
+            parameter.zero_()
+    result = evaluate_model(
+        model,
+        loader,
+        torch.device("cpu"),
+        ("a", "b", "c"),
+        config.evaluation,
+    )
+    bundle = build_dataset(
+        DataConfig(
+            adapter="synthetic",
+            class_names=("a", "b", "c"),
+            num_classes=3,
+            channels="rgb",
+            image_size=(8, 8),
+            adapter_params={"num_samples": 6, "num_classes": 3, "image_size": [8, 8]},
+        )
+    )
+
+    _write_figures(
+        SimpleNamespace(directory=tmp_path),
+        bundle,
+        config,
+        model,
+        loader,
+        result,
+        [],
+    )
+
+    assert (tmp_path / "figures" / "errors.png").exists()
 
 
 def test_inspect_data_reports_contract():

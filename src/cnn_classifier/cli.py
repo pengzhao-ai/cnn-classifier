@@ -597,8 +597,12 @@ def _write_figures(
     plot_model_card(summary, figures / "model_card.png")
 
     dataset = loader.dataset
-    dataset_indices = getattr(dataset, "indices", ())
-    source_to_position = {int(source): position for position, source in enumerate(dataset_indices)}
+    dataset_indices = getattr(dataset, "indices", None)
+    source_to_position = (
+        {int(source): position for position, source in enumerate(dataset_indices)}
+        if dataset_indices
+        else None
+    )
     limit = min(config.evaluation.error_analysis.max_examples, 16)
     images: list[torch.Tensor] = []
     true_labels: list[str] = []
@@ -606,8 +610,10 @@ def _write_figures(
     for source, truth, prediction in zip(result.indices, result.y_true, result.y_pred, strict=True):
         if int(truth) == int(prediction):
             continue
-        position = source_to_position.get(int(source))
-        if position is None:
+        position = (
+            source_to_position.get(int(source)) if source_to_position is not None else int(source)
+        )
+        if position is None or position >= len(dataset):  # type: ignore[arg-type]
             continue
         image, _, _ = dataset[position]
         images.append(_denormalize(image, bundle.normalization))
