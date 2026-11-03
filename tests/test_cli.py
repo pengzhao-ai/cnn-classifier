@@ -6,10 +6,12 @@ from pathlib import Path
 
 import numpy as np
 import pytest
+import torch
 from PIL import Image
 from typer.testing import CliRunner
 
-from cnn_classifier.cli import app
+from cnn_classifier.cli import _prepare, app
+from cnn_classifier.config import load_config
 
 runner = CliRunner()
 CONFIG = Path(__file__).resolve().parents[1] / "configs" / "tests" / "synthetic.yaml"
@@ -60,6 +62,16 @@ def test_train_dry_run_prints_contract(tmp_path):
     assert "parameter" in output
     assert "planned epochs" in output
     assert not runs.exists()
+
+
+def test_prepare_places_model_on_resolved_device(monkeypatch):
+    device = torch.device("meta")
+    monkeypatch.setattr("cnn_classifier.cli.resolve_device", lambda spec: device)
+
+    _, _, model, resolved = _prepare(load_config(CONFIG))
+
+    assert resolved == device
+    assert next(model.parameters()).device.type == "meta"
 
 
 def test_inspect_data_reports_contract():

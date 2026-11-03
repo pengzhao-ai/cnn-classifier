@@ -100,7 +100,7 @@ def _prepare(config: RunConfig) -> tuple[DatasetBundle, DataLoaderBundle, nn.Mod
         num_classes=len(bundle.class_names),
         in_channels=bundle.in_channels,
         image_size=bundle.image_size,
-    )
+    ).to(device)
     return bundle, loaders, model, device
 
 
