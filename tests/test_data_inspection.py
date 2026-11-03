@@ -10,7 +10,11 @@ from cnn_classifier.data.inspection import inspect_dataset
 
 
 @pytest.fixture
-def bundle_with_shared_group(tmp_path):
+def bundle_with_shared_group(tmp_path, monkeypatch):
+    monkeypatch.setattr(
+        "cnn_classifier.data.adapters._common.assert_no_group_overlap",
+        lambda *args, **kwargs: None,
+    )
     for index in range(4):
         Image.fromarray(np.full((4, 4, 3), index * 10, dtype=np.uint8)).save(
             tmp_path / f"{index}.png"

@@ -134,3 +134,17 @@ def test_gradient_monitor_reports_layer_norms(tmp_path):
     monitor.on_epoch_end(state)
     assert "weight" in monitor.last_report
     assert monitor.last_report["weight"] > 0
+
+
+def test_early_stopping_restores_best_and_wait_from_history():
+    stopping = EarlyStopping("val_accuracy", mode="max", patience=2)
+    stopping.restore_from_history(
+        [
+            {"val_accuracy": 0.5},
+            {"val_accuracy": 0.6},
+            {"val_accuracy": 0.55},
+        ],
+        fallback=0.6,
+    )
+    assert stopping.best == pytest.approx(0.6)
+    assert stopping.wait == 1

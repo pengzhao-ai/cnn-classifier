@@ -23,6 +23,7 @@ from cnn_classifier.core.types import (
 from cnn_classifier.data.image_io import ChannelPolicy, read_image
 from cnn_classifier.data.splits import (
     SplitIndices,
+    assert_no_group_overlap,
     group_split_indices,
     random_split_indices,
     stratified_split_indices,
@@ -159,6 +160,12 @@ def build_bundle(
 ) -> DatasetBundle:
     """Build the final bundle, computing normalization before augmentation."""
     names = tuple(class_names)
+    if any(sample.group is not None for sample in samples):
+        group_values = [
+            str(sample.group) if sample.group is not None else f"__ungrouped_{index}"
+            for index, sample in enumerate(samples)
+        ]
+        assert_no_group_overlap(split, group_values)
     label_to_index = {name: index for index, name in enumerate(names)}
     base = RawDataset(samples, label_to_index, config.channels, config.value_range)
     normalization = resolve_normalization(config, base, split.train_indices)

@@ -60,6 +60,30 @@ class EarlyStopping(_NoOpCallback):
         self.best = _initial_best(self.mode)
         self.wait = 0
 
+    def restore_from_history(
+        self,
+        history: Sequence[dict[str, float]],
+        fallback: float,
+    ) -> None:
+        """Restore best value and patience progress after a resume."""
+        best = _initial_best(self.mode)
+        seen = 0
+        last_improvement = -1
+        for row in history:
+            if self.monitor not in row:
+                continue
+            value = float(row[self.monitor])
+            seen += 1
+            if _is_better(value, best, self.mode, self.min_delta):
+                best = value
+                last_improvement = seen - 1
+        if last_improvement >= 0:
+            self.best = best
+            self.wait = seen - 1 - last_improvement
+        else:
+            self.best = fallback
+            self.wait = 0
+
     def on_epoch_end(self, state: TrainingState) -> None:
         if self.monitor not in state.metrics:
             raise ConfigError(f"early_stopping monitor {self.monitor!r} is not a logged metric")
@@ -83,6 +107,10 @@ class ModelCheckpoint(_NoOpCallback):
     def on_train_start(self, state: TrainingState) -> None:
         self.best = _initial_best(self.mode)
 
+    def restore_best(self, best: float) -> None:
+        """Restore the best monitored value after a resume."""
+        self.best = best
+
     def _save(self, state: TrainingState, name: str) -> None:
         save_checkpoint(
             Path(state.run.directory) / "checkpoints" / name,
@@ -104,12 +132,14 @@ class ModelCheckpoint(_NoOpCallback):
         if self.monitor not in state.metrics:
             raise ConfigError(f"checkpoint monitor {self.monitor!r} is not a logged metric")
         value = float(state.metrics[self.monitor])
-        if self.save_last:
-            self._save(state, "last.pt")
-        if _is_better(value, self.best, self.mode, 0.0):
+        improved = _is_better(value, self.best, self.mode, 0.0)
+        if improved:
             self.best = value
             state.best_metric = value
             state.best_epoch = state.epoch
+        if self.save_last:
+            self._save(state, "last.pt")
+        if improved:
             self._save(state, "best.pt")
 
 

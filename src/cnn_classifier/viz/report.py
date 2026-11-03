@@ -513,17 +513,41 @@ def _runtime_rows(
     return rows
 
 
+def _repo_root(run_dir: Path) -> Path | None:
+    for parent in (run_dir.resolve(), *run_dir.resolve().parents):
+        if (parent / "pyproject.toml").is_file():
+            return parent
+    return None
+
+
+def _sanitize_paths(value: Any, root: Path) -> Any:
+    if isinstance(value, str):
+        return value.replace(str(root), ".")
+    if isinstance(value, dict):
+        return {key: _sanitize_paths(item, root) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_sanitize_paths(item, root) for item in value]
+    if isinstance(value, tuple):
+        return tuple(_sanitize_paths(item, root) for item in value)
+    return value
+
+
 def _reproduction_commands(run_dir: Path) -> list[str]:
+    root = _repo_root(run_dir)
+    display = str(run_dir.resolve().relative_to(root)) if root is not None else run_dir.name
     return [
-        f"cnncls train -c <config.yaml>  # produced {run_dir.name}",
-        f"cnncls evaluate --run {run_dir} --checkpoint {run_dir / 'checkpoints' / 'best.pt'}",
-        f"cnncls report --run {run_dir} --format html",
-        f"cnncls compare {run_dir} <other-run>",
+        f"cnncls train -c <config.yaml> --runs-dir runs  # produced {run_dir.name}",
+        f"cnncls evaluate --run {display} --checkpoint {display}/checkpoints/best.pt",
+        f"cnncls report --run {display}",
+        f"cnncls compare {display} <other-run>",
     ]
 
 
 def _build_context(run_dir: Path) -> dict[str, Any]:
     config = _read_yaml(run_dir / "config.resolved.yaml")
+    root = _repo_root(run_dir)
+    if root is not None:
+        config = _sanitize_paths(config, root)
     environment = _read_json(run_dir / "environment.json")
     status = _read_json(run_dir / "status.json")
     summary = _read_json(run_dir / "summary.json")
@@ -604,7 +628,9 @@ def _build_context(run_dir: Path) -> dict[str, Any]:
     return {
         "title": f"Experiment report — {run_name}",
         "run_name": run_name,
-        "run_directory": str(run_dir),
+        "run_directory": (
+            str(run_dir.resolve().relative_to(root)) if root is not None else str(run_dir)
+        ),
         "status": _format(status.get("status")) if status else "unknown",
         "config_hash": _format(summary.get("config_hash")) if summary else "—",
         "cards": cards,

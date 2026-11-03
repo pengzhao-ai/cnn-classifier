@@ -210,3 +210,17 @@ def test_report_handles_run_without_optional_artifacts(tmp_path):
     assert report.exists()
     assert "not evaluated" in report.read_text(encoding="utf-8")
     assert "not evaluated" in markdown
+
+
+def test_report_uses_portable_paths_and_commands(tmp_path):
+    (tmp_path / "pyproject.toml").write_text("", encoding="utf-8")
+    run = write_minimal_run(tmp_path)
+    config_path = run / "config.resolved.yaml"
+    config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+    config["data"]["root"] = str(tmp_path / "data")
+    config_path.write_text(yaml.safe_dump(config, sort_keys=False), encoding="utf-8")
+
+    markdown = build_markdown_report(run)
+
+    assert str(tmp_path) not in markdown
+    assert "--format html" not in markdown

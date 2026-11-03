@@ -14,6 +14,7 @@ from cnn_classifier.config.schema import ValueRangeConfig
 from cnn_classifier.core.errors import DataError
 
 ChannelPolicy = Literal["rgb", "gray", "as_is"]
+_PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
 _INTEGER_MAX = {
     np.dtype("uint8"): 255.0,
     np.dtype("uint16"): 65535.0,
@@ -23,13 +24,34 @@ _INTEGER_MAX = {
 }
 
 
+def _reject_unsupported_png(path: Path) -> None:
+    """Reject 16-bit multichannel PNGs that Pillow would silently downcast."""
+    with path.open("rb") as handle:
+        header = handle.read(26)
+    if len(header) < 26 or header[:8] != _PNG_SIGNATURE:
+        return
+    if header[12:16] != b"IHDR" or int.from_bytes(header[8:12], "big") != 13:
+        return
+    bit_depth = header[24]
+    color_type = header[25]
+    if bit_depth == 16 and color_type in {2, 4, 6}:
+        raise DataError(
+            f"cannot read {path}: 16-bit RGB PNG is not supported without "
+            "truncation; use a 16-bit TIFF or an 8-bit PNG"
+        )
+
+
 def _read_array(path: Path) -> np.ndarray:
     suffix = path.suffix.lower()
     try:
         if suffix in {".tif", ".tiff"}:
             return np.asarray(tifffile.imread(path))
+        if suffix == ".png":
+            _reject_unsupported_png(path)
         with Image.open(path) as image:
             return np.asarray(image)
+    except DataError:
+        raise
     except (OSError, ValueError) as exc:
         raise DataError(f"cannot read image {path}: {exc}") from exc
 

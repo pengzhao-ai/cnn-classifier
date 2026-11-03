@@ -104,12 +104,16 @@ def group_split_indices(
 
 
 def assert_no_group_overlap(split: SplitIndices, groups: Sequence[str]) -> None:
-    """Raise when a group appears in both train and validation."""
-    train_groups = {groups[index] for index in split.train_indices}
-    val_groups = {groups[index] for index in split.val_indices}
-    overlap = train_groups & val_groups
-    if overlap:
-        raise DataError(f"groups leak across train and validation: {sorted(overlap)}")
+    """Raise when a group appears in more than one split."""
+    members = {
+        "train": {groups[index] for index in split.train_indices},
+        "val": {groups[index] for index in split.val_indices},
+        "test": {groups[index] for index in (split.test_indices or ())},
+    }
+    for left, right in (("train", "val"), ("train", "test"), ("val", "test")):
+        overlap = members[left] & members[right]
+        if overlap:
+            raise DataError(f"groups leak across {left}/{right}: {sorted(overlap)}")
 
 
 def make_split_info(

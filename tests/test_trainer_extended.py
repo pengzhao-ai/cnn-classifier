@@ -97,5 +97,7 @@ def test_trainer_early_stopping_breaks_loop(tmp_path):
             },
         },
     )
+    losses = iter([0.5, 0.6, 0.7, 0.8])
+    trainer._validate = lambda: {"val_loss": next(losses), "val_accuracy": 0.5}
     result = trainer.fit()
     assert len(result.history) < 4

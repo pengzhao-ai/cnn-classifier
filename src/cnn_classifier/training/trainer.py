@@ -31,7 +31,7 @@ from cnn_classifier.training.callbacks import (
     TrackerCallback,
     UnfreezeCallback,
 )
-from cnn_classifier.training.checkpoint import load_checkpoint
+from cnn_classifier.training.checkpoint import load_checkpoint, validate_checkpoint_identity
 from cnn_classifier.training.losses import build_loss, mixup_cutmix_batch
 from cnn_classifier.training.optim import build_optimizer
 from cnn_classifier.training.schedulers import build_scheduler
@@ -257,6 +257,12 @@ class Trainer:
             expected_config_hash=self.run.config_hash,
             allow_config_change=allow_config_change,
         )
+        validate_checkpoint_identity(
+            payload,
+            class_names=self.class_names,
+            normalization=self.normalization,
+            model_contract=self.model_contract,
+        )
         self.model.load_state_dict(payload["model"])
         if payload.get("optimizer") is not None:
             self.optimizer.load_state_dict(payload["optimizer"])
@@ -273,9 +279,6 @@ class Trainer:
         self.state.stop_requested = False
         if self._callbacks_are_default:
             self.callbacks = self._default_callbacks()
-        for callback in self.callbacks:
-            if isinstance(callback, ModelCheckpoint):
-                callback.best = self.state.best_metric
         rng = payload.get("rng", {})
         if "torch" in rng:
             torch.set_rng_state(rng["torch"])
@@ -283,6 +286,16 @@ class Trainer:
             np.random.set_state(rng["numpy"])
         if "python" in rng:
             random.setstate(rng["python"])
+
+    def _restore_callback_state(self) -> None:
+        """Reapply resumed best/patience state after callbacks initialize."""
+        if self._start_epoch <= 0:
+            return
+        for callback in self.callbacks:
+            if isinstance(callback, ModelCheckpoint):
+                callback.restore_best(self.state.best_metric)
+            elif isinstance(callback, EarlyStopping):
+                callback.restore_from_history(self.state.history, self.state.best_metric)
 
     def _write_start_artifacts(self) -> None:
         shape = self._input_shape()
@@ -302,16 +315,17 @@ class Trainer:
         self._write_start_artifacts()
         for callback in self.callbacks:
             callback.on_train_start(self.state)
+        self._restore_callback_state()
         for epoch in range(self._start_epoch + 1, self.config.training.epochs + 1):
             self.state.epoch = epoch
             metrics = self._train_epoch()
             metrics.update(self._validate())
+            metrics["lr"] = float(self.optimizer.param_groups[0]["lr"])
             if self.config.training.scheduler.step_unit == "epoch":
                 if isinstance(self.scheduler, torch.optim.lr_scheduler.ReduceLROnPlateau):
                     self.scheduler.step(metrics["val_loss"])
                 else:
                     self.scheduler.step()
-            metrics["lr"] = float(self.optimizer.param_groups[0]["lr"])
             metrics["epoch"] = float(epoch)
             self.state.metrics = metrics
             self.state.history.append(dict(metrics))

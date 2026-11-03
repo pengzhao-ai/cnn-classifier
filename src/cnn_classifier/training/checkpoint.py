@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import random
+from collections.abc import Sequence
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
 from typing import Any, cast
@@ -22,6 +23,65 @@ def _jsonable(value: Any) -> Any:
     if is_dataclass(value):
         return cast(Any, asdict)(value)
     return value
+
+
+def _normalization_dict(value: Any) -> dict[str, Any] | None:
+    data = _jsonable(value)
+    if data is None:
+        return None
+    if not isinstance(data, dict):
+        return {"value": data}
+    return {
+        "mean": tuple(round(float(item), 8) for item in data.get("mean", ())),
+        "std": tuple(round(float(item), 8) for item in data.get("std", ())),
+        "source": data.get("source"),
+    }
+
+
+def _contract_dict(value: Any) -> dict[str, Any] | None:
+    data = _jsonable(value)
+    if data is None or not isinstance(data, dict):
+        return None
+    return {
+        "input_shape": list(data.get("input_shape", ())),
+        "dtype": data.get("dtype"),
+        "value_range": list(data.get("value_range", ())),
+        "class_names": list(data.get("class_names", ())),
+        "label_map": dict(data.get("label_map", {})),
+        "channel_policy": data.get("channel_policy"),
+        "stem_adaptation": data.get("stem_adaptation"),
+    }
+
+
+def validate_checkpoint_identity(
+    payload: CheckpointPayload,
+    *,
+    class_names: Sequence[str] | None = None,
+    normalization: Any = None,
+    model_contract: Any = None,
+) -> None:
+    """Reject a checkpoint whose class map, normalization, or contract changed."""
+    stored_names = payload.get("class_names")
+    if (
+        class_names is not None
+        and stored_names is not None
+        and tuple(stored_names) != tuple(class_names)
+    ):
+        raise RunError(
+            f"checkpoint class names {tuple(stored_names)!r} do not match "
+            f"current class names {tuple(class_names)!r}"
+        )
+    if (
+        payload.get("normalization") is not None or normalization is not None
+    ) and _normalization_dict(payload.get("normalization")) != _normalization_dict(normalization):
+        raise RunError("checkpoint normalization does not match the current run")
+    stored_contract = payload.get("model_contract")
+    if (
+        stored_contract is not None
+        and model_contract is not None
+        and _contract_dict(stored_contract) != _contract_dict(model_contract)
+    ):
+        raise RunError("checkpoint model contract does not match the current run")
 
 
 def save_checkpoint(

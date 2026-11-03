@@ -41,7 +41,10 @@ from cnn_classifier.evaluation.predict import predict_paths
 from cnn_classifier.models import build_model
 from cnn_classifier.models.summary import model_summary
 from cnn_classifier.runs.context import RunContext
-from cnn_classifier.training.checkpoint import load_checkpoint
+from cnn_classifier.training.checkpoint import (
+    load_checkpoint,
+    validate_checkpoint_identity,
+)
 from cnn_classifier.training.losses import build_loss
 from cnn_classifier.training.trainer import Trainer
 
@@ -174,6 +177,14 @@ def _write_data_artifacts(run: RunContext, bundle: DatasetBundle) -> dict[str, A
             "train": list(bundle.split_info.train_indices),
             "val": list(bundle.split_info.val_indices),
             "test": list(bundle.split_info.test_indices or ()),
+            "test_count": (
+                len(bundle.test)  # type: ignore[arg-type]
+                if bundle.split_info.test_indices is None and bundle.test is not None
+                else len(bundle.split_info.test_indices or ())
+            ),
+            "test_fingerprint": (
+                bundle.test_fingerprint if bundle.split_info.test_indices is None else None
+            ),
         },
     )
     run.write_json("data/class_names.json", list(bundle.class_names))
@@ -662,7 +673,7 @@ def _evaluate_into_run(
         config.evaluation,
     )
     save_predictions(result, run.directory / "predictions" / f"{split}_predictions.npz")
-    fingerprint = _fingerprint_payload(bundle)
+    fingerprint = _write_data_artifacts(run, bundle)
     run.write_json("evaluation.json", _evaluation_payload(config, result, split))
     _update_summary(run, model, result, split, fingerprint, device)
     if figures:
@@ -845,6 +856,12 @@ def evaluate(
             map_location=device,
             expected_config_hash=stable_hash(config.model_dump(mode="json")),
             allow_config_change=allow_config_change,
+        )
+        validate_checkpoint_identity(
+            payload,
+            class_names=bundle.class_names,
+            normalization=bundle.normalization,
+            model_contract=bundle.model_contract,
         )
         model.load_state_dict(payload["model"])
         destination = run_dir or _checkpoint_run_dir(checkpoint)

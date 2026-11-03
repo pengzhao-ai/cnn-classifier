@@ -201,6 +201,9 @@ def test_train_evaluate_predict_and_report(tmp_path):
     assert summary["test_accuracy"] is not None
     assert summary["params"] > 0
 
+    (run / "data" / "fingerprint.json").write_text(
+        json.dumps({"test_fingerprint": None}), encoding="utf-8"
+    )
     evaluated = runner.invoke(
         app,
         [
@@ -212,6 +215,8 @@ def test_train_evaluate_predict_and_report(tmp_path):
         ],
     )
     assert evaluated.exit_code == 0, evaluated.output
+    refreshed = json.loads((run / "data" / "fingerprint.json").read_text())
+    assert refreshed["test_fingerprint"]
     evaluation = json.loads((run / "evaluation.json").read_text())
     assert evaluation["split"] == "test"
 
