@@ -22,8 +22,14 @@ def test_ci_has_quality_test_docs_build_and_smoke_jobs():
     assert {"quality", "test", "docs", "build", "smoke"} <= set(jobs)
 
     matrix = jobs["test"]["strategy"]["matrix"]
-    assert set(matrix["python-version"]) == {"3.11", "3.12", "3.13"}
-    assert set(matrix["os"]) == {"ubuntu-latest", "macos-latest"}
+    entries = matrix["include"]
+    assert {entry["python-version"] for entry in entries} == {"3.11", "3.12", "3.13"}
+    assert {entry["os"] for entry in entries} == {
+        "ubuntu-latest",
+        "macos-latest",
+        "macos-15-intel",
+    }
+    assert len(entries) == 6
 
 
 def test_ci_uses_non_editable_install_and_no_full_training():
