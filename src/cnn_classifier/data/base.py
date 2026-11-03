@@ -11,6 +11,7 @@ from cnn_classifier.core.types import DatasetBundle
 class DatasetAdapter(Protocol):
     """Builds a train/val/test bundle from a data configuration."""
 
-    def build(self, config: DataConfig) -> DatasetBundle:
+    @staticmethod
+    def build(config: DataConfig) -> DatasetBundle:
         """Return the resolved datasets and their contracts."""
         ...

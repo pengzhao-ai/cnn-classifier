@@ -53,7 +53,9 @@ class Manifest:
                 if not image_path.is_absolute():
                     image_path = image_root / image_path
                 if not image_path.is_file():
-                    raise DataError(f"manifest row {row_number} references missing file {image_path}")
+                    raise DataError(
+                        f"manifest row {row_number} references missing file {image_path}"
+                    )
                 group = None
                 if "group" in columns:
                     group = row.get(columns["group"], "").strip() or None

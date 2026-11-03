@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections import defaultdict
 from collections.abc import Sequence
 from dataclasses import dataclass
+from typing import Any
 
 import numpy as np
 
@@ -25,7 +26,7 @@ def _validate_fraction(val_fraction: float) -> None:
 
 
 def random_split_indices(
-    labels: Sequence[int],
+    labels: Sequence[Any],
     val_fraction: float,
     seed: int,
 ) -> SplitIndices:
@@ -36,20 +37,20 @@ def random_split_indices(
         return SplitIndices(tuple(range(count)), ())
     rng = np.random.default_rng(seed)
     order = rng.permutation(count).tolist()
-    val_count = min(count - 1, max(1, int(round(count * val_fraction))))
+    val_count = min(count - 1, max(1, round(count * val_fraction)))
     val = tuple(sorted(order[:val_count]))
     train = tuple(sorted(order[val_count:]))
     return SplitIndices(train_indices=train, val_indices=val)
 
 
 def stratified_split_indices(
-    labels: Sequence[int],
+    labels: Sequence[Any],
     val_fraction: float,
     seed: int,
 ) -> SplitIndices:
     """Split each class proportionally, then combine the class splits."""
     _validate_fraction(val_fraction)
-    by_class: dict[int, list[int]] = defaultdict(list)
+    by_class: dict[Any, list[int]] = defaultdict(list)
     for index, label in enumerate(labels):
         by_class[label].append(index)
     rng = np.random.default_rng(seed)
@@ -59,7 +60,7 @@ def stratified_split_indices(
         indices = np.array(by_class[label])
         order = rng.permutation(len(indices))
         shuffled = indices[order].tolist()
-        val_count = min(len(shuffled) - 1, max(1, int(round(len(shuffled) * val_fraction))))
+        val_count = min(len(shuffled) - 1, max(1, round(len(shuffled) * val_fraction)))
         if len(shuffled) == 1:
             val_count = 0
         val.extend(shuffled[:val_count])
@@ -82,7 +83,7 @@ def group_split_indices(
         raise DataError("group split requires at least two groups")
     rng = np.random.default_rng(seed)
     order = rng.permutation(len(unique_groups)).tolist()
-    target = int(round(len(groups) * val_fraction))
+    target = round(len(groups) * val_fraction)
     val_groups: list[str] = []
     val_count = 0
     for position in order:

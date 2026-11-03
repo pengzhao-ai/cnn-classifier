@@ -145,3 +145,11 @@ strict = true
 warn_unreachable = true
 show_error_codes = true
 files = ["src"]
+
+[[tool.mypy.overrides]]
+module = ["torchvision", "torchvision.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["cnn_classifier.data.transforms", "cnn_classifier.data.adapters.torchvision"]
+warn_return_any = false
