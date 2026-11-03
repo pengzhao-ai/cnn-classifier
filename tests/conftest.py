@@ -58,3 +58,23 @@ def synthetic_bundle():
         adapter_params={"num_samples": 8, "num_classes": 2, "image_size": [8, 8]},
     )
     return build_dataset(config)
+
+
+@pytest.fixture
+def tiny_model():
+    from cnn_classifier.config.schema import ModelConfig
+    from cnn_classifier.models import build_model
+
+    return build_model(
+        ModelConfig(name="simple_cnn", params={"channels": [4], "dropout": 0.0}),
+        num_classes=2,
+        in_channels=3,
+        image_size=(8, 8),
+    )
+
+
+@pytest.fixture
+def tiny_batch():
+    import torch
+
+    return torch.zeros(2, 3, 8, 8), torch.tensor([0, 1])
