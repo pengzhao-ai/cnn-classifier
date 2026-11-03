@@ -26,7 +26,7 @@ The version is dynamic from `src/cnn_classifier/_version.py`. A release is a
 
 | Workflow | Trigger | What it does |
 |---|---|---|
-| `ci.yml` | push to `main`, pull request, manual | quality, tests on Python 3.11–3.13 / Ubuntu and macOS (arm64 and Intel), synthetic and BYO smoke, strict docs, build |
+| `ci.yml` | push to `main`, pull request, manual | quality, tests on Python 3.11–3.13 / Ubuntu and macOS arm64, synthetic and BYO smoke, strict docs, build |
 | `docs.yml` | push to `main`, manual | strict MkDocs build and GitHub Pages deployment |
 | `release.yml` | `v*` tag | tests, wheel/sdist, `twine check`, GitHub release assets, PyPI trusted publishing |
 

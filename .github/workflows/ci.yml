@@ -34,21 +34,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Keep one Apple Silicon job, but use Intel images for the other
-        # macOS cells because hosted arm64 capacity can leave jobs queued.
-        include:
-          - os: ubuntu-latest
-            python-version: "3.11"
-          - os: ubuntu-latest
-            python-version: "3.12"
-          - os: ubuntu-latest
-            python-version: "3.13"
-          - os: macos-latest
-            python-version: "3.11"
-          - os: macos-15-intel
-            python-version: "3.12"
-          - os: macos-15-intel
-            python-version: "3.13"
+        # PyTorch publishes arm64-only macOS wheels; pin an arm64 image.
+        os: [ubuntu-latest, macos-15]
+        python-version: ["3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
