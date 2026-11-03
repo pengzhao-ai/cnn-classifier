@@ -14,6 +14,19 @@ contamination. Evaluation is a separate artifact-producing step so the test
 split is never used for model selection and every reported number has a
 provenance.
 
+```mermaid
+flowchart LR
+    Train["Train split"] --> Fit["Trainer.fit"]
+    Val["Validation split"] --> Fit
+    Fit --> Best["best.pt by validation metric"]
+    Best --> Test["Held-out test split"]
+    Test --> Metrics["Accuracy, F1, calibration, bootstrap"]
+    Metrics --> Report["HTML and Markdown report"]
+```
+
+The test split never enters `Trainer.fit`; it is evaluated once from the best
+validation checkpoint.
+
 ## Config keys
 
 | Knob | Config key | Notes |

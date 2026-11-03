@@ -21,6 +21,25 @@ image-quality benchmark.
 | `sensor_noise` | photon and read noise | Gaussian + Poisson |
 | `jpeg` | compression artifacts | JPEG round-trip |
 
+```mermaid
+flowchart LR
+    Deg["Optical degradation"] --> Clean["clean"]
+    Deg --> Blur["defocus / motion_blur"]
+    Deg --> Color["chromatic_aberration / vignetting"]
+    Deg --> Sensor["sensor_noise / jpeg"]
+```
+
+```mermaid
+flowchart LR
+    Group["Base image group"] --> Split["Assign split before generation"]
+    Split --> Train["train"]
+    Split --> Val["validation"]
+    Split --> Test["held-out test"]
+    Train --> Manifest["manifest.csv + generated images"]
+    Val --> Manifest
+    Test --> Manifest
+```
+
 Severity is sampled per sample from a configured range and written to the
 manifest.
 

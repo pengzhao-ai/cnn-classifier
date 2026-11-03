@@ -67,6 +67,16 @@ The selected policy is recorded in the model contract and the report.
 | `channel_policy` | `rgb`, `gray`, or `as_is` |
 | `stem_adaptation` | `None` here; may be set by a model config |
 
+```mermaid
+flowchart LR
+    Files["Folders or manifest"] --> Adapter["manifest / image_folder adapter"]
+    Adapter --> Bundle["DatasetBundle"]
+    Bundle --> Sample["float32 sample [C, H, W]"]
+    Sample --> Batch["Batch [B, C, H, W]"]
+    Batch --> Model["Model"]
+    Model --> Report["Report + model_contract.json"]
+```
+
 `data/model_contract.json` contains these fields, and both `inspect-data` and
 `train --dry-run` print them before training.
 

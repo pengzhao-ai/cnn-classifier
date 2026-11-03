@@ -61,6 +61,18 @@ model:
 | Downsampling | max-pool after stages 1–3 |
 | Head | global average pool, dropout 0.3, linear |
 
+```mermaid
+flowchart LR
+    Input["3×32×32"] --> Stem["3×3 conv, 64"]
+    Stem --> S1["Stage 1: 64, pool"]
+    S1 --> S2["Stage 2: 128, pool"]
+    S2 --> S3["Stage 3: 256, pool"]
+    S3 --> S4["Stage 4: 512"]
+    S4 --> GAP["Global average pool"]
+    GAP --> Drop["Dropout 0.3"]
+    Drop --> FC["Linear 10"]
+```
+
 The same builder covers the ablation pairs: `norm: none` removes BatchNorm and
 `residual: false` turns each block into a plain two-convolution stack.
 
@@ -91,6 +103,19 @@ model:
 
 A frozen `adapt_3x3` stem is rejected: the uninitialized stem would block
 ImageNet features.
+
+```mermaid
+flowchart LR
+    subgraph NoStem [none]
+        N1["7×7 conv, stride 2"] --> N2["max-pool"]
+    end
+    subgraph Keep [keep_7x7_stride1]
+        K1["7×7 conv, stride 1"] --> K2["identity"]
+    end
+    subgraph Adapt [adapt_3x3]
+        A1["3×3 conv, stride 1"] --> A2["identity"]
+    end
+```
 
 ### Transfer modes
 

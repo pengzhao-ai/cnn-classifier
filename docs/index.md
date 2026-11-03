@@ -5,31 +5,56 @@ A config-driven, reproducible PyTorch toolkit for CNN image classification.
 `cnn-classifier` turns a new image/label dataset into a trained, evaluated, and
 reported classifier through a typed YAML configuration. The same library powers
 the command line, so a quick smoke test and a full experiment use one pipeline.
-
-!!! note "Sharp v1"
-    The core library, CLI, evaluation stack, diagnostics, report generator, and
-    all five demo suites are implemented. The CIFAR-10 baseline, three transfer
-    runs, four ablations, and the optical-degradation run are reproduced on
-    Apple Silicon MPS; committed summaries and figures are under `results/`.
+It ships with a complete reference implementation, five demos, and committed
+results from a measured Apple Silicon MPS run.
 
 ## Results at a glance
 
-| Experiment | Result | Budget | Status |
-|---|---:|---|---|
-| CIFAR-10 scratch baseline | **92.25% test**, 92.78% best validation | 50 epochs, 22.3 min MPS | reproduced |
-| ResNet-18 fine-tune, 32×32 | **94.98% test** | 30 epochs, 19.5 min MPS | measured |
-| ResNet-18 scratch, 32×32 | 90.88% test | 30 epochs, 19.6 min MPS | measured |
-| ResNet-18 linear probe | 62.66% test | 30 epochs, 8.4 min MPS | measured |
-| Four core ablations | BN on +19.4 pp; cosine +8.5 pp; residual off +0.7 pp; augmentation off +3.1 pp | 8 epochs, 10k train subset | measured |
-| Optical degradation classifier | 85.71% test | 20 epochs, 7.5 s MPS | measured |
-| Bring-your-own-data quickstart | contract verified | 2 epochs, under a minute | complete |
-
-![CIFAR-10 training history](images/cifar10_training_history.png)
+| Experiment | Result | Budget |
+|---|---:|---|
+| CIFAR-10 scratch baseline | **92.25% test**, 92.78% best validation | 50 epochs, 22.3 min MPS |
+| ResNet-18 fine-tune, 32×32 | **94.98% test** | 30 epochs, 19.5 min MPS |
+| ResNet-18 scratch, 32×32 | 90.88% test | 30 epochs, 19.6 min MPS |
+| ResNet-18 linear probe | 62.66% test | 30 epochs, 8.4 min MPS |
+| Four core ablations | BN on +19.4 pp; cosine +8.5 pp; residual off +0.7 pp; augmentation off +3.1 pp | 8 epochs, 10k train subset |
+| Optical degradation classifier | 85.71% test | 20 epochs, 7.5 s MPS |
+| Bring-your-own-data quickstart | contract verified | 2 epochs, under a minute |
 
 Reference for the scratch baseline: 92.42% validation / 92.61% test on MPS,
 seed 42. The reproduced test result is within 0.4 percentage points and clears
 the ≥90% acceptance gate. See [Results](results.md) for the environment and
 caveats.
+
+<div class="grid cards" markdown>
+
+-   ![CIFAR-10 training history](images/cifar10_training_history.png)
+
+    **CIFAR-10 baseline**
+
+    A 7.8M-parameter residual CNN trained from scratch to 92.25% test accuracy.
+
+-   ![Transfer comparison](images/transfer_comparison.png)
+
+    **Transfer benchmark**
+
+    Scratch, linear probe, and fine-tune at 32×32; fine-tuning gains 4.1 pp
+    over scratch.
+
+-   ![Ablation comparison](images/ablation_comparison.png)
+
+    **Controlled ablations**
+
+    Four paired experiments isolate augmentation, BatchNorm, residuals, and the
+    learning-rate schedule.
+
+-   ![Optical degradation confusion matrix](images/optics_confusion_matrix.png)
+
+    **Optical degradations**
+
+    Seven synthetic degradation classes with a group-safe split and confusion
+    analysis.
+
+</div>
 
 ## What it is
 

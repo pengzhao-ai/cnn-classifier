@@ -17,7 +17,7 @@ uv sync --all-extras --no-editable --reinstall-package cnn-classifier
 
 ## Development workflow
 
-1. Read the relevant design and plan documents under `docs/superpowers/`.
+1. Read the relevant design notes under `docs/`.
 2. Write a failing test first. Run it and confirm the failure is for the right
    reason.
 3. Implement the smallest change that passes.

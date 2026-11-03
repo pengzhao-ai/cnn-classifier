@@ -4,8 +4,8 @@
 
 The torchvision wrapper supports a replaced classifier head, three stem
 adaptations, freeze modes, BatchNorm policy, and regex parameter groups. The
-sharp-v1 transfer benchmark uses three 32×32 ResNet-18 configs: scratch, linear
-probe, and fine-tune.
+transfer benchmark uses three 32×32 ResNet-18 configs: scratch, linear probe,
+and fine-tune.
 
 ## Why
 
@@ -25,6 +25,19 @@ stem is adapted the same way in all three.
 | BN policy | `model.transfer.train_bn` | train BN parameters while frozen |
 | Differential LR | `model.transfer.param_groups` | pattern, multipliers |
 | Head dropout | `model.params.dropout` | applied in the replacement head |
+
+```mermaid
+flowchart LR
+    subgraph Scratch [Scratch]
+        SB["Backbone: trainable"] --> SH["Head: trainable"]
+    end
+    subgraph Probe [Linear probe]
+        PB["Backbone: frozen"] --> PH["Head: trainable"]
+    end
+    subgraph Fine [Fine-tune]
+        FB["Backbone: trainable, lr 1e-4"] --> FH["Head: trainable, lr 1e-3"]
+    end
+```
 
 ## Implementation
 
@@ -53,6 +66,6 @@ stem is rejected because the random stem would block the pretrained features.
 ## Caveat
 
 The 32×32 protocol is one compute budget, not a claim that linear probes are
-always best. The 224×224 tracks and budget-sensitivity sweep are deferred to
-v1.1. The reference baseline and the transfer anchor are separate experiments;
-they should not be conflated.
+always best. This site covers the 32×32 benchmark; a 224×224 study is outside
+its scope. The reference baseline and the transfer anchor are separate
+experiments; they should not be conflated.

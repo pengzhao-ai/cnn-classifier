@@ -64,8 +64,8 @@ is a frozen-parameter probe, not a strict frozen-feature probe.
 
 - **Same data and budget.** The fairness anchor is structural: shared split,
   augmentation, epochs, and evaluation.
-- **Test evaluation is deferred.** All three runs train first with test
-  evaluation disabled; test is evaluated only after the suite completes.
+- **Test evaluation happens after training.** All three runs train first with
+  test evaluation disabled; test is evaluated only after the suite completes.
 - **Compute is part of the result.** A model that wins by a fraction of a point
   while costing much more training time is reported as such.
 - **No significance claim from overlap.** Per-run intervals are reported; a
@@ -74,6 +74,6 @@ is a frozen-parameter probe, not a strict frozen-feature probe.
 ## Caveat
 
 This is a single 32×32 protocol, not a universal statement about transfer
-learning. The 224×224 tracks and budget-sensitivity sweep are deferred to
-v1.1. Results from the reference baseline and the transfer anchor are separate
+learning. This site covers the 32×32 benchmark; a 224×224 study is outside its
+scope. Results from the reference baseline and the transfer anchor are separate
 and should not be merged into one leaderboard.

@@ -23,7 +23,7 @@ spent.
 | Workers | `runtime.num_workers` | `auto` respects device |
 | Pin memory | `runtime.pin_memory` | `auto` enables on CUDA |
 | Channels last | `runtime.channels_last` | memory format |
-| Compile | `runtime.compile` | reserved; off in v1 |
+| Compile | `runtime.compile` | disabled by default |
 
 CLI diagnostics:
 
@@ -33,6 +33,18 @@ cnncls debug -c config.yaml --overfit-batch --steps 20
 cnncls debug -c config.yaml --trace
 cnncls debug -c config.yaml --gradients
 cnncls debug -c config.yaml --determinism
+```
+
+```mermaid
+flowchart TD
+    Start["New dataset or model"] --> Inspect["inspect-data"]
+    Inspect --> Contract{"Contract and splits OK?"}
+    Contract -->|No| Fix["Fix data or config"]
+    Contract -->|Yes| Dry["train --dry-run"]
+    Dry --> Finite{"Loss finite?"}
+    Finite -->|No| Trace["debug --trace / --gradients"]
+    Finite -->|Yes| Overfit["debug --overfit-batch"]
+    Overfit --> Train["Full training"]
 ```
 
 ## Implementation

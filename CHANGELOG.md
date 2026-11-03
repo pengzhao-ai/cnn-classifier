@@ -27,7 +27,6 @@ All notable changes to `cnn-classifier` are documented here.
 - Full transfer, ablation, and optical results are committed under `results/`,
   with comparison tables and figures under `results/comparison/`.
 
-## [0.1.0] — planned
+## [0.1.0]
 
-The first tagged release. PyPI and GitHub Pages publication are owner actions
-documented in `docs/release.md`.
+Initial public release.

@@ -58,8 +58,8 @@ recommendation.
 - **One knob per pair.** A test asserts that the paired configs differ only in
   the intended field.
 - **Same data and budget.** The subset limits are part of the data fingerprint.
-- **Test is deferred.** All eight training runs finish before test is
-  evaluated.
+- **Test evaluation happens after training.** All eight training runs finish
+  before test is evaluated.
 - **Compute is recorded.** A difference is read against training time, not just
   accuracy.
 

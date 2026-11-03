@@ -20,14 +20,14 @@ machine, not guarantees.
 
 ## Benchmark table
 
-| Experiment | Test accuracy | Macro F1 | Params | Training time | Status |
-|---|---:|---:|---:|---:|---|
-| CIFAR-10 scratch baseline | **92.25%** | 92.26% | 7,827,786 | 1,338 s | measured |
-| ResNet-18 scratch, 32×32 | 90.88% | 90.90% | 11,181,642 | 1,173 s | measured |
-| ResNet-18 linear probe | 62.66% | 62.54% | 5,130 trainable | 504 s | measured |
-| ResNet-18 fine-tune | **94.98%** | 94.97% | 11,181,642 | 1,169 s | measured |
-| Optical degradation | 85.71% | 85.57% | 94,375 | 7.5 s | measured |
-| Bring-your-own-data quickstart | 60.00% val | 50.46% | 1,323 | 0.26 s | smoke |
+| Experiment | Test accuracy | Macro F1 | Params | Training time |
+|---|---:|---:|---:|---:|
+| CIFAR-10 scratch baseline | **92.25%** | 92.26% | 7,827,786 | 1,338 s |
+| ResNet-18 scratch, 32×32 | 90.88% | 90.90% | 11,181,642 | 1,173 s |
+| ResNet-18 linear probe | 62.66% | 62.54% | 5,130 trainable | 504 s |
+| ResNet-18 fine-tune | **94.98%** | 94.97% | 11,181,642 | 1,169 s |
+| Optical degradation | 85.71% | 85.57% | 94,375 | 7.5 s |
+| Bring-your-own-data quickstart | 60.00% val | 50.46% | 1,323 | 0.26 s |
 
 ![CIFAR-10 training history](images/cifar10_training_history.png)
 
@@ -125,10 +125,6 @@ resolution, and defocus and sensor noise exceed 91% F1. See the
 - `results/comparison/` holds the cross-run transfer and ablation tables.
 - `docs/images/` mirrors selected figures; a test checks byte-identical copies.
 - Timings are measurements, not guarantees.
-
-The packaging is reproducible: after rerunning the demos, run
-`python scripts/package_results.py` and `python scripts/make_comparisons.py`.
-See `scripts/README.md` for details.
 
 ## Caveats
 

@@ -77,11 +77,23 @@ def test_nav_covers_required_sections_and_pages():
         "Extending",
         "CLI",
         "API",
-        "Project",
     ):
         assert label in nav_text, label
     for page in _nav_paths(config["nav"]):
         assert (DOCS / page).is_file(), page
+
+
+def test_internal_docs_are_excluded_from_the_public_site():
+    config = yaml.load(
+        (REPO_ROOT / "mkdocs.yml").read_text(encoding="utf-8"),
+        Loader=_MkDocsLoader,
+    )
+    excluded = config.get("exclude_docs", "")
+    assert "superpowers/" in excluded
+    assert "release.md" in excluded
+    nav_pages = list(_nav_paths(config["nav"]))
+    assert "release.md" not in nav_pages
+    assert not any("superpowers/" in page for page in nav_pages)
 
 
 def test_technique_pages_follow_required_structure():

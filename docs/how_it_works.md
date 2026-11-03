@@ -25,6 +25,31 @@ the data adapter produces a `DatasetBundle`; the model registry builds a
 `torch.nn.Module`; the trainer fits it; the evaluator produces metrics and
 predictions; the report reads the run directory.
 
+```mermaid
+flowchart TB
+    CLI[cnncls CLI]
+    Config[Typed configuration]
+    Data[Data adapters and contracts]
+    Models[Model registry and builders]
+    Training[Headless trainer]
+    Evaluation[Evaluation]
+    Viz[Figures and reports]
+    CLI --> Config
+    CLI --> Data
+    CLI --> Models
+    CLI --> Training
+    CLI --> Evaluation
+    CLI --> Viz
+    Config --> Data
+    Data --> Models
+    Models --> Training
+    Training --> Evaluation
+    Evaluation --> Viz
+```
+
+The arrows show dependency direction. The CLI is the orchestration layer; the
+library modules below it stay decoupled so training remains headless.
+
 ## Module boundaries
 
 | Layer | Package | Responsibility | Must not import |
