@@ -84,7 +84,7 @@ python demos/optics_degradation/scripts/run_optics.py
 
 The transfer, ablation, and optical full suites are compute-heavy; the demos
 support quick iteration, while the committed results come from the full runs
-described in [Results](results.md).
+described in the [demo pages](case_studies/cifar10.md).
 
 ## Where things go
 

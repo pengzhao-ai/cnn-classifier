@@ -31,25 +31,26 @@ theme:
 nav:
   - Home: index.md
   - Quickstart: quickstart.md
-  - How it works: how_it_works.md
-  - Models & architectures: models.md
-  - Configuration: configuration.md
-  - Techniques:
-      - Augmentation & regularization: techniques/augmentation.md
-      - Optimization & LR: techniques/optimization.md
-      - Transfer learning: techniques/transfer.md
-      - Evaluation rigor: techniques/evaluation.md
-      - Efficiency & diagnostics: techniques/diagnostics.md
-  - Case studies:
+  - How it works:
+      - Overview: how_it_works.md
+      - Data & configuration: configuration.md
+      - Models: models.md
+      - Techniques:
+          - Augmentation & regularization: techniques/augmentation.md
+          - Optimization & LR: techniques/optimization.md
+          - Transfer learning: techniques/transfer.md
+          - Evaluation rigor: techniques/evaluation.md
+          - Efficiency & diagnostics: techniques/diagnostics.md
+      - Extending: extending.md
+  - Demos:
       - CIFAR-10 scratch: case_studies/cifar10.md
       - Transfer benchmark: case_studies/transfer.md
+      - Ablations: case_studies/ablations.md
       - Optical degradation: case_studies/optics_degradation.md
       - Bring your own data: bring_your_own_data.md
-      - Ablations: case_studies/ablations.md
-  - Results: results.md
-  - Extending: extending.md
-  - CLI: cli.md
-  - API: api.md
+  - Reference:
+      - CLI: cli.md
+      - API: api.md
 
 exclude_docs: |
   superpowers/

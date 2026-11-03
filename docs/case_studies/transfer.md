@@ -29,6 +29,14 @@ it. The scratch reference baseline uses CIFAR mean/std. That difference is
 labeled in the comparison, not hidden: the anchor answers a different question
 from the reference reproduction.
 
+## Model design
+
+![ResNet-18 linear probe architecture](../images/architecture_transfer.png)
+
+The schematic shows the linear-probe configuration: the ImageNet stem and
+layers 1–4 are frozen, and only the 5,130-parameter head is trainable. The
+fine-tune configuration keeps the same stage layout but unfreezes every block.
+
 ## Result
 
 All three runs share the CIFAR-10 test set and test fingerprint.

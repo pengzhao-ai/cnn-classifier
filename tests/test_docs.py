@@ -13,7 +13,6 @@ REQUIRED_PAGES = (
     "docs/how_it_works.md",
     "docs/models.md",
     "docs/configuration.md",
-    "docs/results.md",
     "docs/extending.md",
     "docs/cli.md",
     "docs/api.md",
@@ -28,6 +27,14 @@ REQUIRED_PAGES = (
     "docs/case_studies/transfer.md",
     "docs/case_studies/optics_degradation.md",
     "docs/case_studies/ablations.md",
+)
+
+ARCHITECTURE_IMAGES = (
+    "architecture_cifar10.png",
+    "architecture_transfer.png",
+    "architecture_ablations.png",
+    "architecture_optics.png",
+    "architecture_byo.png",
 )
 
 
@@ -69,12 +76,18 @@ def test_nav_covers_required_sections_and_pages():
         "Home",
         "Quickstart",
         "How it works",
-        "Models & architectures",
-        "Configuration",
+        "Overview",
+        "Data & configuration",
+        "Models",
         "Techniques",
-        "Case studies",
-        "Results",
         "Extending",
+        "Demos",
+        "CIFAR-10 scratch",
+        "Transfer benchmark",
+        "Ablations",
+        "Optical degradation",
+        "Bring your own data",
+        "Reference",
         "CLI",
         "API",
     ):
@@ -110,8 +123,21 @@ def test_technique_pages_follow_required_structure():
             assert heading in text, (name, heading)
 
 
-def test_results_page_reports_measured_cifar_baseline():
-    text = (DOCS / "results.md").read_text(encoding="utf-8")
-    assert "92.25" in text
-    assert "MPS" in text
-    assert "seed 42" in text.lower()
+def test_architecture_images_exist():
+    for name in ARCHITECTURE_IMAGES:
+        path = DOCS / "images" / name
+        assert path.is_file(), name
+        assert path.stat().st_size > 0, name
+
+
+def test_demo_pages_report_measured_results():
+    expected = {
+        "case_studies/cifar10.md": "92.25",
+        "case_studies/transfer.md": "94.98",
+        "case_studies/optics_degradation.md": "85.71",
+        "case_studies/ablations.md": "19.37",
+        "bring_your_own_data.md": "60.00",
+    }
+    for relative, value in expected.items():
+        text = (DOCS / relative).read_text(encoding="utf-8")
+        assert value in text, (relative, value)

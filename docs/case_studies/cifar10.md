@@ -24,6 +24,15 @@ config-driven training pipeline that reports its own behavior honestly.
 | Budget | 50 epochs, batch 128, early stopping patience 10 |
 | Device | Apple M3 Max MPS |
 
+## Model design
+
+![Residual CNN architecture](../images/architecture_cifar10.png)
+
+The reference preset is a 7.8M-parameter residual CNN: a 3→64 stem, four
+residual stages at widths 64/128/256/512, global average pooling, dropout 0.3,
+and a linear head. The schematic shows the stage shapes and parameter counts;
+the model card in the report lists every module.
+
 ## Result
 
 | Field | Value |

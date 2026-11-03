@@ -58,10 +58,13 @@ is deterministic for a seed, and the `--quick` path uses fewer base images.
 
 ## Model and report
 
-A small `simple_cnn` trains through the same trainer, evaluator, and report path
-as the CIFAR demos. The report includes the confusion matrix, per-class metrics,
-calibration, and an error gallery. The useful analysis is which degradations
-are confused with which.
+![Simple CNN architecture](../images/architecture_optics.png)
+
+A small `simple_cnn` with 32/64/128 channels and 94,375 parameters trains
+through the same trainer, evaluator, and report path as the CIFAR demos. The
+schematic shows the stage shapes; the report includes the confusion matrix,
+per-class metrics, calibration, and an error gallery. The useful analysis is
+which degradations are confused with which.
 
 ## Result
 

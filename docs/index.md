@@ -22,8 +22,8 @@ results from a measured Apple Silicon MPS run.
 
 Reference for the scratch baseline: 92.42% validation / 92.61% test on MPS,
 seed 42. The reproduced test result is within 0.4 percentage points and clears
-the ≥90% acceptance gate. See [Results](results.md) for the environment and
-caveats.
+the ≥90% acceptance gate. See the [CIFAR-10 case study](case_studies/cifar10.md)
+for the environment and caveats.
 
 <div class="grid cards" markdown>
 
@@ -115,15 +115,12 @@ python demos/cifar10/scripts/run_scratch.py --quick
 
 ## Documentation map
 
+- [How it works](how_it_works.md) — architecture, data and configuration,
+  models, techniques, and extending.
+- [Demos](case_studies/cifar10.md) — CIFAR-10, transfer, ablations, optical
+  degradation, and bring-your-own-data.
+- [Reference](cli.md) — CLI and API.
 - [Quickstart](quickstart.md) — install, verify, run the first experiments.
-- [How it works](how_it_works.md) — module boundaries and the run lifecycle.
-- [Models & architectures](models.md) — registry, CNN presets, torchvision transfer.
-- [Configuration](configuration.md) — schema, defaults, overrides, validation.
-- [Techniques](techniques/augmentation.md) — augmentation, optimization, transfer,
-  evaluation rigor, efficiency and diagnostics.
-- [Results](results.md) — measured numbers, environment, and caveats.
-- [Extending](extending.md) — custom adapters, models, transforms.
-- [CLI](cli.md) and [API](api.md) — command and library reference.
 
 ## Positioning
 

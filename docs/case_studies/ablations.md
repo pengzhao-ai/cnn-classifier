@@ -21,6 +21,14 @@ schedule?
 | Residual | `residual: true` | `residual: false` |
 | Schedule | cosine | constant |
 
+## Model design
+
+![Ablation residual CNN architecture](../images/architecture_ablations.png)
+
+All eight configs share this small residual CNN. A pair changes exactly one of
+the annotated choices—augmentation, BatchNorm, residual connections, or the
+schedule—while the stage layout and parameter budget stay fixed.
+
 ## Result
 
 The four “on” configs share the base recipe, so their identical 67.92% result is

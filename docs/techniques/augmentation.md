@@ -42,7 +42,7 @@ random crop with padding 4, mild color jitter, and random erasing.
 ## Evidence
 
 - The CIFAR-10 scratch baseline reaches 92.25% test accuracy with the reference
-  augmentation family (see [Results](../results.md)).
+  augmentation family (see the [CIFAR-10 case study](../case_studies/cifar10.md)).
 - On the reduced 8-epoch ablation budget, augmentation **off** reached 71.06%
   test accuracy versus 67.92% with the crop/flip pipeline. That is a measured
   outcome on one seed and a small budget, not a general recommendation.

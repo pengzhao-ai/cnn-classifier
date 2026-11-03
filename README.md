@@ -26,8 +26,8 @@ the command line, so a quick smoke test and a full experiment use one pipeline.
 
 Reference: 92.42% validation / 92.61% test on MPS, seed 42. The reproduced test
 result is within 0.4 percentage points and clears the ≥90% gate. See the
-[results page](https://pengzhao-ai.github.io/cnn-classifier/results/) for the
-environment and caveats.
+[CIFAR-10 case study](https://pengzhao-ai.github.io/cnn-classifier/case_studies/cifar10/)
+for the environment and caveats.
 
 ## What is in the core
 
@@ -124,7 +124,7 @@ The full site is published at
 - [Models & architectures](https://pengzhao-ai.github.io/cnn-classifier/models/)
 - [Configuration](https://pengzhao-ai.github.io/cnn-classifier/configuration/)
 - [Techniques](https://pengzhao-ai.github.io/cnn-classifier/techniques/augmentation/)
-- [Results](https://pengzhao-ai.github.io/cnn-classifier/results/)
+- [CIFAR-10 demo](https://pengzhao-ai.github.io/cnn-classifier/case_studies/cifar10/)
 - [Bring your own data](https://pengzhao-ai.github.io/cnn-classifier/bring_your_own_data/)
 - [CLI](https://pengzhao-ai.github.io/cnn-classifier/cli/)
 - [API](https://pengzhao-ai.github.io/cnn-classifier/api/)
