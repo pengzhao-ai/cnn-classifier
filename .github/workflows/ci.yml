@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, sharp-v1]
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
@@ -23,11 +23,10 @@ jobs:
         with:
           python-version: "3.11"
           enable-cache: true
-      - run: uv sync --all-extras
-      - run: uv pip install -e . --config-settings editable_mode=compat
-      - run: uv run ruff check .
-      - run: uv run ruff format --check .
-      - run: uv run mypy src
+      - run: uv sync --all-extras --no-editable
+      - run: uv run --no-sync ruff check .
+      - run: uv run --no-sync ruff format --check .
+      - run: uv run --no-sync mypy src
 
   test:
     name: Test ${{ matrix.python-version }} on ${{ matrix.os }}
@@ -43,9 +42,22 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           enable-cache: true
-      - run: uv sync --all-extras
-      - run: uv pip install -e . --config-settings editable_mode=compat
-      - run: uv run pytest
+      - run: uv sync --all-extras --no-editable
+      - run: uv run --no-sync pytest
+
+  smoke:
+    name: Synthetic and bring-your-own-data smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.11"
+          enable-cache: true
+      - run: uv sync --all-extras --no-editable
+      - run: uv run --no-sync cnncls --help
+      - run: uv run --no-sync cnncls train -c configs/tests/synthetic.yaml --set training.epochs=1 --runs-dir /tmp/cnncls-smoke
+      - run: uv run --no-sync python demos/bring_your_own_data/scripts/run_quickstart.py --output-root /tmp/cnncls-byo
 
   docs:
     name: Documentation
@@ -56,9 +68,8 @@ jobs:
         with:
           python-version: "3.11"
           enable-cache: true
-      - run: uv sync --all-extras
-      - run: uv pip install -e . --config-settings editable_mode=compat
-      - run: uv run mkdocs build --strict
+      - run: uv sync --all-extras --no-editable
+      - run: uv run --no-sync mkdocs build --strict
 
   build:
     name: Build distributions
@@ -69,9 +80,11 @@ jobs:
         with:
           python-version: "3.11"
           enable-cache: true
-      - run: uv sync --all-extras
-      - run: uv pip install -e . --config-settings editable_mode=compat
+      - run: uv sync --all-extras --no-editable
       - run: uv build
+      - run: uvx twine check dist/*
+      - run: uv pip install --reinstall --no-deps dist/*.whl
+      - run: uv run --no-sync cnncls --version
       - uses: actions/upload-artifact@v4
         with:
           name: dist

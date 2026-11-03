@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+title: "cnn-classifier"
+abstract: "A config-driven, reproducible PyTorch toolkit for CNN image classification."
+version: "0.1.0.dev0"
+date-released: "2026-11-03"
+type: software
+authors:
+  - family-names: Zhao
+    given-names: Peng
+repository-code: "https://github.com/pengzhao-ai/cnn-classifier"
+url: "https://pengzhao-ai.github.io/cnn-classifier/"
+license: Apache-2.0
+keywords:
+  - cnn
+  - image-classification
+  - pytorch
+  - reproducibility
+  - deep-learning
