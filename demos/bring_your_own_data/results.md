@@ -23,10 +23,19 @@ pipeline smoke check, not a meaningful accuracy benchmark.
 
 ## Quickstart result
 
+| Field | Value |
+|---|---:|
+| Validation accuracy | 60.00% |
+| Validation macro F1 | 50.46% |
+| Best epoch | 1 of 2 |
+| Training time | 0.26 s |
+| Parameters | 1,323 |
+| Device | Apple MPS |
+
 The run completes in a few seconds on CPU or MPS and writes `report.html`,
-`evaluation.json`, predictions, figures, and checkpoints under its run
-directory. These artifacts are local (`runs/` is gitignored); the quickstart is
-the CI smoke path, not a published benchmark.
+`evaluation.json`, predictions, figures, and checkpoints. Committed copies of
+the report, summary, contract, and figures are in `results/bring_your_own_data/`.
+The quickstart is the CI smoke path, not an accuracy benchmark.
 
 ## Notes
 

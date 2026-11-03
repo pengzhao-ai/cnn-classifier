@@ -1,32 +1,60 @@
 # CIFAR-10 core ablations — results
 
-Status: configurations and runner are complete; the full eight-run MPS suite and
-committed artifacts are produced in Task 28 of the sharp-v1 plan.
+Status: full eight-run MPS suite complete. Committed summaries, reports, and
+figures are in `results/ablations/`; the cross-pair comparison is in
+`results/comparison/ablation_comparison.md`.
 
 ## Budget
 
 - CIFAR-10 reduced split: 10,000 train / 2,000 validation; 10,000 test.
 - Seed 42; 8 epochs; batch 128; AdamW 1e-3; weight decay 5e-4.
-- Residual CNN with widths 32/64/128, dropout 0.2.
+- Residual CNN with widths 32/64/128, dropout 0.2; 482,730 parameters.
+- Training time was 17–20 s per run on MPS.
 
-## Pairs (pending)
+## Pair results
 
-| Pair | Knob on | Knob off | Accuracy difference | 95% CI overlap |
+| Pair | On | Off | Difference | 95% CI overlap |
 |---|---|---|---|---|
-| Augmentation | random crop + flip | none | pending | pending |
-| BatchNorm | batch | none | pending | pending |
-| Residual | true | false | pending | pending |
-| Schedule | cosine | constant | pending | pending |
+| Augmentation | 67.92% | **71.06%** | off +3.14 pp | none |
+| BatchNorm | **67.92%** | 48.55% | on +19.37 pp | none |
+| Residual | 67.92% | **68.60%** | off +0.68 pp | substantial |
+| Schedule | **67.92%** | 59.44% | cosine +8.48 pp | none |
+
+The four “on” configs share the same base recipe, so their identical 67.92%
+result is the controlled baseline for each pair, not four independent
+findings.
+
+## Full table
+
+| Run | Test accuracy | 95% CI | Macro F1 |
+|---|---:|---|---:|
+| augmentation | 67.92% | 67.06–68.80% | 67.87% |
+| none_augmentation | 71.06% | 70.19–71.91% | 70.96% |
+| batchnorm | 67.92% | 67.06–68.80% | 67.87% |
+| no_batchnorm | 48.55% | 47.58–49.46% | 47.32% |
+| residual | 67.92% | 67.06–68.80% | 67.87% |
+| no_residual | 68.60% | 67.75–69.47% | 68.52% |
+| cosine | 67.92% | 67.06–68.80% | 67.87% |
+| constant | 59.44% | 58.60–60.37% | 59.18% |
+
+![Ablation comparison](../../docs/images/ablation_comparison.png)
 
 ## Artifacts
 
-After Task 28, this file will link to `results/ablations/comparison.md`,
-`comparison.json`, `comparison.png`, and the per-run reports.
+- `results/ablations/<name>/reports/` — summary, evaluation, reports.
+- `results/ablations/<name>/figures/` — training history, confusion matrix,
+  per-class, calibration, model card, error gallery.
+- `results/comparison/ablation_comparison.{md,json,png}` — cross-pair table and
+  figure.
 
 ## Notes
 
 - Per-run bootstrap intervals are recorded in each run's `summary.json`.
-- No paired significance claim is made; overlapping intervals are not evidence
+- No paired significance test was run; disjoint per-run intervals are
+  suggestive, not a formal paired test. Overlapping intervals are not evidence
   of no effect.
+- The augmentation result (off better on this budget) is a measured outcome, not
+  a recommendation; the optical demo also avoids label-destroying augmentation.
+- This is one seed and a reduced budget, not a universal ranking.
 - Timings are measurements on the author's Apple M3 Max MPS machine, not
   guarantees.

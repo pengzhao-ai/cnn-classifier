@@ -46,12 +46,35 @@ are confused with which.
 
 ## Result
 
-The full run and committed confusion analysis are produced in the benchmark
-stage.
+2,100 generated samples; 420 test samples (60 per class).
+
+| Field | Value |
+|---|---:|
+| Test accuracy | 85.71% |
+| Test macro F1 | 85.57% |
+| Test accuracy 95% CI | 82.38–88.81% |
+| Best validation accuracy | 82.38% (epoch 16) |
+| Latency | 0.70 ms/image |
+
+| Class | F1 | Support |
+|---|---:|---:|
+| clean | 70.18% | 60 |
+| defocus | 92.68% | 60 |
+| motion_blur | 85.00% | 60 |
+| chromatic_aberration | 100.00% | 60 |
+| vignetting | 78.33% | 60 |
+| sensor_noise | 91.80% | 60 |
+| jpeg | 80.99% | 60 |
+
+![Confusion matrix](../images/optics_confusion_matrix.png)
+
+Clean is the hardest class, as expected for subtle degradations at 32×32.
+Chromatic aberration, defocus, and sensor noise are classified reliably.
 
 - [Generator](https://github.com/pengzhao-ai/cnn-classifier/blob/main/demos/optics_degradation/generate_dataset.py)
 - [Config](https://github.com/pengzhao-ai/cnn-classifier/blob/main/configs/optics_degradation/degradation_classifier.yaml)
 - [Demo](https://github.com/pengzhao-ai/cnn-classifier/tree/main/demos/optics_degradation)
+- [Results](https://github.com/pengzhao-ai/cnn-classifier/blob/main/results/optics_degradation/reports/summary.json)
 
 ## What to notice
 

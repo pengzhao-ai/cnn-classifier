@@ -61,13 +61,14 @@ python demos/optics_degradation/scripts/run_optics.py
 ```
 
 A full generation without `--quick` uses 300 base images (2,100 samples). The
-quick path uses 60 base images (420 samples). The full MPS run is a Task 28
-benchmark stage.
+quick path uses 60 base images (420 samples). The full MPS run has been
+completed; committed results are in `results/optics_degradation/`.
 
 ## Results
 
-Full results, confusion analysis, and committed artifacts are produced in
-Task 28 and described in `demos/optics_degradation/results.md`.
+Full results, confusion analysis, and committed artifacts are in
+`results/optics_degradation/` and described in
+`demos/optics_degradation/results.md`.
 
 ## What to notice
 

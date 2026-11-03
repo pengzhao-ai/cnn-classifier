@@ -1,0 +1,33 @@
+{
+  "channel_policy": "gray",
+  "class_names": [
+    "circle",
+    "square",
+    "stripe"
+  ],
+  "dtype": "float32",
+  "input_shape": [
+    1,
+    16,
+    16
+  ],
+  "label_map": {
+    "circle": 0,
+    "square": 1,
+    "stripe": 2
+  },
+  "normalization": {
+    "mean": [
+      0.24038831041123357
+    ],
+    "source": "computed",
+    "std": [
+      0.2910660097879871
+    ]
+  },
+  "stem_adaptation": null,
+  "value_range": [
+    0.0,
+    1.0
+  ]
+}

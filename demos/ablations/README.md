@@ -51,13 +51,15 @@ results/ablations/
 └── comparison.png
 ```
 
-Run artifacts stay under `runs/` (gitignored). The full suite is a Task 28
-benchmark stage.
+Run artifacts stay under `runs/` (gitignored). The full eight-run suite has
+been completed; committed summaries, figures, and reports are in
+`results/ablations/`, with the cross-pair comparison in
+`results/comparison/ablation_comparison.md`.
 
 ## Results
 
-Full results, per-run reports, and committed summaries are produced in Task 28
-and described in `demos/ablations/results.md`.
+Full results, per-run reports, and committed summaries are in
+`results/ablations/` and described in `demos/ablations/results.md`.
 
 The comparison reports per-run accuracy, macro F1, parameter count, and latency,
 plus the per-run 95% bootstrap interval recorded in each `summary.json`. No

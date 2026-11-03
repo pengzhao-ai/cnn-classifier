@@ -1,0 +1,14 @@
+{
+  "device": {
+    "cuda_available": false,
+    "device": "mps",
+    "mps_available": true,
+    "platform": "macOS-27.0.1-arm64-arm-64bit",
+    "python_version": "3.11.8",
+    "torch_version": "2.15.0"
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.11.8",
+  "torch": "2.15.0",
+  "torchvision": "0.29.2"
+}

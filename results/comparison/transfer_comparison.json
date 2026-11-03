@@ -1,0 +1,44 @@
+{
+  "rows": [
+    {
+      "accuracy": 0.9088,
+      "ci_high": 0.9143025,
+      "ci_low": 0.9033,
+      "latency_ms": 3.8373841597058345,
+      "macro_f1": 0.9089780738082844,
+      "params": 11181642,
+      "peak_memory_mb": 172.22216796875,
+      "run": "scratch",
+      "test_fingerprint": "7aac74439fdc9640",
+      "total_params": 11181642,
+      "train_seconds": 1173.214171749998
+    },
+    {
+      "accuracy": 0.6266,
+      "ci_high": 0.6363025,
+      "ci_low": 0.6175,
+      "latency_ms": 3.7491087502712617,
+      "macro_f1": 0.6253699378531212,
+      "params": 5130,
+      "peak_memory_mb": 85.9375,
+      "run": "linear_probe",
+      "test_fingerprint": "7aac74439fdc9640",
+      "total_params": 11181642,
+      "train_seconds": 504.1955067919989
+    },
+    {
+      "accuracy": 0.9498,
+      "ci_high": 0.9541,
+      "ci_low": 0.9456975,
+      "latency_ms": 3.7040658603655174,
+      "macro_f1": 0.9496802230187207,
+      "params": 11181642,
+      "peak_memory_mb": 172.22216796875,
+      "run": "finetune",
+      "test_fingerprint": "7aac74439fdc9640",
+      "total_params": 11181642,
+      "train_seconds": 1168.9595736250049
+    }
+  ],
+  "warnings": []
+}

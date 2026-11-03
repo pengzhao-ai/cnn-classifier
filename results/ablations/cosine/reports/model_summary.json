@@ -1,0 +1,181 @@
+{
+  "input_shape": [
+    3,
+    32,
+    32
+  ],
+  "macs": null,
+  "modules": [
+    {
+      "name": "model",
+      "params": 482730,
+      "type": "ResidualCNN"
+    },
+    {
+      "name": "features",
+      "params": 481440,
+      "type": "Sequential"
+    },
+    {
+      "name": "features.0",
+      "params": 864,
+      "type": "Conv2d"
+    },
+    {
+      "name": "features.1",
+      "params": 64,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "features.2",
+      "params": 0,
+      "type": "ReLU"
+    },
+    {
+      "name": "features.3",
+      "params": 18560,
+      "type": "ResidualBlock"
+    },
+    {
+      "name": "features.3.conv1",
+      "params": 9216,
+      "type": "Conv2d"
+    },
+    {
+      "name": "features.3.norm1",
+      "params": 64,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "features.3.conv2",
+      "params": 9216,
+      "type": "Conv2d"
+    },
+    {
+      "name": "features.3.norm2",
+      "params": 64,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "features.4",
+      "params": 0,
+      "type": "MaxPool2d"
+    },
+    {
+      "name": "features.5",
+      "params": 18432,
+      "type": "Conv2d"
+    },
+    {
+      "name": "features.6",
+      "params": 128,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "features.7",
+      "params": 0,
+      "type": "ReLU"
+    },
+    {
+      "name": "features.8",
+      "params": 73984,
+      "type": "ResidualBlock"
+    },
+    {
+      "name": "features.8.conv1",
+      "params": 36864,
+      "type": "Conv2d"
+    },
+    {
+      "name": "features.8.norm1",
+      "params": 128,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "features.8.conv2",
+      "params": 36864,
+      "type": "Conv2d"
+    },
+    {
+      "name": "features.8.norm2",
+      "params": 128,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "features.9",
+      "params": 0,
+      "type": "MaxPool2d"
+    },
+    {
+      "name": "features.10",
+      "params": 73728,
+      "type": "Conv2d"
+    },
+    {
+      "name": "features.11",
+      "params": 256,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "features.12",
+      "params": 0,
+      "type": "ReLU"
+    },
+    {
+      "name": "features.13",
+      "params": 295424,
+      "type": "ResidualBlock"
+    },
+    {
+      "name": "features.13.conv1",
+      "params": 147456,
+      "type": "Conv2d"
+    },
+    {
+      "name": "features.13.norm1",
+      "params": 256,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "features.13.conv2",
+      "params": 147456,
+      "type": "Conv2d"
+    },
+    {
+      "name": "features.13.norm2",
+      "params": 256,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "head",
+      "params": 1290,
+      "type": "Sequential"
+    },
+    {
+      "name": "head.0",
+      "params": 0,
+      "type": "AdaptiveAvgPool2d"
+    },
+    {
+      "name": "head.1",
+      "params": 0,
+      "type": "Flatten"
+    },
+    {
+      "name": "head.2",
+      "params": 0,
+      "type": "Dropout"
+    },
+    {
+      "name": "head.3",
+      "params": 1290,
+      "type": "Linear"
+    }
+  ],
+  "output_shape": [
+    1,
+    10
+  ],
+  "total_params": 482730,
+  "trainable_params": 482730
+}

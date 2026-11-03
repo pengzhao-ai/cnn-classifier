@@ -1,0 +1,91 @@
+{
+  "input_shape": [
+    1,
+    16,
+    16
+  ],
+  "macs": null,
+  "modules": [
+    {
+      "name": "model",
+      "params": 1323,
+      "type": "SimpleCNN"
+    },
+    {
+      "name": "features",
+      "params": 1272,
+      "type": "Sequential"
+    },
+    {
+      "name": "features.0",
+      "params": 72,
+      "type": "Conv2d"
+    },
+    {
+      "name": "features.1",
+      "params": 16,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "features.2",
+      "params": 0,
+      "type": "ReLU"
+    },
+    {
+      "name": "features.3",
+      "params": 0,
+      "type": "MaxPool2d"
+    },
+    {
+      "name": "features.4",
+      "params": 1152,
+      "type": "Conv2d"
+    },
+    {
+      "name": "features.5",
+      "params": 32,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "features.6",
+      "params": 0,
+      "type": "ReLU"
+    },
+    {
+      "name": "features.7",
+      "params": 0,
+      "type": "MaxPool2d"
+    },
+    {
+      "name": "head",
+      "params": 51,
+      "type": "Sequential"
+    },
+    {
+      "name": "head.0",
+      "params": 0,
+      "type": "AdaptiveAvgPool2d"
+    },
+    {
+      "name": "head.1",
+      "params": 0,
+      "type": "Flatten"
+    },
+    {
+      "name": "head.2",
+      "params": 0,
+      "type": "Dropout"
+    },
+    {
+      "name": "head.3",
+      "params": 51,
+      "type": "Linear"
+    }
+  ],
+  "output_shape": [
+    1,
+    3
+  ],
+  "total_params": 1323,
+  "trainable_params": 1323
+}

@@ -24,8 +24,8 @@ All notable changes to `cnn-classifier` are documented here.
 
 - The CIFAR-10 scratch baseline reproduced 92.25% test accuracy on Apple
   Silicon MPS (reference 92.61%).
-- Full transfer, ablation, and optical results are generated in the benchmark
-  stage and recorded under `results/`.
+- Full transfer, ablation, and optical results are committed under `results/`,
+  with comparison tables and figures under `results/comparison/`.
 
 ## [0.1.0] — planned
 

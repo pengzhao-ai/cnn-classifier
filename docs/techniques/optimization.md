@@ -52,8 +52,9 @@ clipping happens before the optimizer step.
   50 epochs, and reaches 92.25% test accuracy.
 - The transfer anchor uses AdamW; the fine-tune run uses 1e-4 for the backbone
   and 1e-3 for the head via a regex group.
-- The schedule ablation compares cosine and constant on the reduced split; the
-  measured pair is produced in the benchmark stage.
+- On the reduced 8-epoch ablation budget, cosine reached 67.92% test accuracy
+  versus 59.44% for a constant schedule. This is one seed and a short budget,
+  not a universal schedule result.
 
 ## Caveat
 

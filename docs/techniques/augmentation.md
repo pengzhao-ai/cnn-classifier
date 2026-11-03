@@ -43,9 +43,9 @@ random crop with padding 4, mild color jitter, and random erasing.
 
 - The CIFAR-10 scratch baseline reaches 92.25% test accuracy with the reference
   augmentation family (see [Results](../results.md)).
-- The augmentation ablation pair (`augmentation.yaml` vs
-  `none_augmentation.yaml`) isolates the train pipeline on a reduced split; the
-  measured pair is produced in the benchmark stage.
+- On the reduced 8-epoch ablation budget, augmentation **off** reached 71.06%
+  test accuracy versus 67.92% with the crop/flip pipeline. That is a measured
+  outcome on one seed and a small budget, not a general recommendation.
 - The optical degradation demo deliberately does **not** use flips or crops:
   motion-blur direction and vignetting position are part of the label.
 

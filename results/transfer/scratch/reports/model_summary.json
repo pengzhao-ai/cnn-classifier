@@ -1,0 +1,356 @@
+{
+  "input_shape": [
+    3,
+    32,
+    32
+  ],
+  "macs": null,
+  "modules": [
+    {
+      "name": "model",
+      "params": 11181642,
+      "type": "ResNet"
+    },
+    {
+      "name": "conv1",
+      "params": 9408,
+      "type": "Conv2d"
+    },
+    {
+      "name": "bn1",
+      "params": 128,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "relu",
+      "params": 0,
+      "type": "ReLU"
+    },
+    {
+      "name": "maxpool",
+      "params": 0,
+      "type": "Identity"
+    },
+    {
+      "name": "layer1",
+      "params": 147968,
+      "type": "Sequential"
+    },
+    {
+      "name": "layer1.0",
+      "params": 73984,
+      "type": "BasicBlock"
+    },
+    {
+      "name": "layer1.0.conv1",
+      "params": 36864,
+      "type": "Conv2d"
+    },
+    {
+      "name": "layer1.0.bn1",
+      "params": 128,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "layer1.0.relu",
+      "params": 0,
+      "type": "ReLU"
+    },
+    {
+      "name": "layer1.0.conv2",
+      "params": 36864,
+      "type": "Conv2d"
+    },
+    {
+      "name": "layer1.0.bn2",
+      "params": 128,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "layer1.1",
+      "params": 73984,
+      "type": "BasicBlock"
+    },
+    {
+      "name": "layer1.1.conv1",
+      "params": 36864,
+      "type": "Conv2d"
+    },
+    {
+      "name": "layer1.1.bn1",
+      "params": 128,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "layer1.1.relu",
+      "params": 0,
+      "type": "ReLU"
+    },
+    {
+      "name": "layer1.1.conv2",
+      "params": 36864,
+      "type": "Conv2d"
+    },
+    {
+      "name": "layer1.1.bn2",
+      "params": 128,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "layer2",
+      "params": 525568,
+      "type": "Sequential"
+    },
+    {
+      "name": "layer2.0",
+      "params": 230144,
+      "type": "BasicBlock"
+    },
+    {
+      "name": "layer2.0.conv1",
+      "params": 73728,
+      "type": "Conv2d"
+    },
+    {
+      "name": "layer2.0.bn1",
+      "params": 256,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "layer2.0.relu",
+      "params": 0,
+      "type": "ReLU"
+    },
+    {
+      "name": "layer2.0.conv2",
+      "params": 147456,
+      "type": "Conv2d"
+    },
+    {
+      "name": "layer2.0.bn2",
+      "params": 256,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "layer2.0.downsample",
+      "params": 8448,
+      "type": "Sequential"
+    },
+    {
+      "name": "layer2.0.downsample.0",
+      "params": 8192,
+      "type": "Conv2d"
+    },
+    {
+      "name": "layer2.0.downsample.1",
+      "params": 256,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "layer2.1",
+      "params": 295424,
+      "type": "BasicBlock"
+    },
+    {
+      "name": "layer2.1.conv1",
+      "params": 147456,
+      "type": "Conv2d"
+    },
+    {
+      "name": "layer2.1.bn1",
+      "params": 256,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "layer2.1.relu",
+      "params": 0,
+      "type": "ReLU"
+    },
+    {
+      "name": "layer2.1.conv2",
+      "params": 147456,
+      "type": "Conv2d"
+    },
+    {
+      "name": "layer2.1.bn2",
+      "params": 256,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "layer3",
+      "params": 2099712,
+      "type": "Sequential"
+    },
+    {
+      "name": "layer3.0",
+      "params": 919040,
+      "type": "BasicBlock"
+    },
+    {
+      "name": "layer3.0.conv1",
+      "params": 294912,
+      "type": "Conv2d"
+    },
+    {
+      "name": "layer3.0.bn1",
+      "params": 512,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "layer3.0.relu",
+      "params": 0,
+      "type": "ReLU"
+    },
+    {
+      "name": "layer3.0.conv2",
+      "params": 589824,
+      "type": "Conv2d"
+    },
+    {
+      "name": "layer3.0.bn2",
+      "params": 512,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "layer3.0.downsample",
+      "params": 33280,
+      "type": "Sequential"
+    },
+    {
+      "name": "layer3.0.downsample.0",
+      "params": 32768,
+      "type": "Conv2d"
+    },
+    {
+      "name": "layer3.0.downsample.1",
+      "params": 512,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "layer3.1",
+      "params": 1180672,
+      "type": "BasicBlock"
+    },
+    {
+      "name": "layer3.1.conv1",
+      "params": 589824,
+      "type": "Conv2d"
+    },
+    {
+      "name": "layer3.1.bn1",
+      "params": 512,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "layer3.1.relu",
+      "params": 0,
+      "type": "ReLU"
+    },
+    {
+      "name": "layer3.1.conv2",
+      "params": 589824,
+      "type": "Conv2d"
+    },
+    {
+      "name": "layer3.1.bn2",
+      "params": 512,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "layer4",
+      "params": 8393728,
+      "type": "Sequential"
+    },
+    {
+      "name": "layer4.0",
+      "params": 3673088,
+      "type": "BasicBlock"
+    },
+    {
+      "name": "layer4.0.conv1",
+      "params": 1179648,
+      "type": "Conv2d"
+    },
+    {
+      "name": "layer4.0.bn1",
+      "params": 1024,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "layer4.0.relu",
+      "params": 0,
+      "type": "ReLU"
+    },
+    {
+      "name": "layer4.0.conv2",
+      "params": 2359296,
+      "type": "Conv2d"
+    },
+    {
+      "name": "layer4.0.bn2",
+      "params": 1024,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "layer4.0.downsample",
+      "params": 132096,
+      "type": "Sequential"
+    },
+    {
+      "name": "layer4.0.downsample.0",
+      "params": 131072,
+      "type": "Conv2d"
+    },
+    {
+      "name": "layer4.0.downsample.1",
+      "params": 1024,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "layer4.1",
+      "params": 4720640,
+      "type": "BasicBlock"
+    },
+    {
+      "name": "layer4.1.conv1",
+      "params": 2359296,
+      "type": "Conv2d"
+    },
+    {
+      "name": "layer4.1.bn1",
+      "params": 1024,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "layer4.1.relu",
+      "params": 0,
+      "type": "ReLU"
+    },
+    {
+      "name": "layer4.1.conv2",
+      "params": 2359296,
+      "type": "Conv2d"
+    },
+    {
+      "name": "layer4.1.bn2",
+      "params": 1024,
+      "type": "BatchNorm2d"
+    },
+    {
+      "name": "avgpool",
+      "params": 0,
+      "type": "AdaptiveAvgPool2d"
+    },
+    {
+      "name": "fc",
+      "params": 5130,
+      "type": "Linear"
+    }
+  ],
+  "output_shape": [
+    1,
+    10
+  ],
+  "total_params": 11181642,
+  "trainable_params": 11181642
+}

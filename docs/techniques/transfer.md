@@ -40,11 +40,15 @@ stem is rejected because the random stem would block the pretrained features.
   training (the 512→10 head and bias).
 - All three configs use `keep_7x7_stride1`, ImageNet normalization, the same
   45k/5k random split, 30 epochs, and validation-based early stopping.
-- The fairness comparison records test fingerprints and per-run bootstrap
-  intervals; measured transfer results are produced in the benchmark stage.
+- Measured test accuracy: fine-tune **94.98%**, scratch 90.88%, linear probe
+  62.66%. All three share the same test fingerprint and have per-run bootstrap
+  intervals in the comparison.
 - The reference scratch baseline uses CIFAR mean/std; the transfer anchor uses
   ImageNet mean/std because the pretrained model expects it. The comparison
   labels that difference rather than hiding it.
+- BatchNorm running statistics update even while probe parameters are frozen,
+  so the linear probe is a frozen-parameter probe rather than a strict
+  frozen-feature probe.
 
 ## Caveat
 

@@ -1,0 +1,168 @@
+{
+  "confidence_intervals": {},
+  "latency": null,
+  "metrics": {
+    "accuracy": 0.6,
+    "calibration": {
+      "bins": [
+        {
+          "accuracy": 0.0,
+          "confidence": 0.0,
+          "count": 0,
+          "lower": 0.0,
+          "upper": 0.06666666666666667
+        },
+        {
+          "accuracy": 0.0,
+          "confidence": 0.0,
+          "count": 0,
+          "lower": 0.06666666666666667,
+          "upper": 0.13333333333333333
+        },
+        {
+          "accuracy": 0.0,
+          "confidence": 0.0,
+          "count": 0,
+          "lower": 0.13333333333333333,
+          "upper": 0.2
+        },
+        {
+          "accuracy": 0.0,
+          "confidence": 0.0,
+          "count": 0,
+          "lower": 0.2,
+          "upper": 0.26666666666666666
+        },
+        {
+          "accuracy": 0.0,
+          "confidence": 0.0,
+          "count": 0,
+          "lower": 0.26666666666666666,
+          "upper": 0.3333333333333333
+        },
+        {
+          "accuracy": 0.6,
+          "confidence": 0.3653883735338847,
+          "count": 15,
+          "lower": 0.3333333333333333,
+          "upper": 0.4
+        },
+        {
+          "accuracy": 0.0,
+          "confidence": 0.0,
+          "count": 0,
+          "lower": 0.4,
+          "upper": 0.4666666666666667
+        },
+        {
+          "accuracy": 0.0,
+          "confidence": 0.0,
+          "count": 0,
+          "lower": 0.4666666666666667,
+          "upper": 0.5333333333333333
+        },
+        {
+          "accuracy": 0.0,
+          "confidence": 0.0,
+          "count": 0,
+          "lower": 0.5333333333333333,
+          "upper": 0.6
+        },
+        {
+          "accuracy": 0.0,
+          "confidence": 0.0,
+          "count": 0,
+          "lower": 0.6,
+          "upper": 0.6666666666666666
+        },
+        {
+          "accuracy": 0.0,
+          "confidence": 0.0,
+          "count": 0,
+          "lower": 0.6666666666666666,
+          "upper": 0.7333333333333333
+        },
+        {
+          "accuracy": 0.0,
+          "confidence": 0.0,
+          "count": 0,
+          "lower": 0.7333333333333333,
+          "upper": 0.8
+        },
+        {
+          "accuracy": 0.0,
+          "confidence": 0.0,
+          "count": 0,
+          "lower": 0.8,
+          "upper": 0.8666666666666667
+        },
+        {
+          "accuracy": 0.0,
+          "confidence": 0.0,
+          "count": 0,
+          "lower": 0.8666666666666667,
+          "upper": 0.9333333333333333
+        },
+        {
+          "accuracy": 0.0,
+          "confidence": 0.0,
+          "count": 0,
+          "lower": 0.9333333333333333,
+          "upper": 1.0
+        }
+      ],
+      "brier": 0.6435994171416867,
+      "ece": 0.23461162646611528,
+      "mce": 0.23461162646611528
+    },
+    "confusion_matrix": [
+      [
+        0,
+        5,
+        0
+      ],
+      [
+        0,
+        5,
+        0
+      ],
+      [
+        0,
+        1,
+        4
+      ]
+    ],
+    "macro_f1": 0.5046296296296297,
+    "nll": 1.0643036487240911,
+    "per_class": {
+      "circle": {
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 5
+      },
+      "square": {
+        "f1": 0.625,
+        "precision": 0.45454545454545453,
+        "recall": 1.0,
+        "support": 5
+      },
+      "stripe": {
+        "f1": 0.888888888888889,
+        "precision": 1.0,
+        "recall": 0.8,
+        "support": 5
+      }
+    },
+    "support": 15,
+    "top_k_accuracy": 1.0
+  },
+  "split": "val",
+  "tta": {
+    "base": {
+      "accuracy": 0.6
+    },
+    "enabled": false,
+    "tta": null
+  }
+}

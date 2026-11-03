@@ -1,0 +1,159 @@
+schema_version: '1.0'
+defaults: []
+experiment:
+  name: bring_your_own_data_quickstart
+  tags:
+  - byo
+  - manifest
+  - 16-bit
+  - quickstart
+  notes: Tiny committed 16-bit grayscale fixture; runs end to end in under a minute.
+  seed: 7
+data:
+  adapter: manifest
+  root: null
+  manifest: /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/demos/bring_your_own_data/manifest.csv
+  image_root: /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/demos/bring_your_own_data/fixture
+  class_names:
+  - circle
+  - square
+  - stripe
+  num_classes: 3
+  channels: gray
+  image_size:
+  - 16
+  - 16
+  split:
+    mode: explicit
+    val_fraction: 0.1
+    seed: 7
+    group_column: null
+  normalization:
+    mode: compute
+    mean: null
+    std: null
+    cache: true
+  transforms:
+    train:
+    - name: Resize
+      size:
+      - 16
+      - 16
+    - name: ToTensor
+    - name: Normalize
+      mean: auto
+      std: auto
+    eval:
+    - name: Resize
+      size:
+      - 16
+      - 16
+    - name: ToTensor
+    - name: Normalize
+      mean: auto
+      std: auto
+  value_range:
+    mode: auto
+    min: null
+    max: null
+  adapter_params: {}
+model:
+  name: simple_cnn
+  params:
+    channels:
+    - 8
+    - 16
+    dropout: 0.0
+    norm: batch
+  transfer:
+    weights: null
+    freeze: none
+    train_bn: false
+    unfreeze_schedule: []
+    param_groups: []
+training:
+  epochs: 2
+  batch_size: 8
+  grad_accum_steps: 1
+  selection_metric: val_accuracy
+  optimizer:
+    name: adamw
+    lr: 0.001
+    weight_decay: 0.0001
+    momentum: 0.9
+  scheduler:
+    name: cosine
+    warmup_epochs: 0
+    min_lr_ratio: 0.0
+    step_size: 10
+    gamma: 0.1
+    step_unit: epoch
+  loss:
+    name: cross_entropy
+    label_smoothing: 0.0
+  grad_clip_norm: null
+  amp: auto
+  mixup_alpha: 0.0
+  cutmix_alpha: 0.0
+  ema:
+    enabled: false
+    decay: 0.999
+  early_stopping:
+    enabled: false
+    monitor: val_accuracy
+    mode: max
+    patience: 5
+    min_delta: 0.0
+  checkpoint:
+    monitor: val_accuracy
+    mode: max
+    save_last: true
+evaluation:
+  metrics:
+  - accuracy
+  - macro_f1
+  - per_class
+  - confusion_matrix
+  - nll
+  top_k: 3
+  bootstrap:
+    enabled: false
+    n_resamples: 200
+    confidence: 0.95
+    stratify: true
+  calibration:
+    bins: 10
+  latency:
+    enabled: false
+    warmup: 5
+    iterations: 20
+  error_analysis:
+    max_examples: 8
+  tta:
+    enabled: false
+    transforms:
+    - identity
+    - hflip
+    reduction: mean_probabilities
+tracking:
+  console: true
+  csv: true
+  tensorboard: false
+report:
+  enabled: true
+  formats:
+  - html
+  - markdown
+  figures:
+  - training_history
+  - confusion_matrix
+  - per_class
+  - model_summary
+runtime:
+  device: auto
+  deterministic: true
+  num_workers: 0
+  persistent_workers: false
+  pin_memory: false
+  channels_last: false
+  compile: false

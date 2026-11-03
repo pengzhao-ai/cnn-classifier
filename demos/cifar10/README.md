@@ -56,8 +56,8 @@ python demos/cifar10/scripts/run_scratch.py --quick
 With a two-epoch cosine schedule the final epoch runs at learning rate zero, so
 the quick run is a pipeline smoke check, not a meaningful accuracy result. The
 script prints the run directory and the report path. Run artifacts stay under
-`runs/` (gitignored). The full 50-epoch run is a Task 28 benchmark stage; do not
-expect its numbers from the quick mode.
+`runs/` (gitignored). The full 50-epoch run has been reproduced; see
+`demos/cifar10/results.md` for the measured numbers.
 
 You can also drive the same config through the CLI:
 
@@ -69,8 +69,8 @@ cnncls train -c configs/cifar10/scratch_baseline.yaml --dry-run
 ## Results
 
 Full-run results, figures, and the HTML report are committed under
-`results/cifar10/` after the benchmark stage. `demos/cifar10/results.md` records
-the environment, seed, device, and any difference from the reference.
+`results/cifar10/`. `demos/cifar10/results.md` records the environment, seed,
+device, and the reference comparison.
 
 Reference from the design document, to be reproduced rather than assumed:
 

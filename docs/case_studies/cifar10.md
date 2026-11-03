@@ -42,6 +42,12 @@ Reference: 92.42% validation / 92.61% test on MPS, seed 42. The test difference
 is −0.36 percentage points; the validation difference is +0.36. The ≥90% gate is
 met. No tuning was performed against the test split.
 
+![Training history](../images/cifar10_training_history.png)
+
+![Confusion matrix](../images/cifar10_confusion_matrix.png)
+
+![Error gallery](../images/cifar10_errors.png)
+
 ## Artifacts
 
 The run directory contains `best.pt`, `last.pt`, the resolved config,

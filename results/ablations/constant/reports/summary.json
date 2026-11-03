@@ -1,0 +1,87 @@
+{
+  "accuracy_ci": [
+    0.5859949999999999,
+    0.6037
+  ],
+  "best_epoch": 7,
+  "best_metric": 0.594,
+  "config_hash": "836084d880f84c98",
+  "dataset_fingerprint": "439c395269b66035",
+  "device": "mps",
+  "epochs_run": 8,
+  "evaluated_split": "test",
+  "history": [
+    {
+      "epoch": 1.0,
+      "lr": 0.001,
+      "train_accuracy": 0.3479,
+      "train_loss": 1.725043238067627,
+      "val_accuracy": 0.2855,
+      "val_loss": 2.6856781578063966
+    },
+    {
+      "epoch": 2.0,
+      "lr": 0.001,
+      "train_accuracy": 0.475,
+      "train_loss": 1.4259784099578858,
+      "val_accuracy": 0.3565,
+      "val_loss": 2.077751756668091
+    },
+    {
+      "epoch": 3.0,
+      "lr": 0.001,
+      "train_accuracy": 0.554,
+      "train_loss": 1.238611698436737,
+      "val_accuracy": 0.5325,
+      "val_loss": 1.3023894081115723
+    },
+    {
+      "epoch": 4.0,
+      "lr": 0.001,
+      "train_accuracy": 0.6027,
+      "train_loss": 1.1109965396881103,
+      "val_accuracy": 0.528,
+      "val_loss": 1.3881950578689575
+    },
+    {
+      "epoch": 5.0,
+      "lr": 0.001,
+      "train_accuracy": 0.631,
+      "train_loss": 1.0462302860260009,
+      "val_accuracy": 0.502,
+      "val_loss": 1.5759605045318603
+    },
+    {
+      "epoch": 6.0,
+      "lr": 0.001,
+      "train_accuracy": 0.651,
+      "train_loss": 0.9749904325485229,
+      "val_accuracy": 0.541,
+      "val_loss": 1.3953070278167725
+    },
+    {
+      "epoch": 7.0,
+      "lr": 0.001,
+      "train_accuracy": 0.677,
+      "train_loss": 0.9135221390724182,
+      "val_accuracy": 0.594,
+      "val_loss": 1.2055730290412903
+    },
+    {
+      "epoch": 8.0,
+      "lr": 0.001,
+      "train_accuracy": 0.691,
+      "train_loss": 0.8713698085784912,
+      "val_accuracy": 0.479,
+      "val_loss": 1.6686264190673827
+    }
+  ],
+  "latency_ms": null,
+  "macro_f1": 0.59181525242614,
+  "params": 482730,
+  "peak_memory_mb": 7.398193359375,
+  "test_accuracy": 0.5944,
+  "test_fingerprint": "7aac74439fdc9640",
+  "train_seconds": 19.386550459006685,
+  "trainable_params": 482730
+}

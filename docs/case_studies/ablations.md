@@ -23,13 +23,26 @@ schedule?
 
 ## Result
 
-The eight full runs and the comparison table are produced in the benchmark
-stage. The comparison records per-run accuracy, macro F1, parameter count,
-training time, and latency, with the per-run bootstrap interval in each
-`summary.json`.
+The four “on” configs share the base recipe, so their identical 67.92% result is
+the shared baseline for each pair.
+
+| Pair | On | Off | Difference | CI overlap |
+|---|---|---|---|---|
+| Augmentation | 67.92% | **71.06%** | off +3.14 pp | none |
+| BatchNorm | **67.92%** | 48.55% | on +19.37 pp | none |
+| Residual | 67.92% | **68.60%** | off +0.68 pp | substantial |
+| Schedule | **67.92%** | 59.44% | cosine +8.48 pp | none |
+
+![Ablation comparison](../images/ablation_comparison.png)
+
+The comparison records per-run accuracy, macro F1, parameter count, training
+time, and latency, with the per-run bootstrap interval in each `summary.json`.
+The augmentation result (off better on this reduced budget) is measured, not a
+recommendation.
 
 - [Configs](https://github.com/pengzhao-ai/cnn-classifier/tree/main/configs/ablations)
 - [Runner](https://github.com/pengzhao-ai/cnn-classifier/blob/main/demos/ablations/run_ablations.py)
+- [Comparison](https://github.com/pengzhao-ai/cnn-classifier/blob/main/results/comparison/ablation_comparison.md)
 
 ## What to notice
 

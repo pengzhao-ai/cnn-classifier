@@ -1,0 +1,168 @@
+schema_version: '1.0'
+defaults: []
+experiment:
+  name: optics_degradation_classifier
+  tags:
+  - optics
+  - degradation
+  - manifest
+  - diagnostics
+  notes: Classify the dominant optical degradation in generated 32x32 samples.
+  seed: 1
+data:
+  adapter: manifest
+  root: null
+  manifest: /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/data/optics_degradation/manifest.csv
+  image_root: /Users/pengzhao/Documents/Projects/git_repos/CNN_Classifier/data/optics_degradation
+  class_names:
+  - clean
+  - defocus
+  - motion_blur
+  - chromatic_aberration
+  - vignetting
+  - sensor_noise
+  - jpeg
+  num_classes: 7
+  channels: rgb
+  image_size:
+  - 32
+  - 32
+  split:
+    mode: explicit
+    val_fraction: 0.1
+    seed: 1
+    group_column: null
+  normalization:
+    mode: compute
+    mean: null
+    std: null
+    cache: true
+  transforms:
+    train:
+    - name: Resize
+      size:
+      - 32
+      - 32
+    - name: ToTensor
+    - name: Normalize
+      mean: auto
+      std: auto
+    eval:
+    - name: Resize
+      size:
+      - 32
+      - 32
+    - name: ToTensor
+    - name: Normalize
+      mean: auto
+      std: auto
+  value_range:
+    mode: auto
+    min: null
+    max: null
+  adapter_params: {}
+model:
+  name: simple_cnn
+  params:
+    channels:
+    - 32
+    - 64
+    - 128
+    dropout: 0.2
+    norm: batch
+  transfer:
+    weights: null
+    freeze: none
+    train_bn: false
+    unfreeze_schedule: []
+    param_groups: []
+training:
+  epochs: 20
+  batch_size: 64
+  grad_accum_steps: 1
+  selection_metric: val_accuracy
+  optimizer:
+    name: adamw
+    lr: 0.001
+    weight_decay: 0.0005
+    momentum: 0.9
+  scheduler:
+    name: cosine
+    warmup_epochs: 0
+    min_lr_ratio: 0.0
+    step_size: 10
+    gamma: 0.1
+    step_unit: epoch
+  loss:
+    name: cross_entropy
+    label_smoothing: 0.0
+  grad_clip_norm: null
+  amp: auto
+  mixup_alpha: 0.0
+  cutmix_alpha: 0.0
+  ema:
+    enabled: false
+    decay: 0.999
+  early_stopping:
+    enabled: true
+    monitor: val_accuracy
+    mode: max
+    patience: 5
+    min_delta: 0.0
+  checkpoint:
+    monitor: val_accuracy
+    mode: max
+    save_last: true
+evaluation:
+  metrics:
+  - accuracy
+  - top_k
+  - macro_f1
+  - per_class
+  - confusion_matrix
+  - ece
+  - nll
+  top_k: 3
+  bootstrap:
+    enabled: true
+    n_resamples: 1000
+    confidence: 0.95
+    stratify: true
+  calibration:
+    bins: 15
+  latency:
+    enabled: true
+    warmup: 20
+    iterations: 100
+  error_analysis:
+    max_examples: 32
+  tta:
+    enabled: false
+    transforms:
+    - identity
+    - hflip
+    reduction: mean_probabilities
+tracking:
+  console: true
+  csv: true
+  tensorboard: true
+report:
+  enabled: true
+  formats:
+  - html
+  - markdown
+  figures:
+  - training_history
+  - confusion_matrix
+  - per_class
+  - calibration
+  - errors
+  - model_summary
+runtime:
+  device: auto
+  deterministic: true
+  num_workers: auto
+  persistent_workers: true
+  pin_memory: auto
+  channels_last: false
+  compile: false

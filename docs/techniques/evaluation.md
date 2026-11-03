@@ -40,7 +40,10 @@ test fingerprints. Test is loaded only by the explicit `evaluate` command.
 - The test split is evaluated once, from the best validation checkpoint
   (epoch 46), not used for selection.
 - Every run records its test fingerprint, including the torchvision adapter's
-  separate test set.
+  separate test set. The three transfer runs share the fingerprint
+  `7aac74439fdc9640`.
+- The optical degradation demo reaches 85.71% test accuracy with a 95% CI of
+  82.38–88.81% on 420 generated test samples.
 - The ablation and transfer comparisons include per-run intervals; the
   comparison report does not claim significance from overlapping intervals.
 

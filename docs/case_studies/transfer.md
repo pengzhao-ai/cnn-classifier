@@ -31,13 +31,24 @@ from the reference reproduction.
 
 ## Result
 
-Three full runs and the fairness comparison are produced in the benchmark
-stage. The comparison records test fingerprints, per-run bootstrap intervals,
-parameter counts, training time, latency, and peak memory, and writes a Pareto
-plot.
+All three runs share the CIFAR-10 test set and test fingerprint.
+
+| Run | Test accuracy | 95% CI | Macro F1 | Trainable params | Train time |
+|---|---:|---|---:|---:|---:|
+| Scratch | 90.88% | 90.33–91.43% | 90.90% | 11,181,642 | 19.6 min |
+| Linear probe | 62.66% | 61.75–63.63% | 62.54% | 5,130 | 8.4 min |
+| Fine-tune | **94.98%** | 94.57–95.41% | 94.97% | 11,181,642 | 19.5 min |
+
+![Transfer comparison](../images/transfer_comparison.png)
+
+The comparison records test fingerprints, per-run bootstrap intervals,
+parameter counts, training time, latency, and peak memory. BatchNorm running
+statistics update even while probe parameters are frozen, so the linear probe
+is a frozen-parameter probe, not a strict frozen-feature probe.
 
 - [Runner](https://github.com/pengzhao-ai/cnn-classifier/blob/main/demos/cifar10/scripts/run_transfer.py)
 - [Configs](https://github.com/pengzhao-ai/cnn-classifier/tree/main/configs/cifar10)
+- [Comparison](https://github.com/pengzhao-ai/cnn-classifier/blob/main/results/comparison/transfer_comparison.md)
 
 ## What to notice
 

@@ -1,8 +1,8 @@
 # CIFAR-10 scratch baseline — results
 
-Status: reference baseline reproduced on Apple Silicon MPS. Full run artifacts
-are under `runs/20261103T055515Z_cifar10_scratch_baseline_0283f0f0/`
-(gitignored); committed result packaging is Task 28 of the sharp-v1 plan.
+Status: reference baseline reproduced on Apple Silicon MPS. Committed
+summaries, figures, and reports are in `results/cifar10/`; the full run
+directory remains under `runs/` (gitignored).
 
 ## Reproduced run
 
@@ -36,6 +36,23 @@ reproduced test accuracy is within 0.4 percentage points and clears the ≥90%
 acceptance gate. No tuning was performed against the test split; the best
 checkpoint was selected on validation accuracy (epoch 46) and evaluated once.
 
+## Transfer benchmark (32×32 ResNet-18)
+
+All three runs share the CIFAR-10 test set and the same test fingerprint.
+The full comparison, Pareto chart, and caveats are in
+`results/comparison/transfer_comparison.md`.
+
+| Run | Test accuracy | 95% CI | Macro F1 | Trainable params | Train time |
+|---|---:|---|---:|---:|---:|
+| Scratch | 90.88% | 90.33–91.43% | 90.90% | 11,181,642 | 19.6 min |
+| Linear probe | 62.66% | 61.75–63.63% | 62.54% | 5,130 | 8.4 min |
+| Fine-tune | **94.98%** | 94.57–95.41% | 94.97% | 11,181,642 | 19.5 min |
+
+The scratch control uses ImageNet normalization to match the pretrained input
+contract. BatchNorm running statistics update even while the probe parameters
+are frozen, so the linear probe is not a strict frozen-feature probe; the
+comparison labels that caveat rather than hiding it.
+
 ## Artifacts
 
 Local run directory (not committed):
@@ -54,14 +71,12 @@ runs/20261103T055515Z_cifar10_scratch_baseline_0283f0f0/
 └── environment.json, git.json, config.resolved.yaml
 ```
 
-Task 28 copies selected summaries, figures, and reports into `results/cifar10/`
-for commit. Checkpoints stay local and are not committed.
+Committed copies of the summary, evaluation, reports, and figures are in
+`results/cifar10/`. Checkpoints stay local and are not committed.
 
 ## Notes
 
 - The test split is evaluated only after training, from `checkpoints/best.pt`.
 - `best.pt` is selected by validation accuracy, not test accuracy.
 - The quick mode (`--quick`) is a two-epoch pipeline smoke check, not a result.
-- The CIFAR adapter's recorded test fingerprint is currently null; comparisons
-  fall back to the shared dataset/validation fingerprint. This is noted for the
-  Task 22 fairness review.
+- The CIFAR test fingerprint is now recorded and matches the transfer runs.

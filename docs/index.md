@@ -8,19 +8,23 @@ the command line, so a quick smoke test and a full experiment use one pipeline.
 
 !!! note "Sharp v1"
     The core library, CLI, evaluation stack, diagnostics, report generator, and
-    the five demo suites are implemented. The CIFAR-10 scratch baseline has been
-    reproduced on Apple Silicon MPS; the transfer, ablation, and optical runs are
-    scheduled for the final benchmark stage.
+    all five demo suites are implemented. The CIFAR-10 baseline, three transfer
+    runs, four ablations, and the optical-degradation run are reproduced on
+    Apple Silicon MPS; committed summaries and figures are under `results/`.
 
 ## Results at a glance
 
 | Experiment | Result | Budget | Status |
 |---|---:|---|---|
 | CIFAR-10 scratch baseline | **92.25% test**, 92.78% best validation | 50 epochs, 22.3 min MPS | reproduced |
-| Three 32×32 ResNet-18 transfer runs | pending | 30 epochs each | benchmark stage |
-| Four core ablations | pending | 8 epochs, 10k train subset | benchmark stage |
-| Optical degradation classifier | pending | 20 epochs | benchmark stage |
+| ResNet-18 fine-tune, 32×32 | **94.98% test** | 30 epochs, 19.5 min MPS | measured |
+| ResNet-18 scratch, 32×32 | 90.88% test | 30 epochs, 19.6 min MPS | measured |
+| ResNet-18 linear probe | 62.66% test | 30 epochs, 8.4 min MPS | measured |
+| Four core ablations | BN +19.4 pp; cosine +8.5 pp; residual +0.7 pp; augmentation −3.1 pp | 8 epochs, 10k train subset | measured |
+| Optical degradation classifier | 85.71% test | 20 epochs, 7.5 s MPS | measured |
 | Bring-your-own-data quickstart | contract verified | 2 epochs, under a minute | complete |
+
+![CIFAR-10 training history](images/cifar10_training_history.png)
 
 Reference for the scratch baseline: 92.42% validation / 92.61% test on MPS,
 seed 42. The reproduced test result is within 0.4 percentage points and clears

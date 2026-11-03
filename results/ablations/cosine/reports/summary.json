@@ -1,0 +1,87 @@
+{
+  "accuracy_ci": [
+    0.6705975,
+    0.6880025
+  ],
+  "best_epoch": 7,
+  "best_metric": 0.6745,
+  "config_hash": "123f8ffc26b6ee84",
+  "dataset_fingerprint": "439c395269b66035",
+  "device": "mps",
+  "epochs_run": 8,
+  "evaluated_split": "test",
+  "history": [
+    {
+      "epoch": 1.0,
+      "lr": 0.0009504844339512095,
+      "train_accuracy": 0.3479,
+      "train_loss": 1.725043238067627,
+      "val_accuracy": 0.2855,
+      "val_loss": 2.6856781578063966
+    },
+    {
+      "epoch": 2.0,
+      "lr": 0.0008117449009293668,
+      "train_accuracy": 0.4756,
+      "train_loss": 1.4213972969055175,
+      "val_accuracy": 0.361,
+      "val_loss": 2.0152201309204103
+    },
+    {
+      "epoch": 3.0,
+      "lr": 0.0006112604669781572,
+      "train_accuracy": 0.5565,
+      "train_loss": 1.2283648252487183,
+      "val_accuracy": 0.5395,
+      "val_loss": 1.277869918823242
+    },
+    {
+      "epoch": 4.0,
+      "lr": 0.00038873953302184284,
+      "train_accuracy": 0.6145,
+      "train_loss": 1.0818296014785767,
+      "val_accuracy": 0.56,
+      "val_loss": 1.2805415210723876
+    },
+    {
+      "epoch": 5.0,
+      "lr": 0.00018825509907063325,
+      "train_accuracy": 0.6488,
+      "train_loss": 0.9890462339401245,
+      "val_accuracy": 0.602,
+      "val_loss": 1.1073704042434693
+    },
+    {
+      "epoch": 6.0,
+      "lr": 4.9515566048790485e-05,
+      "train_accuracy": 0.677,
+      "train_loss": 0.9026319881439209,
+      "val_accuracy": 0.625,
+      "val_loss": 1.0383196072578431
+    },
+    {
+      "epoch": 7.0,
+      "lr": 0.0,
+      "train_accuracy": 0.7001,
+      "train_loss": 0.8532401627540588,
+      "val_accuracy": 0.6745,
+      "val_loss": 0.8909398832321167
+    },
+    {
+      "epoch": 8.0,
+      "lr": 0.0,
+      "train_accuracy": 0.7134,
+      "train_loss": 0.8271690370559692,
+      "val_accuracy": 0.673,
+      "val_loss": 0.8910822677612305
+    }
+  ],
+  "latency_ms": null,
+  "macro_f1": 0.6787257208664117,
+  "params": 482730,
+  "peak_memory_mb": 7.398193359375,
+  "test_accuracy": 0.6792,
+  "test_fingerprint": "7aac74439fdc9640",
+  "train_seconds": 19.435209291994397,
+  "trainable_params": 482730
+}
