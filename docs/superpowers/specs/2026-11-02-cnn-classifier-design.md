@@ -1,12 +1,18 @@
 # `cnn-classifier` — Design Document
 
-**Status:** Approved for sharp v1 implementation
+**Status:** Implemented; v0.1.0 released 2026-11-03
 **Date:** 2026-11-02
 **Repository:** `CNN_Classifier`
-**Distribution:** `cnn-classifier`
+**Distribution:** `cnn-classifier-toolkit`
 **Import package:** `cnn_classifier`
 **CLI:** `cnncls`
 **License:** Apache-2.0
+
+> **Post-release note (2026-11-03):** The distribution was released as
+> `cnn-classifier-toolkit`. PyPI rejected the originally planned
+> `cnn-classifier` because its name-similarity rule normalizes it to the same
+> value as the existing `cnnClassifier` project. The import package and CLI are
+> unchanged.
 
 ---
 
@@ -1510,7 +1516,7 @@ resumes from the last checkpoint rather than restarting the whole benchmark.
 
 ### 17.1 Package metadata
 
-- Distribution: `cnn-classifier`.
+- Distribution: `cnn-classifier-toolkit` (originally planned as `cnn-classifier`).
 - Import: `cnn_classifier`.
 - CLI: `cnncls`.
 - Python 3.11–3.13.
@@ -1803,7 +1809,7 @@ The project is complete when:
 | Full demo runtime too long for iteration | Quick configs; subset; committed full results; CI uses synthetic data |
 | Test set overuse | Test only through explicit evaluate; run metadata records split; comparison checks fingerprint |
 | Report drift between docs and results | Regenerate figures from artifacts; byte-identical docs image test |
-| PyPI name collision | `cnn-classifier` verified unclaimed on 2026-11-02; re-check before release |
+| PyPI name collision | `cnn-classifier` was unclaimed on 2026-11-02 but rejected on 2026-11-03 because `cnnClassifier` normalizes to the same name; released as `cnn-classifier-toolkit` |
 | Over-engineering the config system | Pydantic + small merge resolver; no Hydra; builder review and phase gates |
 
 ---

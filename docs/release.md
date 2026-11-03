@@ -63,19 +63,20 @@ For a new PyPI project, register a pending publisher with these exact values:
 These steps require the repository owner's accounts and are not automated by
 the local build:
 
-- [ ] Create or confirm `pengzhao-ai/cnn-classifier`.
-- [ ] Enable GitHub Pages and select GitHub Actions as the source.
-- [ ] Confirm the `docs.yml` workflow can deploy to the `github-pages`
+- [x] Create or confirm `pengzhao-ai/cnn-classifier`.
+- [x] Enable GitHub Pages and select GitHub Actions as the source.
+- [x] Confirm the `docs.yml` workflow can deploy to the `github-pages`
       environment.
-- [ ] Configure the PyPI trusted publisher for project
+- [x] Configure the PyPI trusted publisher for project
       `cnn-classifier-toolkit`, workflow `release.yml`, and environment `pypi`.
-- [ ] Push the `v*` tag.
-- [ ] Verify the GitHub release assets contain the wheel and sdist.
-- [ ] Verify the PyPI page
+- [x] Push the `v*` tag.
+- [x] Verify the GitHub release assets contain the wheel and sdist.
+- [x] Verify the PyPI page
       `https://pypi.org/project/cnn-classifier-toolkit/` renders, including
       README links and images.
-- [ ] Verify the documentation URL
+- [x] Verify the documentation URL
       `https://pengzhao-ai.github.io/cnn-classifier/` is live.
 
-Live PyPI and Pages publication is verified by the owner after account setup.
-The local build does not assume it succeeded.
+Live PyPI and Pages publication was verified on 2026-11-03:
+`v0.1.0` published both artifacts, and the docs site is serving the five-section
+public navigation.
