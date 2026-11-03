@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
+from pathlib import Path
 
 import torch
 
@@ -106,4 +108,8 @@ def test_training_import_does_not_import_plotting_stack():
         "assert 'matplotlib' not in sys.modules; "
         "assert 'jinja2' not in sys.modules"
     )
-    subprocess.run([sys.executable, "-c", code], check=True)
+    env = {
+        **os.environ,
+        "PYTHONPATH": str(Path(__file__).resolve().parents[1] / "src"),
+    }
+    subprocess.run([sys.executable, "-c", code], check=True, env=env)

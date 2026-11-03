@@ -15,11 +15,14 @@ from cnn_classifier.viz.features import (
     plot_filters,
     plot_gradcam,
 )
+from cnn_classifier.viz.report import build_markdown_report, build_report
 from cnn_classifier.viz.style import PALETTE, save_figure, set_style
 from cnn_classifier.viz.training import plot_training_history
 
 __all__ = [
     "PALETTE",
+    "build_markdown_report",
+    "build_report",
     "compute_gradcam",
     "plot_augmentation_gallery",
     "plot_calibration",

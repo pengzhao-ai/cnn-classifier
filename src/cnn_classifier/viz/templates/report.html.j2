@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }}</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #16181d;
+      --muted: #5b6472;
+      --line: #dfe3e8;
+      --surface: #f6f7f9;
+      --accent: #0072b2;
+      --accent-soft: #e8f3fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #ffffff;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.55;
+    }
+    main { max-width: 1080px; margin: 0 auto; padding: 48px 24px 80px; }
+    header { border-bottom: 3px solid var(--ink); padding-bottom: 24px; margin-bottom: 32px; }
+    .eyebrow {
+      margin: 0 0 6px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0 0 8px; font-size: 40px; line-height: 1.1; letter-spacing: -0.02em; }
+    .subtitle { margin: 0; color: var(--muted); font-size: 15px; }
+    h2 {
+      margin: 44px 0 14px;
+      padding-bottom: 7px;
+      border-bottom: 1px solid var(--line);
+      font-size: 22px;
+      letter-spacing: -0.01em;
+    }
+    h3 { margin: 24px 0 8px; font-size: 15px; }
+    p { margin: 8px 0; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .card span { display: block; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .card strong { display: block; margin-top: 4px; font-size: 22px; font-variant-numeric: tabular-nums; }
+    table { width: 100%; border-collapse: collapse; margin: 10px 0 18px; font-size: 14px; }
+    th, td { padding: 7px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+    td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .matrix td, .matrix th { text-align: center; font-variant-numeric: tabular-nums; }
+    .note {
+      margin: 10px 0;
+      padding: 10px 14px;
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+      color: #284a60;
+      font-size: 14px;
+    }
+    .figure { margin: 18px 0 26px; }
+    .figure img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; }
+    .figure figcaption { margin-top: 7px; color: var(--muted); font-size: 13px; }
+    .figures { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+    code, pre { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; }
+    pre {
+      overflow-x: auto;
+      padding: 14px 16px;
+      background: #101318;
+      color: #e8ebef;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .meta { color: var(--muted); font-size: 13px; }
+    footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+    @media (max-width: 640px) {
+      main { padding: 28px 16px 56px; }
+      h1 { font-size: 30px; }
+      table { font-size: 13px; }
+    }
+    @media print {
+      main { max-width: none; padding: 0; }
+      h2 { break-after: avoid; }
+      .figure, table { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="eyebrow">cnn-classifier</p>
+    <h1>Experiment report</h1>
+    <p class="subtitle">{{ run_name }} &middot; status: {{ status }} &middot; config {{ config_hash }}</p>
+  </header>
+
+  {% if cards %}
+  <section class="cards" aria-label="Summary metrics">
+    {% for card in cards %}
+    <div class="card"><span>{{ card.label }}</span><strong>{{ card.value }}</strong></div>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  <section id="metrics">
+    <h2>Metrics</h2>
+    {% if evaluation.available %}
+    <table>
+      <thead><tr><th>Metric</th><th class="num">Value</th></tr></thead>
+      <tbody>
+        {% for row in evaluation.metrics %}
+        <tr><td>{{ row.label }}</td><td class="num">{{ row.value }}</td></tr>
+        {% endfor %}
+        {% if evaluation.confidence %}
+        <tr><td>Accuracy interval</td><td class="num">{{ evaluation.confidence }}</td></tr>
+        {% endif %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="note">Test metrics: not evaluated (no evaluation artifact found).</p>
+    {% endif %}
+    {% if prediction_rows %}
+    <h3>Saved predictions</h3>
+    <table>
+      <thead><tr><th>Archive</th><th class="num">Samples</th><th class="num">Saved accuracy</th></tr></thead>
+      <tbody>
+        {% for row in prediction_rows %}
+        <tr><td><code>{{ row.name }}</code></td><td class="num">{{ row.samples }}</td><td class="num">{{ row.accuracy }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="note">Saved predictions: not evaluated.</p>
+    {% endif %}
+  </section>
+
+  <section id="configuration">
+    <h2>Configuration</h2>
+    {% if config_sections %}
+      {% for section in config_sections %}
+      <h3>{{ section.title }}</h3>
+      <table>
+        <thead><tr><th>Key</th><th>Value</th></tr></thead>
+        <tbody>
+          {% for key, value in section.rows %}
+          <tr><td><code>{{ key }}</code></td><td>{{ value }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endfor %}
+    {% else %}
+    <p class="note">Configuration: not evaluated (no resolved config found).</p>
+    {% endif %}
+  </section>
+
+  <section id="data-contract">
+    <h2>Data contract</h2>
+    {% if contract_rows %}
+    <table>
+      <thead><tr><th>Field</th><th>Value</th></tr></thead>
+      <tbody>
+        {% for key, value in contract_rows %}
+        <tr><td><code>{{ key }}</code></td><td>{{ value }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="note">Data contract: not evaluated.</p>
+    {% endif %}
+  </section>
+
+  <section id="split-integrity">
+    <h2>Split integrity</h2>
+    {% if split_rows %}
+    <table>
+      <thead><tr><th>Split</th><th class="num">Count</th><th>Fingerprint</th></tr></thead>
+      <tbody>
+        {% for row in split_rows %}
+        <tr><td>{{ row.split }}</td><td class="num">{{ row.count }}</td><td><code>{{ row.fingerprint }}</code></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% for note in split_notes %}<p class="meta">{{ note }}</p>{% endfor %}
+    {% else %}
+    {% for note in split_notes %}<p class="note">{{ note }}</p>{% else %}<p class="note">Split integrity: not evaluated.</p>{% endfor %}
+    {% endif %}
+  </section>
+
+  <section id="model">
+    <h2>Model</h2>
+    {% if model_facts %}
+    <table>
+      <thead><tr><th>Property</th><th class="num">Value</th></tr></thead>
+      <tbody>
+        {% for row in model_facts %}
+        <tr><td>{{ row.label }}</td><td class="num">{{ row.value }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if module_rows %}
+    <h3>Modules</h3>
+    <table>
+      <thead><tr><th>Module</th><th>Type</th><th class="num">Parameters</th></tr></thead>
+      <tbody>
+        {% for row in module_rows %}
+        <tr><td><code>{{ row.name }}</code></td><td>{{ row.type }}</td><td class="num">{{ row.params }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+    {% else %}
+    <p class="note">Model summary: not evaluated.</p>
+    {% endif %}
+  </section>
+
+  <section id="training">
+    <h2>Training</h2>
+    {% if history.rows %}
+    <p>Epochs run: <strong>{{ history.epochs_run }}</strong>{% if history.best_val_accuracy is not none %} &middot; best validation accuracy <strong>{{ history.best_val_accuracy }}</strong> at epoch <strong>{{ history.best_epoch }}</strong>{% endif %}</p>
+    <table>
+      <thead>
+        <tr>{% for column in history.columns %}<th{% if column.key != 'lr' %} class="num"{% endif %}>{{ column.label }}</th>{% endfor %}</tr>
+      </thead>
+      <tbody>
+        {% for row in history.rows %}
+        <tr>{% for column in history.columns %}<td{% if column.key != 'lr' %} class="num"{% endif %}>{{ row[column.key] }}</td>{% endfor %}</tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% for figure in figure_groups.training %}
+    <figure class="figure">
+      <img src="{{ figure.data_uri }}" alt="{{ figure.caption }}">
+      <figcaption>{{ figure.caption }}</figcaption>
+    </figure>
+    {% endfor %}
+    {% else %}
+    <p class="note">Training history: not evaluated.</p>
+    {% endif %}
+  </section>
+
+  <section id="test-metrics">
+    <h2>Test metrics</h2>
+    {% if evaluation.per_class %}
+    <table>
+      <thead><tr><th>Class</th><th class="num">Precision</th><th class="num">Recall</th><th class="num">F1</th><th class="num">Support</th></tr></thead>
+      <tbody>
+        {% for row in evaluation.per_class %}
+        <tr><td>{{ row.name }}</td><td class="num">{{ row.precision }}</td><td class="num">{{ row.recall }}</td><td class="num">{{ row.f1 }}</td><td class="num">{{ row.support }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="note">Per-class metrics: not evaluated.</p>
+    {% endif %}
+
+    {% if evaluation.confusion %}
+    <h3>Confusion matrix</h3>
+    <table class="matrix">
+      <thead>
+        <tr><th>True \ Predicted</th>{% for name in evaluation.class_names %}<th>{{ name }}</th>{% endfor %}</tr>
+      </thead>
+      <tbody>
+        {% for row in evaluation.confusion %}
+        <tr><th>{{ evaluation.class_names[loop.index0] }}</th>{% for value in row %}<td>{{ value }}</td>{% endfor %}</tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+    {% for figure in figure_groups.confusion %}
+    <figure class="figure">
+      <img src="{{ figure.data_uri }}" alt="{{ figure.caption }}">
+      <figcaption>{{ figure.caption }}</figcaption>
+    </figure>
+    {% endfor %}
+  </section>
+
+  <section id="calibration-errors">
+    <h2>Calibration and error analysis</h2>
+    {% if figure_groups.calibration %}
+      {% for figure in figure_groups.calibration %}
+      <figure class="figure">
+        <img src="{{ figure.data_uri }}" alt="{{ figure.caption }}">
+        <figcaption>{{ figure.caption }}</figcaption>
+      </figure>
+      {% endfor %}
+    {% else %}
+    <p class="note">Calibration figure: not evaluated.</p>
+    {% endif %}
+    {% if figure_groups.errors %}
+      {% for figure in figure_groups.errors %}
+      <figure class="figure">
+        <img src="{{ figure.data_uri }}" alt="{{ figure.caption }}">
+        <figcaption>{{ figure.caption }}</figcaption>
+      </figure>
+      {% endfor %}
+    {% else %}
+    <p class="note">Error gallery: not evaluated.</p>
+    {% endif %}
+  </section>
+
+  <section id="figures">
+    <h2>Figures</h2>
+    {% if figure_groups.other %}
+    <div class="figures">
+      {% for figure in figure_groups.other %}
+      <figure class="figure">
+        <img src="{{ figure.data_uri }}" alt="{{ figure.caption }}">
+        <figcaption>{{ figure.caption }}</figcaption>
+      </figure>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="note">Additional figures: not evaluated.</p>
+    {% endif %}
+  </section>
+
+  <section id="runtime">
+    <h2>Runtime</h2>
+    {% if runtime_rows or evaluation.latency %}
+    <table>
+      <thead><tr><th>Property</th><th class="num">Value</th></tr></thead>
+      <tbody>
+        {% for row in runtime_rows %}
+        <tr><td>{{ row.label }}</td><td class="num">{{ row.value }}</td></tr>
+        {% endfor %}
+        {% for row in evaluation.latency %}
+        <tr><td>{{ row.label }}</td><td class="num">{{ row.value }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="note">Runtime: not evaluated.</p>
+    {% endif %}
+  </section>
+
+  <section id="reproduction">
+    <h2>Reproduction</h2>
+    <p class="meta">This report was generated from saved artifacts only; no model was retrained or re-evaluated.</p>
+    <pre>{% for command in reproduction %}{{ command }}
+{% endfor %}</pre>
+  </section>
+
+  <footer>
+    Generated by <code>cnn_classifier.viz.report</code> &middot; {{ run_directory }}
+  </footer>
+</main>
+</body>
+</html>
