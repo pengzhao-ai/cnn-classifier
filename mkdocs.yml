@@ -55,6 +55,7 @@ nav:
 exclude_docs: |
   superpowers/
   release.md
+  known_issues.md
 
 plugins:
   - search
