@@ -179,25 +179,24 @@ def test_trainer_tolerates_legacy_callback_without_batch_hook(tmp_path):
 
 
 @pytest.mark.parametrize("grad_clip_norm", [None, 1.0])
-def test_trainer_unscales_gradients_once_per_window(tmp_path, grad_clip_norm):
+def test_trainer_unscales_gradients_once_per_window(tmp_path, grad_clip_norm, monkeypatch):
     class FakeScaler:
         def __init__(self):
-            self.unscale_calls = 0
-            self.step_calls = 0
-            self.update_calls = 0
+            self.events = []
 
         def scale(self, loss):
+            self.events.append("scale")
             return loss
 
         def unscale_(self, optimizer):
-            self.unscale_calls += 1
+            self.events.append("unscale")
 
         def step(self, optimizer):
-            self.step_calls += 1
+            self.events.append("step")
             optimizer.step()
 
         def update(self):
-            self.update_calls += 1
+            self.events.append("update")
 
         def state_dict(self):
             return {}
@@ -205,15 +204,35 @@ def test_trainer_unscales_gradients_once_per_window(tmp_path, grad_clip_norm):
         def load_state_dict(self, state):
             return None
 
+    class ProbeCallback(_NoOpCallback):
+        def __init__(self, events):
+            self.events = events
+
+        def on_batch_end(self, state):
+            self.events.append("hook")
+
     training = {} if grad_clip_norm is None else {"grad_clip_norm": grad_clip_norm}
     trainer, _ = _trainer(tmp_path, training)
     expected_windows = len(trainer.loaders.train)
     scaler = FakeScaler()
+    trainer.callbacks = [ProbeCallback(scaler.events)]
+    trainer._callbacks_are_default = False
     trainer.scaler = scaler
     trainer.state.scaler = scaler
 
+    if grad_clip_norm is not None:
+        original_clip = torch.nn.utils.clip_grad_norm_
+
+        def record_clip(parameters, max_norm, *args, **kwargs):
+            scaler.events.append("clip")
+            return original_clip(parameters, max_norm, *args, **kwargs)
+
+        monkeypatch.setattr(torch.nn.utils, "clip_grad_norm_", record_clip)
+
     trainer.fit()
 
-    assert scaler.unscale_calls == expected_windows
-    assert scaler.step_calls == expected_windows
-    assert scaler.update_calls == expected_windows
+    expected = ["scale", "unscale", "hook"]
+    if grad_clip_norm is not None:
+        expected.append("clip")
+    expected.extend(["step", "update"])
+    assert scaler.events == expected * expected_windows

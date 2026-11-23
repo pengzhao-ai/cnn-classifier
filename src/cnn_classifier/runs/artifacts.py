@@ -7,6 +7,7 @@ import json
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 from cnn_classifier.runs.context import RunContext
 
@@ -28,14 +29,39 @@ class MetricsWriter:
             handle.write(json.dumps(payload, sort_keys=True) + "\n")
         if self._header is None:
             self._header = self._existing_header()
-            if self._header is None:
-                self._header = ["step", *sorted(metrics)]
-                with self._history_path().open("w", encoding="utf-8", newline="") as handle:
-                    writer = csv.DictWriter(handle, fieldnames=self._header)
-                    writer.writeheader()
+        if self._header is None:
+            self._header = ["step", *sorted(metrics)]
+            self._write_header()
+        else:
+            new_keys = sorted(set(payload) - set(self._header))
+            if new_keys:
+                self._extend_header(new_keys)
+        header = self._header
+        assert header is not None
         with self._history_path().open("a", encoding="utf-8", newline="") as handle:
-            writer = csv.DictWriter(handle, fieldnames=self._header, extrasaction="ignore")
+            writer = csv.DictWriter(handle, fieldnames=header, extrasaction="ignore")
             writer.writerow(payload)
+
+    def _write_header(self) -> None:
+        header = self._header
+        assert header is not None
+        with self._history_path().open("w", encoding="utf-8", newline="") as handle:
+            csv.DictWriter(handle, fieldnames=header).writeheader()
+
+    def _extend_header(self, new_keys: list[str]) -> None:
+        header = self._header
+        assert header is not None
+        path = self._history_path()
+        rows: list[dict[str, Any]] = []
+        if path.is_file() and path.stat().st_size > 0:
+            with path.open(encoding="utf-8", newline="") as handle:
+                rows = list(csv.DictReader(handle))
+        new_header = [*header, *new_keys]
+        self._header = new_header
+        with path.open("w", encoding="utf-8", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=new_header, extrasaction="ignore")
+            writer.writeheader()
+            writer.writerows(rows)
 
     def _existing_header(self) -> list[str] | None:
         path = self._history_path()
