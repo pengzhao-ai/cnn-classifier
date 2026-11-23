@@ -25,6 +25,8 @@ data:
   adapter_params:
     dataset: CIFAR10
     download: true
+    max_train_samples: null
+    max_val_samples: null
   transforms:
     train:
       - {name: RandomHorizontalFlip, p: 0.5}

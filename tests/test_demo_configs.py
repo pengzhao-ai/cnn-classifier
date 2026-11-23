@@ -1,3 +1,5 @@
+import runpy
+
 import pytest
 
 from cnn_classifier.config import load_config
@@ -49,3 +51,14 @@ def test_finetune_uses_differential_learning_rates():
     group = fine.model.transfer.param_groups[0]
     assert group.pattern == r"^fc\."
     assert fine.training.optimizer.lr * group.lr_multiplier == pytest.approx(1.0e-3)
+
+
+def test_cifar_scratch_quick_overrides_apply():
+    overrides = runpy.run_path("demos/cifar10/scripts/run_scratch.py")["QUICK_OVERRIDES"]
+    cfg = load_config("configs/cifar10/scratch_baseline.yaml", overrides)
+
+    assert cfg.training.epochs == 2
+    assert cfg.data.adapter_params["max_train_samples"] == 10000
+    assert cfg.data.adapter_params["max_val_samples"] == 2000
+    assert cfg.evaluation.bootstrap.enabled is False
+    assert cfg.evaluation.latency.enabled is False
