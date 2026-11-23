@@ -148,8 +148,7 @@ def test_trainer_stops_before_step_when_batch_hook_requests_stop(tmp_path):
     trainer.callbacks = [callback]
     trainer._callbacks_are_default = False
     before = {
-        name: parameter.detach().clone()
-        for name, parameter in trainer.model.named_parameters()
+        name: parameter.detach().clone() for name, parameter in trainer.model.named_parameters()
     }
 
     trainer.fit()
