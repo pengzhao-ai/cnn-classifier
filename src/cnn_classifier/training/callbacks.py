@@ -21,6 +21,8 @@ from cnn_classifier.training.state import TrainingState
 class Callback(Protocol):
     def on_train_start(self, state: TrainingState) -> None: ...
 
+    def on_batch_end(self, state: TrainingState) -> None: ...
+
     def on_epoch_end(self, state: TrainingState) -> None: ...
 
     def on_train_end(self, state: TrainingState) -> None: ...
@@ -28,6 +30,9 @@ class Callback(Protocol):
 
 class _NoOpCallback:
     def on_train_start(self, state: TrainingState) -> None:
+        return None
+
+    def on_batch_end(self, state: TrainingState) -> None:
         return None
 
     def on_epoch_end(self, state: TrainingState) -> None:
@@ -147,15 +152,20 @@ class GradientMonitor(_NoOpCallback):
     def __init__(self) -> None:
         self.last_report: dict[str, float] = {}
 
-    def on_epoch_end(self, state: TrainingState) -> None:
-        report = {}
+    def on_train_start(self, state: TrainingState) -> None:
+        self.last_report = {}
+
+    def on_batch_end(self, state: TrainingState) -> None:
+        report: dict[str, float] = {}
         for name, parameter in state.model.named_parameters():
             if parameter.grad is not None:
                 report[name] = float(parameter.grad.detach().norm().item())
         self.last_report = report
-        if report:
+
+    def on_epoch_end(self, state: TrainingState) -> None:
+        if self.last_report:
             state.metrics["grad_norm"] = float(
-                sum(value * value for value in report.values()) ** 0.5
+                sum(value * value for value in self.last_report.values()) ** 0.5
             )
 
 
@@ -166,15 +176,16 @@ class NaNDetector(_NoOpCallback):
     def on_train_start(self, state: TrainingState) -> None:
         self.failed = False
 
+    def on_batch_end(self, state: TrainingState) -> None:
+        for parameter in state.model.parameters():
+            if parameter.grad is not None and not bool(torch.isfinite(parameter.grad).all()):
+                self.failed = True
+                state.stop_requested = True
+                return
+
     def on_epoch_end(self, state: TrainingState) -> None:
         values = list(state.metrics.values())
-        gradients = [
-            parameter.grad for parameter in state.model.parameters() if parameter.grad is not None
-        ]
-        nonfinite = any(not math.isfinite(float(value)) for value in values) or any(
-            not bool(torch.isfinite(gradient).all()) for gradient in gradients
-        )
-        if nonfinite:
+        if any(not math.isfinite(float(value)) for value in values):
             self.failed = True
             state.stop_requested = True
 

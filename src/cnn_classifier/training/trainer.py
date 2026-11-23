@@ -154,6 +154,14 @@ class Trainer:
         first = self.loaders.train.dataset[0][0]
         return (int(first.shape[0]), int(first.shape[1]), int(first.shape[2]))
 
+    def _run_batch_hooks(self) -> None:
+        for callback in self.callbacks:
+            hook = getattr(callback, "on_batch_end", None)
+            if callable(hook):
+                hook(self.state)
+            if self.state.stop_requested:
+                break
+
     def _train_epoch(self) -> dict[str, float]:
         self.model.train()
         total_loss = 0.0
@@ -195,9 +203,13 @@ class Trainer:
                 batch_index + 1
             ) % self.config.training.grad_accum_steps == 0 or batch_index + 1 == batches
             if should_step:
+                if self.scaler is not None:
+                    self.scaler.unscale_(self.optimizer)
+                self._run_batch_hooks()
+                if self.state.stop_requested:
+                    self.optimizer.zero_grad(set_to_none=True)
+                    break
                 if self.config.training.grad_clip_norm is not None:
-                    if self.scaler is not None:
-                        self.scaler.unscale_(self.optimizer)
                     torch.nn.utils.clip_grad_norm_(
                         self.model.parameters(), self.config.training.grad_clip_norm
                     )
@@ -321,7 +333,10 @@ class Trainer:
             metrics = self._train_epoch()
             metrics.update(self._validate())
             metrics["lr"] = float(self.optimizer.param_groups[0]["lr"])
-            if self.config.training.scheduler.step_unit == "epoch":
+            if (
+                self.config.training.scheduler.step_unit == "epoch"
+                and not self.state.stop_requested
+            ):
                 if isinstance(self.scheduler, torch.optim.lr_scheduler.ReduceLROnPlateau):
                     self.scheduler.step(metrics["val_loss"])
                 else:
@@ -331,6 +346,7 @@ class Trainer:
             self.state.history.append(dict(metrics))
             for callback in self.callbacks:
                 callback.on_epoch_end(self.state)
+            self.state.history[-1].update(self.state.metrics)
             if self.state.stop_requested:
                 break
         for callback in self.callbacks:

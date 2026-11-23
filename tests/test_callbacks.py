@@ -131,9 +131,38 @@ def test_gradient_monitor_reports_layer_norms(tmp_path):
     loss = state.model(torch.ones(1, 2)).sum()
     loss.backward()
     monitor = GradientMonitor()
+    monitor.on_train_start(state)
+    monitor.on_batch_end(state)
     monitor.on_epoch_end(state)
     assert "weight" in monitor.last_report
     assert monitor.last_report["weight"] > 0
+    assert state.metrics["grad_norm"] > 0
+
+
+def test_gradient_monitor_records_last_batch_gradients(tmp_path):
+    state = make_state(tmp_path)
+    state.model.weight.grad = torch.ones_like(state.model.weight)
+    state.model.bias.grad = None
+
+    callback = GradientMonitor()
+    callback.on_train_start(state)
+    callback.on_batch_end(state)
+    callback.on_epoch_end(state)
+
+    assert state.metrics["grad_norm"] == pytest.approx(2.0)
+    assert callback.last_report["weight"] == pytest.approx(2.0)
+
+
+def test_nan_detector_stops_on_nonfinite_gradient(tmp_path):
+    state = make_state(tmp_path)
+    state.model.weight.grad = torch.full_like(state.model.weight, float("inf"))
+
+    callback = NaNDetector()
+    callback.on_train_start(state)
+    callback.on_batch_end(state)
+
+    assert callback.failed is True
+    assert state.stop_requested is True
 
 
 def test_early_stopping_restores_best_and_wait_from_history():
