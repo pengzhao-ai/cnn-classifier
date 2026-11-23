@@ -80,3 +80,7 @@ the local build:
 Live PyPI and Pages publication was verified on 2026-11-03:
 `v0.1.0` published both artifacts, and the docs site is serving the five-section
 public navigation.
+
+Live PyPI and Pages publication was verified on 2026-11-22:
+`v0.1.1` published both artifacts, and the docs site is serving the same
+five-section navigation.
