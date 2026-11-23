@@ -4,6 +4,22 @@ All notable changes to `cnn-classifier-toolkit` are documented here.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-22
+
+### Fixed
+
+- Gradient norm is captured at the optimizer window and written to
+  `history.csv`, `metrics.jsonl`, `summary.json`, and training-history figures.
+- The gradient half of `NaNDetector` checks gradients before the optimizer step
+  and stops the run instead of applying a nonfinite update.
+- `demos/cifar10/scripts/run_scratch.py --quick` applies its sample-limit
+  overrides instead of failing at config load.
+
+### Documentation
+
+- Recorded validation of the 12 known-issue reports and closed the false,
+  by-design, and already-resolved items.
+
 ## [0.1.0] - 2026-11-03
 
 Initial public release.

@@ -1,7 +1,9 @@
 # Known issues and revision backlog
 
-Observed while walking the codebase and running the demos. Nothing here has been
-fixed yet — this file is the work list for the next revision pass.
+Observed while walking the codebase and running the demos. Validated on
+2026-11-22 against `e6460c0`. Items marked **Fixed in 0.1.1** are resolved;
+**Closed** items were not reproducible or are by design; the rest remain open.
+This file is internal and is excluded from the published documentation site.
 
 Each entry records: what was observed, why it happens, what was actually run to
 confirm it, and a proposed fix. Line references describe the code at the time of
@@ -10,6 +12,21 @@ writing.
 Severity legend: **High** = wrong or missing output in a normal run; **Medium** =
 inconsistent behaviour or a trap for the next reader; **Low** = cosmetic,
 hygiene, or documentation.
+
+| # | Status | Decision |
+|---|--------|----------|
+| 1 | Fixed in 0.1.1 | Batch-level gradient norm is written to history, metrics, summary, and reports. |
+| 2 | Fixed in 0.1.1 | Nonfinite gradients stop the run before the optimizer step. |
+| 3 | Open — cosmetic | Checkpoint tracks strict best; document or thread `min_delta` later. |
+| 4 | Closed — not reproducible | A `val_loss`/`min` run wrote `best.pt` with `best_metric` 1.1154; the claim is incorrect. |
+| 5 | Fixed in 0.1.1 | Added null sample-limit keys so the quick overrides apply. |
+| 6 | Deferred — conditional | EMA checkpoint/resume contract; no shipped config enables EMA. |
+| 7 | Open — cosmetic | Torchvision pseudo-path display. |
+| 8 | Closed — by design | Non-editable install is intentional and documented in README/CONTRIBUTING. |
+| 9 | Closed — resolved | No duplicate ` 2.py` files remain; `.DS_Store` is ignored. |
+| 10 | Deferred — design | Callback resume dispatch; revisit with #11. |
+| 11 | Deferred — conditional | Unfreeze schedule on resume; no shipped config uses it. |
+| 12 | Open — decision | `predict` output default; document or change later. |
 
 ---
 

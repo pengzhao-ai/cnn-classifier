@@ -1,5 +1,6 @@
 from typer.testing import CliRunner
 
+import cnn_classifier
 from cnn_classifier.cli import app
 
 runner = CliRunner()
@@ -14,4 +15,4 @@ def test_cli_help_lists_doctor():
 def test_cli_version():
     result = runner.invoke(app, ["--version"])
     assert result.exit_code == 0
-    assert "0.1.0" in result.stdout
+    assert cnn_classifier.__version__ in result.stdout
